@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioDex Alumno v1.8 · Ciudad BioNova</title>
+<style>
+:root {
+  --bg:#070a16; --panel:#11152e; --panel2:#1b2147; --ink:#ecf7ff; --muted:#a7b4d8;
+  --green:#4dff91; --cyan:#48e7ff; --mag:#ff4fd8; --yellow:#ffe66d; --red:#ff5f7a;
+  --line:#38427d; --font:"Courier New","Lucida Console",monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:var(--font);color:var(--ink);background:radial-gradient(circle at top,#263278 0%,#0b1027 42%,#04060d 100%);overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:34px 34px;animation:grid 14s linear infinite}
+@keyframes grid{from{transform:translateY(0)}to{transform:translateY(34px)}}
+body.crt::after{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.02) 50%,rgba(0,0,0,.07) 50%);background-size:100% 4px;mix-blend-mode:screen;z-index:999}
+.particles{position:fixed;inset:0;pointer-events:none;opacity:.35;background:radial-gradient(circle at 10% 20%,rgba(72,231,255,.7) 0 1px,transparent 2px),radial-gradient(circle at 80% 30%,rgba(255,79,216,.7) 0 1px,transparent 2px),radial-gradient(circle at 40% 78%,rgba(255,230,109,.7) 0 1px,transparent 2px);animation:drift 18s infinite alternate linear}
+@keyframes drift{from{transform:translateY(0)}to{transform:translateY(-28px)}}
+.app{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:18px 14px 120px}
+.boot-screen{position:fixed;inset:0;z-index:2000;display:grid;place-items:center;background:radial-gradient(circle at top,#1e2b66,#050712)}
+.boot-panel{width:min(820px,92vw);padding:20px;border:4px solid var(--green);background:#03060f;box-shadow:0 0 35px rgba(77,255,145,.22),8px 8px 0 #000}
+.boot-title{font-size:1.6rem;color:var(--green);text-shadow:2px 2px 0 #000;margin-bottom:10px;font-weight:900}
+.boot-line{min-height:1.45em;color:#c8ffd9}.boot-bar{height:20px;border:3px solid var(--line);background:#03060f;margin-top:14px;overflow:hidden}.boot-bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--cyan),var(--mag));transition:width .35s}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.brand{display:flex;align-items:center;gap:12px}.logo{width:56px;height:56px;border:4px solid var(--cyan);display:grid;place-items:center;background:#0d1533;color:var(--green);font-weight:900;font-size:24px;text-shadow:2px 2px 0 #000;box-shadow:0 0 18px rgba(72,231,255,.55),inset 0 0 12px rgba(72,231,255,.25)}
+h1,h2,h3,p{margin-top:0}h1{font-size:clamp(1.45rem,4vw,2.7rem);letter-spacing:2px;text-shadow:3px 3px 0 #000,0 0 16px rgba(72,231,255,.65);margin:0}.subtitle{color:var(--muted);font-size:.9rem}.tag{border:2px solid var(--line);padding:7px 10px;background:rgba(10,15,36,.82);color:var(--yellow);font-size:.82rem}
+.rpg-window{background:linear-gradient(180deg,rgba(27,33,71,.96),rgba(13,17,43,.96));border:4px solid var(--cyan);box-shadow:0 0 0 2px rgba(255,255,255,.08),0 0 24px rgba(72,231,255,.18),7px 7px 0 rgba(0,0,0,.6);padding:16px;position:relative}
+.rpg-window::before{content:"";position:absolute;inset:5px;border:1px solid rgba(255,255,255,.12);pointer-events:none}.rpg-title{display:inline-block;background:#050816;border:3px solid var(--yellow);color:var(--yellow);padding:5px 10px;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;font-weight:900;box-shadow:4px 4px 0 #000}
+.nav{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0}button,.btn{font-family:var(--font);font-weight:900;cursor:pointer;border:3px solid var(--cyan);background:#101a3c;color:var(--ink);padding:10px 12px;box-shadow:4px 4px 0 #000;text-transform:uppercase;transition:.12s}button:hover{transform:translate(-1px,-1px);filter:brightness(1.15);border-color:var(--green)}button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}button.active{border-color:var(--green);color:var(--green)}button.ghost{background:transparent;border-color:var(--line);color:var(--muted);box-shadow:none}button.danger{border-color:var(--red)}button.secondary{border-color:var(--yellow)}.nav button{text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.nav button::before{content:"▶ ";color:var(--green)}
+input,select,textarea{width:100%;font-family:var(--font);background:#050816;color:var(--ink);border:3px solid var(--line);padding:12px;outline:none;box-shadow:inset 0 0 12px rgba(0,0,0,.35)}input:focus,select:focus,textarea:focus{border-color:var(--cyan)}label{display:block;color:var(--yellow);margin:10px 0 6px;font-weight:900;text-transform:uppercase;font-size:.85rem}
+.grid{display:grid;gap:14px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.hero{min-height:72vh;display:grid;place-items:center}.register{width:min(900px,100%)}.terminal{color:var(--green);font-size:.95rem;line-height:1.7;background:#050816;border:2px solid var(--green);padding:12px;margin-bottom:14px;box-shadow:inset 0 0 16px rgba(77,255,145,.1)}.blink{animation:blink 1s steps(2,end) infinite}@keyframes blink{50%{opacity:.2}}
+.card{border:3px solid var(--line);background:rgba(5,8,22,.64);padding:12px;position:relative;box-shadow:4px 4px 0 rgba(0,0,0,.45);overflow-wrap:break-word}.card:hover{border-color:var(--cyan)}.card-title{font-weight:900;color:var(--cyan);text-transform:uppercase;margin-bottom:8px}.muted{color:var(--muted)}.small{font-size:.84rem;line-height:1.45}.pill{display:inline-block;border:2px solid currentColor;padding:3px 7px;margin:3px 3px 3px 0;font-size:.75rem;font-weight:900;background:rgba(0,0,0,.22)}.stamp{position:absolute;right:10px;top:10px;border:2px solid var(--green);color:var(--green);padding:4px 8px;transform:rotate(-6deg);font-size:.72rem;background:rgba(77,255,145,.08);z-index:2}
+.type-aurora{color:#ff8bd1}.type-prisma{color:#ff9d4d}.type-nexo{color:#ff5f7a}.type-nova{color:#4dff91}.type-bruma{color:#9cffd2}.type-lumen{color:#a477ff}.type-vector{color:#ffe66d}.type-umbral{color:#48e7ff}.type-arcana{color:#ff7d4d}.type-terra{color:#c7d2ff}
+.rarity-comun{border-color:#8ca3c7}.rarity-poco-comun{border-color:#4dff91;box-shadow:0 0 12px rgba(77,255,145,.12),4px 4px 0 rgba(0,0,0,.45)}.rarity-rara{border-color:#48e7ff;box-shadow:0 0 18px rgba(72,231,255,.23),4px 4px 0 rgba(0,0,0,.45)}.rarity-epica{border-color:#ff4fd8;box-shadow:0 0 20px rgba(255,79,216,.32),4px 4px 0 rgba(0,0,0,.45)}.rarity-legendaria{border-color:#ffe66d;box-shadow:0 0 24px rgba(255,230,109,.4),4px 4px 0 rgba(0,0,0,.45);animation:legend 2.3s infinite alternate}@keyframes legend{from{filter:brightness(1)}to{filter:brightness(1.22)}}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{border:3px solid var(--line);background:rgba(5,8,22,.58);padding:12px;min-height:92px}.stat b{display:block;color:var(--yellow);font-size:.78rem;text-transform:uppercase;margin-bottom:8px}.stat span{font-size:1.25rem;color:var(--green);text-shadow:2px 2px 0 #000}.progress{height:20px;background:#050816;border:3px solid var(--line);box-shadow:inset 0 0 10px #000;overflow:hidden;margin-top:8px}.progress>div{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan),var(--mag));width:0%;transition:.4s}
+.bioforma-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:12px}.bioforma{min-height:345px;display:flex;flex-direction:column;justify-content:space-between;transition:.15s transform}.bioforma:hover{transform:translateY(-2px)}.bio-svg-wrap{height:125px;display:grid;place-items:center;margin:8px 0;background:linear-gradient(135deg,rgba(72,231,255,.08),rgba(255,79,216,.08));border:2px dashed rgba(255,255,255,.12);overflow:hidden}.locked .bio-svg-wrap{filter:grayscale(.85)}.evo-locked .bio-svg-wrap{opacity:.65;filter:grayscale(1)}.capture-reveal{animation:reveal 1.35s ease-in-out}@keyframes reveal{0%{filter:grayscale(1) brightness(.45);transform:scale(.88)}45%{filter:grayscale(.7) brightness(1.3);transform:scale(1.04)}100%{filter:none;transform:scale(1)}}
+.status{font-size:.76rem;font-weight:900;text-transform:uppercase;color:var(--yellow)}.bioforma .status{display:block;min-height:22px;padding-right:116px}.bioforma .stamp{top:44px;right:12px;font-size:.68rem;padding:4px 7px;white-space:nowrap;pointer-events:none}.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.modal-back{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;display:none;align-items:center;justify-content:center;padding:18px}.modal-back.show{display:flex}.modal{width:min(890px,100%);max-height:92vh;overflow:auto}.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.dialogue{position:fixed;left:50%;bottom:15px;transform:translateX(-50%);width:min(1000px,calc(100% - 24px));z-index:1100;display:none}.dialogue.show{display:block}.dialogue .name{display:inline-block;background:#050816;color:var(--yellow);border:3px solid var(--yellow);padding:4px 10px;margin-bottom:-3px;position:relative;z-index:2;font-weight:900}.dialogue .box{border:4px solid var(--ink);background:#090d25;padding:16px;min-height:105px;box-shadow:0 0 24px rgba(72,231,255,.25),7px 7px 0 rgba(0,0,0,.75);line-height:1.55}.dialogue .controls{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+.map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}.zone-node{min-height:285px}.zone-svg{height:120px;border:2px solid var(--line);background:#050816;margin-bottom:10px;overflow:hidden}.node-top{display:flex;align-items:center;gap:10px}.node-icon{width:42px;height:42px;border:3px solid var(--cyan);display:grid;place-items:center;background:#050816;color:var(--green);box-shadow:0 0 15px rgba(72,231,255,.2)}.inventory{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}.slot{min-height:160px;text-align:center;border-style:dashed;padding:14px}
+.achievement.unlocked{border-color:var(--green);background:rgba(77,255,145,.08)}.achievement.locked{filter:grayscale(.8);opacity:.65}.toast{position:fixed;top:18px;right:18px;background:#050816;border:3px solid var(--green);color:var(--ink);padding:12px;box-shadow:5px 5px 0 #000;z-index:1200;display:none;max-width:340px}.toast.show{display:block;animation:pop .18s}@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.terminal-lines{background:#050816;border:2px solid var(--line);padding:12px;line-height:1.6;min-height:140px}.terminal-lines .ok{color:var(--green)}.terminal-lines .info{color:var(--cyan)}.terminal-lines .warn{color:var(--yellow)}.meter{display:grid;grid-template-columns:115px 1fr 42px;gap:8px;align-items:center;margin:8px 0}.meter b{font-size:.8rem;color:var(--yellow)}.meter-bar{height:14px;border:2px solid var(--line);background:#050816;overflow:hidden}.meter-bar>div{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));width:0}
+.footer-note{margin-top:14px;color:var(--muted);font-size:.8rem;line-height:1.5}.question-note{border-left:3px solid var(--cyan);padding-left:10px;color:var(--muted)}
+@media(max-width:900px){.grid.two,.grid.three,.grid.four{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-direction:column}.nav{grid-template-columns:repeat(2,1fr)!important}.stats-row{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:1fr}.meter{grid-template-columns:92px 1fr 38px}}
+
+/* === Gimnasios BioNova integrados === */
+.gym-command-row{display:grid;grid-template-columns:1fr auto;gap:10px;margin:12px 0 6px}
+.gym-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-top:14px}
+.gym-card{min-height:100%;padding-top:12px}
+.gym-status-pill{position:absolute;right:12px;top:12px;border:2px solid var(--yellow);color:var(--yellow);background:#050816;padding:4px 8px;font-size:.68rem;font-weight:900;transform:rotate(-4deg);z-index:5;white-space:nowrap}
+.gym-status-open{border-color:var(--cyan);color:var(--cyan)}
+.gym-status-progress{border-color:var(--yellow);color:var(--yellow)}
+.gym-status-complete{border-color:var(--green);color:var(--green)}
+.gym-status-closed{border-color:var(--red);color:var(--red)}
+.gym-zone-svg{height:145px;border:2px dashed rgba(255,255,255,.12);background:linear-gradient(135deg,rgba(72,231,255,.07),rgba(255,79,216,.06));display:grid;place-items:center;margin-bottom:12px;overflow:hidden}
+.gym-zone-svg svg{width:100%;height:145px;display:block}
+.gym-bio-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.gym-bio-token{border:2px solid var(--line);background:rgba(0,0,0,.24);padding:8px;min-height:104px;text-align:center;display:grid;align-content:center;gap:4px}
+.gym-bio-token.locked{filter:grayscale(1);opacity:.62}
+.gym-bio-token.done{border-color:var(--green);box-shadow:0 0 12px rgba(77,255,145,.18)}
+.gym-bio-mini{height:50px;display:grid;place-items:center}
+.gym-bio-mini .bioforma-wrap.tiny svg{width:54px}
+.gym-card.closed .gym-bio-list{display:none}
+.gym-locked-panel{border:2px dashed var(--line);padding:10px;text-align:center;color:var(--muted);background:rgba(0,0,0,.18);margin-top:10px}
+.gym-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.gym-code-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px;margin-top:10px}
+.gym-code-line{border:2px solid var(--line);padding:8px;background:#050816}
+@media(max-width:900px){.gym-command-row{grid-template-columns:1fr}.gym-bio-list{grid-template-columns:1fr}}
+
+
+/* === Sectores Ciudad BioNova === */
+.sector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-top:14px}
+.sector-card{position:relative;transition:.15s}
+.sector-locked{opacity:.70}
+.sector-locked .gym-zone-svg{filter:grayscale(1) brightness(.45)!important}
+.sector-locked-panel{border:2px dashed var(--line);padding:14px 10px;text-align:center;background:rgba(0,0,0,.32);margin-top:8px;border-radius:0}
+.sector-gyms{display:flex;flex-direction:column;gap:8px}
+.gym-mini-card{border:2px solid var(--line);padding:10px;background:rgba(0,0,0,.18);transition:.12s}
+.gym-mini-card:hover{border-color:var(--cyan)}
+.gym-mini-card.gym-mini-done{border-color:var(--green);background:rgba(77,255,145,.07)}
+.gym-mini-card.gym-mini-progress{border-color:var(--yellow);background:rgba(255,230,109,.05)}
+.gym-mini-header{display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap}
+.gym-mini-bios{display:flex;flex-wrap:wrap;gap:4px;margin:5px 0 4px}
+.gym-bio-pill{font-size:.7rem;padding:2px 7px;border:1.5px solid var(--line);background:rgba(0,0,0,.2);display:inline-block;font-weight:900}
+.gym-bio-pill.captured{border-color:var(--green);color:var(--green);background:rgba(77,255,145,.09)}
+.gym-bio-pill.pending{color:var(--muted)}
+@media(max-width:900px){.sector-grid{grid-template-columns:1fr}}
+
+/* ════════════════════════════════════════════
+   EPIC CAPTURE ANIMATION — BioDex v1.8
+   ════════════════════════════════════════════ */
+#captureOverlay{
+  position:fixed;inset:0;z-index:3000;background:#000;
+  display:none;flex-direction:column;
+  align-items:center;justify-content:center;overflow:hidden;
+}
+.cap-flash{position:fixed;inset:0;background:#fff;z-index:3500;pointer-events:none;
+  animation:capFlashOut .35s ease-out forwards}
+@keyframes capFlashOut{from{opacity:1}to{opacity:0}}
+
+.cap-bg{position:absolute;inset:-100%;
+  animation:capBgPulse 2.2s ease-out forwards}
+@keyframes capBgPulse{
+  0%{transform:scale(0);opacity:0}
+  35%{transform:scale(.7);opacity:.55}
+  100%{transform:scale(1.5);opacity:0}}
+
+.cap-ring{position:absolute;left:50%;top:50%;border-radius:50%;border:3px solid;
+  transform:translate(-50%,-50%);width:0;height:0;
+  animation:capRingExpand 1.6s ease-out forwards}
+@keyframes capRingExpand{
+  0%{width:0;height:0;opacity:.9}
+  100%{width:700px;height:700px;opacity:0}}
+
+.cap-stage{position:relative;z-index:10;text-align:center;padding:20px}
+.cap-svg-wrap{
+  width:220px;height:220px;margin:0 auto;position:relative;
+  display:grid;place-items:center;
+  filter:drop-shadow(0 0 32px var(--cap-glow));
+  animation:capBioReveal 2s ease-in-out forwards}
+@keyframes capBioReveal{
+  0%{filter:brightness(0) saturate(0) drop-shadow(0 0 0px #000);transform:scale(.5)}
+  20%{filter:brightness(4) saturate(0) drop-shadow(0 0 60px #fff);transform:scale(1.2)}
+  55%{filter:brightness(1.6) saturate(.6) drop-shadow(0 0 40px var(--cap-glow));transform:scale(.97)}
+  100%{filter:brightness(1) saturate(1) drop-shadow(0 0 28px var(--cap-glow));transform:scale(1)}}
+
+.cap-scanline{
+  position:absolute;left:-20%;right:-20%;height:8px;top:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent,var(--cap-col),#fff,var(--cap-col),transparent);
+  box-shadow:0 0 40px 14px rgba(255,255,255,.55);
+  animation:capScan 1.15s .4s ease-in-out forwards;opacity:0}
+@keyframes capScan{
+  0%{top:-4px;opacity:1}50%{opacity:1}100%{top:100%;opacity:.2}}
+
+.cap-particle{position:absolute;border-radius:50%;pointer-events:none;
+  left:50%;top:50%;
+  animation:capParticle var(--cdur) var(--cdel) ease-out forwards;opacity:0}
+@keyframes capParticle{
+  0%{transform:translate(-50%,-50%) scale(1);opacity:1}
+  100%{transform:translate(calc(-50% + var(--cdx)),calc(-50% + var(--cdy))) scale(0);opacity:0}}
+
+.cap-name{
+  font-size:clamp(1.8rem,6vw,3.2rem);font-weight:900;letter-spacing:4px;
+  text-transform:uppercase;margin-top:18px;line-height:1.1;
+  text-shadow:4px 4px 0 #000,0 0 40px var(--cap-col);
+  animation:capNameSlam .45s 1.75s cubic-bezier(.15,.85,.25,1.4) both;opacity:0}
+@keyframes capNameSlam{
+  from{transform:scale(3.5) translateY(-15px);opacity:0;filter:blur(12px)}
+  to{transform:scale(1) translateY(0);opacity:1;filter:blur(0)}}
+
+.cap-rarity{
+  display:inline-block;border:3px solid var(--cap-col);color:var(--cap-col);
+  padding:5px 18px;font-weight:900;letter-spacing:3px;text-transform:uppercase;
+  background:rgba(0,0,0,.55);margin-top:10px;
+  box-shadow:0 0 20px var(--cap-col),4px 4px 0 #000;
+  animation:capBadgePop .35s 2.1s cubic-bezier(.15,.85,.25,1.5) both;opacity:0}
+@keyframes capBadgePop{
+  from{transform:scale(0) rotate(-8deg);opacity:0}
+  to{transform:scale(1) rotate(-2deg);opacity:1}}
+
+.cap-cta{
+  margin-top:28px;
+  animation:capNameSlam .4s 2.5s cubic-bezier(.15,.85,.25,1.3) both;opacity:0}
+.cap-cta button{
+  font-family:var(--font);font-weight:900;cursor:pointer;
+  border:3px solid var(--cap-col);background:#101a3c;color:#ecf7ff;
+  padding:14px 36px;font-size:1.05rem;letter-spacing:3px;text-transform:uppercase;
+  box-shadow:0 0 24px var(--cap-col),6px 6px 0 #000;
+  transition:.12s}
+.cap-cta button:hover{filter:brightness(1.2);transform:translate(-1px,-1px)}
+.cap-cta button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #000}
+
+/* Reflexión metacognitiva */
+.metacog-card{border:3px solid var(--cyan);background:rgba(5,8,22,.92);
+  padding:18px;margin-top:14px}
+.metacog-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.metacog-options button{text-align:left;font-size:.85rem;line-height:1.35;
+  padding:12px 14px;white-space:normal;height:auto;min-height:54px}
+@media(max-width:600px){.metacog-options{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="crt">
+<div class="particles"></div>
+<div id="bootScreen" class="boot-screen"><div class="boot-panel"><div class="boot-title">BIODEX // BIOFORMAS v1.8</div><div id="bootLines"></div><div class="boot-bar"><div id="bootBarInner"></div></div></div></div>
+<div id="app" class="app"></div>
+<div id="modalBack" class="modal-back" onclick="closeModal(event)"><div id="modalContent" class="modal rpg-window" onclick="event.stopPropagation()"></div></div>
+<div id="dialogue" class="dialogue"><div class="name" id="dialogueName">Dra. Lira</div><div class="box"><div id="dialogueText"></div><div class="controls"><button class="ghost" onclick="skipDialogue()">Saltar</button><button onclick="closeDialogue()">Continuar</button></div></div></div>
+<div id="toast" class="toast"></div>
+<div id="captureOverlay"></div>
+<script>
+
+/*
+  Bloque SVG Bioformas BioDex v1.8
+  30 Bioformas con silueta/captura, sin imágenes externas.
+  Uso:
+    injectBioformaSVGStyles();
+    renderBioformaSVG("B001", false, "card");
+    renderBioformaSVG("B001", true, "large", {reveal:true});
+*/
+const BIOFORMAS_SVG_DATA = [{"id": "B001", "nombre": "Nimbel", "template": "fireflyCell", "tipo": "Aurora", "rareza": "Común", "colors": {"primary": "#ff8bd1", "secondary": "#a477ff", "accent": "#ffe66d", "glow": "#ff4fd8"}}, {"id": "B002", "nombre": "Auralis", "template": "shieldGuardian", "tipo": "Aurora", "rareza": "Poco común", "colors": {"primary": "#a477ff", "secondary": "#48e7ff", "accent": "#ff8bd1", "glow": "#48e7ff"}}, {"id": "B003", "nombre": "Prismara", "template": "orbitTriad", "tipo": "Aurora", "rareza": "Rara", "colors": {"primary": "#ffe66d", "secondary": "#ff4fd8", "accent": "#48e7ff", "glow": "#ffe66d"}}, {"id": "B004", "nombre": "Lunor", "template": "lunarCreature", "tipo": "Prisma", "rareza": "Común", "colors": {"primary": "#263c99", "secondary": "#f4f7ff", "accent": "#ff9d4d", "glow": "#f4f7ff"}}, {"id": "B005", "nombre": "Orbelix", "template": "gameteOrbit", "tipo": "Prisma", "rareza": "Poco común", "colors": {"primary": "#ff9d4d", "secondary": "#48e7ff", "accent": "#a477ff", "glow": "#ffcc80"}}, {"id": "B006", "nombre": "Solvian", "template": "guardianBird", "tipo": "Prisma", "rareza": "Rara", "colors": {"primary": "#48e7ff", "secondary": "#ff9d4d", "accent": "#ffe66d", "glow": "#48e7ff"}}, {"id": "B007", "nombre": "Vireon", "template": "alertSentinel", "tipo": "Nexo", "rareza": "Común", "colors": {"primary": "#ff5f7a", "secondary": "#ffffff", "accent": "#48e7ff", "glow": "#ff5f7a"}}, {"id": "B008", "nombre": "Nexora", "template": "shieldMedic", "tipo": "Nexo", "rareza": "Poco común", "colors": {"primary": "#48e7ff", "secondary": "#4dff91", "accent": "#ff5f7a", "glow": "#4dff91"}}, {"id": "B009", "nombre": "Clyrion", "template": "medicAngel", "tipo": "Nexo", "rareza": "Rara", "colors": {"primary": "#ffffff", "secondary": "#48e7ff", "accent": "#ff5f7a", "glow": "#4dff91"}}, {"id": "B010", "nombre": "Terral", "template": "livingWall", "tipo": "Nova", "rareza": "Común", "colors": {"primary": "#4dff91", "secondary": "#48e7ff", "accent": "#ffffff", "glow": "#4dff91"}}, {"id": "B011", "nombre": "Valtrix", "template": "immuneGuardian", "tipo": "Nova", "rareza": "Poco común", "colors": {"primary": "#4dff91", "secondary": "#2b7bff", "accent": "#ffe66d", "glow": "#4dff91"}}, {"id": "B012", "nombre": "Aegira", "template": "vaccineCrystal", "tipo": "Nova", "rareza": "Rara", "colors": {"primary": "#48e7ff", "secondary": "#4dff91", "accent": "#ffe66d", "glow": "#48e7ff"}}, {"id": "B013", "nombre": "Myrka", "template": "viralParticle", "tipo": "Bruma", "rareza": "Común", "colors": {"primary": "#a477ff", "secondary": "#4dff91", "accent": "#48e7ff", "glow": "#a477ff"}}, {"id": "B014", "nombre": "Zephor", "template": "bacteriumFlagellum", "tipo": "Bruma", "rareza": "Poco común", "colors": {"primary": "#4dff91", "secondary": "#9cff57", "accent": "#ffe66d", "glow": "#4dff91"}}, {"id": "B015", "nombre": "Spirel", "template": "fungusSpores", "tipo": "Bruma", "rareza": "Rara", "colors": {"primary": "#a477ff", "secondary": "#f7e7c6", "accent": "#4dff91", "glow": "#a477ff"}}, {"id": "B016", "nombre": "Embera", "template": "fermentFlask", "tipo": "Lumen", "rareza": "Común", "colors": {"primary": "#ffb347", "secondary": "#4dff91", "accent": "#ffffff", "glow": "#ffb347"}}, {"id": "B017", "nombre": "Cylar", "template": "biotechGear", "tipo": "Lumen", "rareza": "Poco común", "colors": {"primary": "#a477ff", "secondary": "#48e7ff", "accent": "#4dff91", "glow": "#48e7ff"}}, {"id": "B018", "nombre": "Orynx", "template": "medicineCapsule", "tipo": "Lumen", "rareza": "Rara", "colors": {"primary": "#ffffff", "secondary": "#ff5f7a", "accent": "#48e7ff", "glow": "#4dff91"}}, {"id": "B019", "nombre": "Altor", "template": "gravityPlanet", "tipo": "Vector", "rareza": "Común", "colors": {"primary": "#2d5bff", "secondary": "#ffe66d", "accent": "#ff9d4d", "glow": "#ffe66d"}}, {"id": "B020", "nombre": "Dravik", "template": "frictionLizard", "tipo": "Vector", "rareza": "Poco común", "colors": {"primary": "#ff9d4d", "secondary": "#7b8499", "accent": "#ffe66d", "glow": "#ff9d4d"}}, {"id": "B021", "nombre": "Velion", "template": "elasticSpring", "tipo": "Vector", "rareza": "Rara", "colors": {"primary": "#ffe66d", "secondary": "#48e7ff", "accent": "#a477ff", "glow": "#ffe66d"}}, {"id": "B022", "nombre": "Umbrin", "template": "pressureBlock", "tipo": "Umbral", "rareza": "Común", "colors": {"primary": "#48e7ff", "secondary": "#b7c3d7", "accent": "#ffe66d", "glow": "#48e7ff"}}, {"id": "B023", "nombre": "Caelix", "template": "divingDrop", "tipo": "Umbral", "rareza": "Poco común", "colors": {"primary": "#1264ff", "secondary": "#48e7ff", "accent": "#ffffff", "glow": "#48e7ff"}}, {"id": "B024", "nombre": "Nuvora", "template": "gasCloud", "tipo": "Umbral", "rareza": "Rara", "colors": {"primary": "#bdf9ff", "secondary": "#48e7ff", "accent": "#ff8bd1", "glow": "#bdf9ff"}}, {"id": "B025", "nombre": "Lithor", "template": "tectonicRock", "tipo": "Arcana", "rareza": "Común", "colors": {"primary": "#7b8499", "secondary": "#8b5a3c", "accent": "#ff9d4d", "glow": "#ff9d4d"}}, {"id": "B026", "nombre": "Quarza", "template": "seismicBeast", "tipo": "Arcana", "rareza": "Poco común", "colors": {"primary": "#ff5f3d", "secondary": "#7b8499", "accent": "#ffe66d", "glow": "#ff5f3d"}}, {"id": "B027", "nombre": "Pyronix", "template": "volcanoDragon", "tipo": "Arcana", "rareza": "Épica", "colors": {"primary": "#1b1b22", "secondary": "#ff5f3d", "accent": "#ffe66d", "glow": "#ff5f3d"}}, {"id": "B028", "nombre": "Strata", "template": "crystalRocks", "tipo": "Terra", "rareza": "Común", "colors": {"primary": "#9aa7bd", "secondary": "#6e4b35", "accent": "#d8f3ff", "glow": "#d8f3ff"}}, {"id": "B029", "nombre": "Borelia", "template": "climateFlower", "tipo": "Terra", "rareza": "Rara", "colors": {"primary": "#4dff91", "secondary": "#48e7ff", "accent": "#ff9d4d", "glow": "#4dff91"}}, {"id": "B030", "nombre": "Gaian", "template": "biodiversityLegend", "tipo": "Terra", "rareza": "Legendaria", "colors": {"primary": "#4dff91", "secondary": "#ffe66d", "accent": "#48e7ff", "glow": "#ffe66d"}}]
+const BIOFORMA_SVG_TEMPLATES = {
+  "fireflyCell": "<path class=\"detail\" d=\"M192 96 C160 38,135 42,122 70\" fill=\"none\" stroke=\"{s}\" stroke-width=\"15\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M308 96 C340 38,365 42,378 70\" fill=\"none\" stroke=\"{s}\" stroke-width=\"15\" stroke-linecap=\"round\"/><circle class=\"color-part\" cx=\"119\" cy=\"67\" r=\"18\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><circle class=\"color-part\" cx=\"381\" cy=\"67\" r=\"18\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><ellipse class=\"color-part\" cx=\"250\" cy=\"215\" rx=\"105\" ry=\"122\" fill=\"url(#grad-{b_id})\" stroke=\"#091126\" stroke-width=\"10\"/><circle class=\"color-part\" cx=\"250\" cy=\"250\" r=\"34\" fill=\"{a}\" opacity=\".9\"/><ellipse class=\"detail\" cx=\"202\" cy=\"330\" rx=\"22\" ry=\"38\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"7\"/><ellipse class=\"detail\" cx=\"298\" cy=\"330\" rx=\"22\" ry=\"38\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"7\"/><circle class=\"eye\" cx=\"214\" cy=\"190\" r=\"14\"/><circle class=\"eye\" cx=\"286\" cy=\"190\" r=\"14\"/>",
+  "shieldGuardian": "<path class=\"color-part\" d=\"M110 180 C76 230,88 295,140 325 C154 274,160 230,150 176 Z\" fill=\"{s}\" opacity=\".75\" stroke=\"#091126\" stroke-width=\"9\"/><path class=\"color-part\" d=\"M390 180 C424 230,412 295,360 325 C346 274,340 230,350 176 Z\" fill=\"{s}\" opacity=\".75\" stroke=\"#091126\" stroke-width=\"9\"/><path class=\"color-part\" d=\"M250 66 C335 118,360 210,334 302 C310 352,190 352,166 302 C140 210,165 118,250 66 Z\" fill=\"url(#grad-{b_id})\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M250 126 C290 150,302 194,288 230 C276 264,224 264,212 230 C198 194,210 150,250 126 Z\" fill=\"{a}\" opacity=\".9\" stroke=\"#091126\" stroke-width=\"7\"/><path class=\"detail\" d=\"M220 104 Q250 56 280 104\" fill=\"none\" stroke=\"{a}\" stroke-width=\"10\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"218\" cy=\"190\" r=\"12\"/><circle class=\"eye\" cx=\"282\" cy=\"190\" r=\"12\"/>",
+  "orbitTriad": "<path class=\"detail\" d=\"M145 214 C185 145,315 145,355 214\" fill=\"none\" stroke=\"{s}\" stroke-width=\"9\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M145 244 C190 315,310 315,355 244\" fill=\"none\" stroke=\"{a}\" stroke-width=\"9\" stroke-linecap=\"round\"/><circle class=\"color-part\" cx=\"250\" cy=\"220\" r=\"72\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><circle class=\"color-part\" cx=\"128\" cy=\"228\" r=\"46\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"9\"/><circle class=\"color-part\" cx=\"372\" cy=\"228\" r=\"46\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"9\"/><path class=\"detail\" d=\"M250 92 L286 148 L214 148 Z\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><circle class=\"eye\" cx=\"225\" cy=\"208\" r=\"10\"/><circle class=\"eye\" cx=\"275\" cy=\"208\" r=\"10\"/>",
+  "lunarCreature": "<path class=\"color-part\" d=\"M315 92 C245 108,202 172,216 248 C230 320,298 358,365 334 C318 302,296 252,306 196 C314 150,344 114,388 94 C362 86,338 86,315 92 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"10\"/><ellipse class=\"color-part\" cx=\"230\" cy=\"230\" rx=\"86\" ry=\"104\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><circle class=\"detail\" cx=\"185\" cy=\"112\" r=\"15\" fill=\"{s}\"/><circle class=\"detail\" cx=\"225\" cy=\"88\" r=\"20\" fill=\"{s}\"/><circle class=\"detail\" cx=\"270\" cy=\"96\" r=\"15\" fill=\"{s}\"/><path class=\"eye\" d=\"M195 218 Q213 232 231 218\" fill=\"none\" stroke=\"#06101d\" stroke-width=\"8\" stroke-linecap=\"round\"/><path class=\"eye\" d=\"M247 218 Q265 232 283 218\" fill=\"none\" stroke=\"#06101d\" stroke-width=\"8\" stroke-linecap=\"round\"/>",
+  "gameteOrbit": "<ellipse class=\"detail\" cx=\"250\" cy=\"220\" rx=\"165\" ry=\"84\" fill=\"none\" stroke=\"{s}\" stroke-width=\"9\" transform=\"rotate(-18 250 220)\"/><circle class=\"color-part\" cx=\"224\" cy=\"222\" r=\"76\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"color-part\" d=\"M332 168 C388 172,410 215,378 252 C355 278,315 270,303 238 C292 206,302 178,332 168 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"9\"/><path class=\"detail\" d=\"M373 250 C420 294,398 336,350 352\" fill=\"none\" stroke=\"{s}\" stroke-width=\"12\" stroke-linecap=\"round\"/><circle class=\"detail\" cx=\"224\" cy=\"222\" r=\"34\" fill=\"{a}\" opacity=\".9\"/><circle class=\"eye\" cx=\"196\" cy=\"205\" r=\"10\"/><circle class=\"eye\" cx=\"248\" cy=\"205\" r=\"10\"/>",
+  "guardianBird": "<path class=\"color-part\" d=\"M120 210 C72 182,60 126,94 92 C158 122,198 164,218 238 C176 250,144 238,120 210 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"color-part\" d=\"M380 210 C428 182,440 126,406 92 C342 122,302 164,282 238 C324 250,356 238,380 210 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"10\"/><ellipse class=\"color-part\" cx=\"250\" cy=\"222\" rx=\"72\" ry=\"110\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M250 100 L304 178 L250 155 L196 178 Z\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"detail\" d=\"M210 238 L250 304 L290 238 Z\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><circle class=\"eye\" cx=\"225\" cy=\"194\" r=\"10\"/><circle class=\"eye\" cx=\"275\" cy=\"194\" r=\"10\"/>",
+  "alertSentinel": "<path class=\"detail\" d=\"M250 84 L250 42\" stroke=\"{s}\" stroke-width=\"13\" stroke-linecap=\"round\"/><path class=\"color-part\" d=\"M250 32 L284 90 L216 90 Z\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"color-part\" d=\"M250 84 C320 142,330 260,250 340 C170 260,180 142,250 84 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M166 246 Q128 234 112 196\" stroke=\"{s}\" stroke-width=\"12\" stroke-linecap=\"round\" fill=\"none\"/><path class=\"detail\" d=\"M334 246 Q372 234 388 196\" stroke=\"{s}\" stroke-width=\"12\" stroke-linecap=\"round\" fill=\"none\"/><circle class=\"eye\" cx=\"222\" cy=\"202\" r=\"11\"/><circle class=\"eye\" cx=\"278\" cy=\"202\" r=\"11\"/>",
+  "shieldMedic": "<ellipse class=\"color-part\" cx=\"250\" cy=\"224\" rx=\"128\" ry=\"150\" fill=\"{s}\" opacity=\".62\" stroke=\"#091126\" stroke-width=\"10\"/><ellipse class=\"color-part\" cx=\"250\" cy=\"226\" rx=\"80\" ry=\"94\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M250 150 L250 286 M202 218 L298 218\" stroke=\"{a}\" stroke-width=\"24\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M170 238 Q132 210 150 166\" stroke=\"{s}\" stroke-width=\"14\" fill=\"none\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M330 238 Q368 210 350 166\" stroke=\"{s}\" stroke-width=\"14\" fill=\"none\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"224\" cy=\"196\" r=\"10\"/><circle class=\"eye\" cx=\"276\" cy=\"196\" r=\"10\"/>",
+  "medicAngel": "<path class=\"color-part\" d=\"M160 198 C102 170,92 118,132 90 C190 125,210 166,206 224 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"9\"/><path class=\"color-part\" d=\"M340 198 C398 170,408 118,368 90 C310 125,290 166,294 224 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"9\"/><path class=\"color-part\" d=\"M250 112 C318 160,318 278,250 342 C182 278,182 160,250 112 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M250 42 L250 100 M218 72 L282 72\" stroke=\"{a}\" stroke-width=\"22\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"224\" cy=\"196\" r=\"10\"/><circle class=\"eye\" cx=\"276\" cy=\"196\" r=\"10\"/>",
+  "livingWall": "<path class=\"color-part\" d=\"M132 135 L164 135 L164 100 L204 100 L204 135 L246 135 L246 100 L286 100 L286 135 L328 135 L328 100 L368 100 L368 135 L398 135 L398 330 L132 330 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M156 178 H376 M156 224 H376 M156 270 H376 M204 135 V330 M286 135 V330\" stroke=\"{s}\" stroke-width=\"7\" opacity=\".75\"/><path class=\"detail\" d=\"M112 248 L76 218 M388 248 L424 218\" stroke=\"{a}\" stroke-width=\"16\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"218\" cy=\"212\" r=\"13\"/><circle class=\"eye\" cx=\"282\" cy=\"212\" r=\"13\"/>",
+  "immuneGuardian": "<path class=\"detail\" d=\"M188 122 Q250 48 312 122\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"9\"/><ellipse class=\"color-part\" cx=\"250\" cy=\"226\" rx=\"92\" ry=\"118\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><ellipse class=\"color-part\" cx=\"148\" cy=\"238\" rx=\"42\" ry=\"62\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"9\"/><ellipse class=\"color-part\" cx=\"352\" cy=\"238\" rx=\"42\" ry=\"62\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"9\"/><path class=\"detail\" d=\"M180 164 L320 164\" stroke=\"{a}\" stroke-width=\"12\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"218\" cy=\"214\" r=\"12\"/><circle class=\"eye\" cx=\"282\" cy=\"214\" r=\"12\"/>",
+  "vaccineCrystal": "<path class=\"color-part\" d=\"M250 78 L334 162 L310 302 L250 360 L190 302 L166 162 Z\" fill=\"url(#grad-{b_id})\" stroke=\"#091126\" stroke-width=\"10\"/><circle class=\"detail\" cx=\"130\" cy=\"198\" r=\"28\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"8\"/><circle class=\"detail\" cx=\"370\" cy=\"198\" r=\"28\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"8\"/><circle class=\"detail\" cx=\"250\" cy=\"56\" r=\"24\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"detail\" d=\"M250 150 L250 278 M206 214 L294 214\" stroke=\"#fff\" stroke-width=\"18\" stroke-linecap=\"round\" opacity=\".9\"/><circle class=\"eye\" cx=\"224\" cy=\"196\" r=\"9\"/><circle class=\"eye\" cx=\"276\" cy=\"196\" r=\"9\"/>",
+  "viralParticle": "<g class=\"detail\" stroke=\"{s}\" stroke-width=\"12\" stroke-linecap=\"round\"><line x1=\"250\" y1=\"118\" x2=\"250\" y2=\"74\"/><line x1=\"250\" y1=\"322\" x2=\"250\" y2=\"366\"/><line x1=\"148\" y1=\"220\" x2=\"104\" y2=\"220\"/><line x1=\"352\" y1=\"220\" x2=\"396\" y2=\"220\"/><line x1=\"178\" y1=\"148\" x2=\"146\" y2=\"116\"/><line x1=\"322\" y1=\"148\" x2=\"354\" y2=\"116\"/><line x1=\"178\" y1=\"292\" x2=\"146\" y2=\"324\"/><line x1=\"322\" y1=\"292\" x2=\"354\" y2=\"324\"/></g><circle class=\"color-part\" cx=\"250\" cy=\"220\" r=\"96\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M250 150 L314 198 L290 274 L210 274 L186 198 Z\" fill=\"{s}\" opacity=\".8\" stroke=\"#091126\" stroke-width=\"7\"/><circle class=\"eye\" cx=\"220\" cy=\"210\" r=\"10\"/><circle class=\"eye\" cx=\"280\" cy=\"210\" r=\"10\"/>",
+  "bacteriumFlagellum": "<path class=\"detail\" d=\"M356 250 C430 270,410 342,458 352\" fill=\"none\" stroke=\"{s}\" stroke-width=\"14\" stroke-linecap=\"round\"/><path class=\"color-part\" d=\"M125 190 C125 132,180 108,250 122 C328 136,382 184,372 246 C362 306,290 332,210 316 C154 304,125 258,125 190 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M132 154 L96 124 M148 292 L108 324 M338 160 L386 128 M330 300 L372 334\" stroke=\"{a}\" stroke-width=\"10\" stroke-linecap=\"round\"/><circle class=\"detail\" cx=\"218\" cy=\"190\" r=\"16\" fill=\"{a}\"/><circle class=\"detail\" cx=\"284\" cy=\"238\" r=\"18\" fill=\"{s}\"/><circle class=\"eye\" cx=\"210\" cy=\"238\" r=\"10\"/><circle class=\"eye\" cx=\"266\" cy=\"250\" r=\"10\"/>",
+  "fungusSpores": "<path class=\"color-part\" d=\"M120 192 C130 110,208 70,290 86 C360 98,404 146,392 210 C326 198,198 198,120 192 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><ellipse class=\"color-part\" cx=\"250\" cy=\"258\" rx=\"70\" ry=\"92\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"10\"/><circle class=\"detail\" cx=\"194\" cy=\"142\" r=\"18\" fill=\"{a}\"/><circle class=\"detail\" cx=\"262\" cy=\"124\" r=\"14\" fill=\"{a}\"/><circle class=\"detail\" cx=\"328\" cy=\"158\" r=\"20\" fill=\"{a}\"/><circle class=\"detail\" cx=\"112\" cy=\"86\" r=\"13\" fill=\"{s}\"/><circle class=\"detail\" cx=\"392\" cy=\"88\" r=\"16\" fill=\"{s}\"/><circle class=\"eye\" cx=\"225\" cy=\"248\" r=\"10\"/><circle class=\"eye\" cx=\"275\" cy=\"248\" r=\"10\"/>",
+  "fermentFlask": "<path class=\"color-part\" d=\"M218 82 H282 V150 C336 178,356 246,330 306 C304 366,196 366,170 306 C144 246,164 178,218 150 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M184 250 C218 230,282 272,318 246 L318 304 C292 346,208 346,182 304 Z\" fill=\"{s}\" opacity=\".85\"/><circle class=\"detail\" cx=\"215\" cy=\"218\" r=\"16\" fill=\"{a}\"/><circle class=\"detail\" cx=\"282\" cy=\"236\" r=\"12\" fill=\"{a}\"/><circle class=\"detail\" cx=\"260\" cy=\"180\" r=\"10\" fill=\"#fff\"/><circle class=\"detail\" cx=\"226\" cy=\"50\" r=\"15\" fill=\"#fff\"/><circle class=\"eye\" cx=\"222\" cy=\"282\" r=\"10\"/><circle class=\"eye\" cx=\"278\" cy=\"282\" r=\"10\"/>",
+  "biotechGear": "<ellipse class=\"color-part\" cx=\"250\" cy=\"220\" rx=\"88\" ry=\"108\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M154 166 C92 150,92 244,154 228\" fill=\"none\" stroke=\"{s}\" stroke-width=\"18\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M346 166 C408 150,408 244,346 228\" fill=\"none\" stroke=\"{s}\" stroke-width=\"18\" stroke-linecap=\"round\"/><circle class=\"detail\" cx=\"250\" cy=\"230\" r=\"46\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"detail\" d=\"M250 170 V290 M190 230 H310 M208 188 L292 272 M292 188 L208 272\" stroke=\"#091126\" stroke-width=\"7\"/><path class=\"detail\" d=\"M212 102 L190 62 M288 102 L310 62\" stroke=\"{a}\" stroke-width=\"11\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"224\" cy=\"194\" r=\"9\"/><circle class=\"eye\" cx=\"276\" cy=\"194\" r=\"9\"/>",
+  "medicineCapsule": "<path class=\"color-part\" d=\"M250 74 C318 74,354 126,354 202 L354 252 C354 328,314 368,250 368 C186 368,146 328,146 252 L146 202 C146 126,182 74,250 74 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"color-part\" d=\"M146 222 H354 V252 C354 328,314 368,250 368 C186 368,146 328,146 252 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"5\"/><path class=\"detail\" d=\"M250 142 V266 M202 204 H298\" stroke=\"{a}\" stroke-width=\"22\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M142 188 C90 178,80 128,112 100\" fill=\"none\" stroke=\"{s}\" stroke-width=\"13\" stroke-linecap=\"round\" opacity=\".8\"/><path class=\"detail\" d=\"M358 188 C410 178,420 128,388 100\" fill=\"none\" stroke=\"{s}\" stroke-width=\"13\" stroke-linecap=\"round\" opacity=\".8\"/><circle class=\"eye\" cx=\"222\" cy=\"284\" r=\"10\"/><circle class=\"eye\" cx=\"278\" cy=\"284\" r=\"10\"/>",
+  "gravityPlanet": "<ellipse class=\"detail\" cx=\"250\" cy=\"210\" rx=\"160\" ry=\"54\" fill=\"none\" stroke=\"{s}\" stroke-width=\"13\" transform=\"rotate(-18 250 210)\"/><circle class=\"color-part\" cx=\"250\" cy=\"210\" r=\"95\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M250 142 V260 M220 230 L250 262 L280 230\" stroke=\"{a}\" stroke-width=\"16\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"/><ellipse class=\"detail\" cx=\"202\" cy=\"328\" rx=\"34\" ry=\"22\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"8\"/><ellipse class=\"detail\" cx=\"298\" cy=\"328\" rx=\"34\" ry=\"22\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"8\"/><circle class=\"eye\" cx=\"222\" cy=\"196\" r=\"10\"/><circle class=\"eye\" cx=\"278\" cy=\"196\" r=\"10\"/>",
+  "frictionLizard": "<path class=\"color-part\" d=\"M106 242 C142 160,250 122,348 170 C392 192,392 260,342 292 C250 350,134 320,106 242 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M172 158 L190 110 L220 156 L246 104 L276 158 L312 116 L318 176\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"7\"/><path class=\"detail\" d=\"M120 290 H382 M144 316 H332\" stroke=\"{s}\" stroke-width=\"9\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M328 262 C398 278,420 318,446 352\" fill=\"none\" stroke=\"{s}\" stroke-width=\"13\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"190\" cy=\"220\" r=\"10\"/><circle class=\"eye\" cx=\"244\" cy=\"214\" r=\"10\"/>",
+  "elasticSpring": "<circle class=\"color-part\" cx=\"250\" cy=\"98\" r=\"54\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"color-part\" d=\"M210 158 C310 176,190 206,290 228 C190 250,310 278,210 302 C248 328,286 328,322 302 C222 278,342 250,242 228 C342 206,222 176,322 158\" fill=\"none\" stroke=\"{s}\" stroke-width=\"24\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path class=\"detail\" d=\"M150 196 C98 182,102 270,148 250\" fill=\"none\" stroke=\"{a}\" stroke-width=\"15\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M350 196 C402 182,398 270,352 250\" fill=\"none\" stroke=\"{a}\" stroke-width=\"15\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"230\" cy=\"92\" r=\"9\"/><circle class=\"eye\" cx=\"270\" cy=\"92\" r=\"9\"/>",
+  "pressureBlock": "<path class=\"detail\" d=\"M172 66 H328 V122 H172 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"9\"/><path class=\"detail\" d=\"M200 130 V178 M250 130 V178 M300 130 V178\" stroke=\"{a}\" stroke-width=\"13\" stroke-linecap=\"round\"/><path class=\"color-part\" d=\"M126 194 C126 152,374 152,374 194 L354 318 C344 352,156 352,146 318 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M150 328 H350\" stroke=\"{s}\" stroke-width=\"16\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"220\" cy=\"238\" r=\"10\"/><circle class=\"eye\" cx=\"280\" cy=\"238\" r=\"10\"/>",
+  "divingDrop": "<path class=\"color-part\" d=\"M250 68 C326 156,358 224,330 292 C304 354,196 354,170 292 C142 224,174 156,250 68 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><circle class=\"detail\" cx=\"250\" cy=\"218\" r=\"58\" fill=\"{s}\" opacity=\".85\" stroke=\"#091126\" stroke-width=\"8\"/><circle class=\"detail\" cx=\"390\" cy=\"102\" r=\"14\" fill=\"{a}\"/><circle class=\"detail\" cx=\"366\" cy=\"64\" r=\"10\" fill=\"{a}\"/><path class=\"detail\" d=\"M168 252 L112 284 L160 308 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"7\"/><path class=\"detail\" d=\"M332 252 L388 284 L340 308 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"7\"/><circle class=\"eye\" cx=\"228\" cy=\"216\" r=\"9\"/><circle class=\"eye\" cx=\"272\" cy=\"216\" r=\"9\"/>",
+  "gasCloud": "<path class=\"color-part\" d=\"M158 264 C100 260,86 190,134 164 C140 100,222 84,258 132 C306 94,386 130,376 196 C430 216,402 304,342 292 C302 342,214 336,190 292 C176 292,166 282,158 264 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><circle class=\"detail\" cx=\"252\" cy=\"222\" r=\"48\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"detail\" d=\"M252 222 L286 196\" stroke=\"{a}\" stroke-width=\"8\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M210 110 L210 62 H290 V110\" fill=\"none\" stroke=\"{a}\" stroke-width=\"12\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"208\" cy=\"250\" r=\"10\"/><circle class=\"eye\" cx=\"296\" cy=\"250\" r=\"10\"/>",
+  "tectonicRock": "<path class=\"color-part\" d=\"M132 148 L212 88 L282 122 L354 98 L396 200 L352 322 L224 348 L116 286 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M156 206 L240 150 L234 294 L142 282 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"detail\" d=\"M252 146 L352 176 L326 294 L244 294 Z\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"detail\" d=\"M238 132 L250 318\" stroke=\"#091126\" stroke-width=\"7\" stroke-dasharray=\"14 10\"/><circle class=\"eye\" cx=\"210\" cy=\"224\" r=\"10\"/><circle class=\"eye\" cx=\"292\" cy=\"224\" r=\"10\"/>",
+  "seismicBeast": "<path class=\"detail\" d=\"M96 202 C68 228,68 270,96 296 M404 202 C432 228,432 270,404 296\" fill=\"none\" stroke=\"{a}\" stroke-width=\"10\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M64 178 C22 220,22 284,64 326 M436 178 C478 220,478 284,436 326\" fill=\"none\" stroke=\"{a}\" stroke-width=\"7\" stroke-linecap=\"round\" opacity=\".75\"/><path class=\"color-part\" d=\"M250 82 L354 162 L330 310 L250 360 L170 310 L146 162 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M250 100 L222 190 L270 198 L232 330\" fill=\"none\" stroke=\"{s}\" stroke-width=\"13\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle class=\"eye\" cx=\"218\" cy=\"220\" r=\"10\"/><circle class=\"eye\" cx=\"282\" cy=\"220\" r=\"10\"/>",
+  "volcanoDragon": "<path class=\"detail\" d=\"M230 82 C204 40,252 24,250 64 C284 24,326 54,286 92\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"color-part\" d=\"M250 70 L392 342 H108 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"color-part\" d=\"M250 110 L322 342 H178 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"6\"/><path class=\"detail\" d=\"M206 342 C238 270,262 270,294 342 Z\" fill=\"{a}\" opacity=\".9\"/><path class=\"detail\" d=\"M340 238 C408 250,424 306,448 348\" fill=\"none\" stroke=\"{s}\" stroke-width=\"18\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"226\" cy=\"210\" r=\"11\"/><circle class=\"eye\" cx=\"274\" cy=\"210\" r=\"11\"/>",
+  "crystalRocks": "<path class=\"color-part\" d=\"M250 74 L324 166 L300 334 L250 372 L200 334 L176 166 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M250 82 V366 M180 168 L300 334 M320 168 L200 334\" stroke=\"#fff\" stroke-width=\"6\" opacity=\".4\"/><path class=\"color-part\" d=\"M104 218 L142 178 L186 206 L168 264 L120 270 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"color-part\" d=\"M396 224 L360 180 L316 210 L334 268 L382 270 Z\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"color-part\" d=\"M250 34 L286 78 L250 104 L214 78 Z\" fill=\"{a}\" stroke=\"#091126\" stroke-width=\"8\"/><circle class=\"eye\" cx=\"224\" cy=\"220\" r=\"9\"/><circle class=\"eye\" cx=\"276\" cy=\"220\" r=\"9\"/>",
+  "climateFlower": "<path class=\"detail\" d=\"M250 210 C228 260,224 314,226 364\" stroke=\"{p}\" stroke-width=\"18\" stroke-linecap=\"round\"/><path class=\"color-part\" d=\"M250 156 C216 84,278 58,304 118 C356 80,394 150,326 190 C390 222,344 294,292 236 C272 310,194 288,218 218 C150 238,134 150,206 158 C178 96,232 80,250 156 Z\" fill=\"url(#grad-{b_id})\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"detail\" d=\"M318 76 C360 54,410 80,406 126 C430 132,438 168,410 184\" fill=\"{s}\" opacity=\".85\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"detail\" d=\"M210 304 C170 280,128 302,120 342 C166 350,202 336,226 314\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"7\"/><circle class=\"eye\" cx=\"230\" cy=\"188\" r=\"10\"/><circle class=\"eye\" cx=\"282\" cy=\"188\" r=\"10\"/>",
+  "biodiversityLegend": "<path class=\"detail\" d=\"M250 94 C220 40,164 52,178 116 C118 88,74 136,126 180\" fill=\"none\" stroke=\"{p}\" stroke-width=\"15\" stroke-linecap=\"round\"/><path class=\"detail\" d=\"M250 94 C280 40,336 52,322 116 C382 88,426 136,374 180\" fill=\"none\" stroke=\"{p}\" stroke-width=\"15\" stroke-linecap=\"round\"/><path class=\"color-part\" d=\"M250 84 C318 142,344 238,314 318 C292 372,208 372,186 318 C156 238,182 142,250 84 Z\" fill=\"url(#grad-{b_id})\" stroke=\"#091126\" stroke-width=\"10\"/><path class=\"color-part\" d=\"M168 214 C100 190,78 126,116 90 C176 126,206 172,214 238 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"9\"/><path class=\"color-part\" d=\"M332 214 C400 190,422 126,384 90 C324 126,294 172,286 238 Z\" fill=\"{p}\" stroke=\"#091126\" stroke-width=\"9\"/><path class=\"detail\" d=\"M214 344 C190 382,158 390,130 374 M286 344 C310 382,342 390,370 374\" stroke=\"{p}\" stroke-width=\"13\" stroke-linecap=\"round\" fill=\"none\"/><circle class=\"detail\" cx=\"250\" cy=\"230\" r=\"42\" fill=\"{s}\" stroke=\"#091126\" stroke-width=\"8\"/><path class=\"detail\" d=\"M250 188 V272 M210 230 H290\" stroke=\"{a}\" stroke-width=\"10\" stroke-linecap=\"round\"/><circle class=\"eye\" cx=\"224\" cy=\"190\" r=\"10\"/><circle class=\"eye\" cx=\"276\" cy=\"190\" r=\"10\"/>"
+};
+
+const BIOFORMA_SVG_STYLES = `
+.bioforma-wrap{width:100%;display:grid;place-items:center;position:relative;isolation:isolate}
+.bioforma-wrap.tiny svg{width:92px;height:auto}
+.bioforma-wrap.card svg{width:min(180px,100%);height:auto}
+.bioforma-wrap.large svg{width:min(360px,100%);height:auto}
+.bioforma-svg{width:100%;max-width:360px;overflow:visible;filter:drop-shadow(0 0 10px rgba(72,231,255,.18))}
+.bioforma-svg .color-part,.bioforma-svg .detail,.bioforma-svg .eye,.bioforma-svg .aura{transition:fill .75s ease,stroke .75s ease,opacity .75s ease,filter .75s ease,transform .75s ease;transform-origin:center}
+.bioforma-svg .eye{fill:#06101d;stroke:none}
+.bioforma-wrap.locked .color-part{fill:#05070d!important;stroke:#1e2740!important;filter:grayscale(1) brightness(.48)}
+.bioforma-wrap.locked .detail{fill:#0b1020!important;stroke:#1e2740!important;opacity:.56}
+.bioforma-wrap.locked .eye{fill:#0d1220!important;stroke:#1e2740!important;opacity:.7}
+.bioforma-wrap.locked .aura{opacity:.08!important}
+.bioforma-wrap.locked .question-mark{opacity:1}
+.bioforma-wrap.unlocked .question-mark{opacity:0}
+.bioforma-wrap.unlocked .aura{animation:pulseBioAura 2.4s infinite ease-in-out}
+.bioforma-wrap.reveal .color-part{animation:bioReveal .95s ease both}
+.bioforma-wrap.reveal .aura{animation:pulseBioAura 2.4s infinite ease-in-out,auraPop .95s ease both}
+.bioforma-wrap.legendaria .bioforma-svg{filter:drop-shadow(0 0 18px rgba(255,230,109,.55))}
+.bioforma-wrap.epica .bioforma-svg{filter:drop-shadow(0 0 16px rgba(255,79,216,.45))}
+@keyframes pulseBioAura{0%,100%{opacity:.25;transform:scale(1)}50%{opacity:.55;transform:scale(1.04)}}
+@keyframes bioReveal{0%{filter:grayscale(1) brightness(.25);opacity:.45;transform:scale(.96)}55%{filter:grayscale(.3) brightness(1.6);opacity:1;transform:scale(1.03)}100%{filter:none;opacity:1;transform:scale(1)}}
+@keyframes auraPop{0%{opacity:.05;transform:scale(.75)}60%{opacity:.75;transform:scale(1.08)}100%{opacity:.35;transform:scale(1)}}
+`;
+
+function getBioformaSVGData(input){
+  if(typeof input === "string") return BIOFORMAS_SVG_DATA.find(b => b.id === input || b.nombre === input) || BIOFORMAS_SVG_DATA[0];
+  if(!input) return BIOFORMAS_SVG_DATA[0];
+  const ref = BIOFORMAS_SVG_DATA.find(b => b.id === input.id || b.nombre === input.nombre) || {};
+  const colors = (input.colors && !Array.isArray(input.colors)) ? input.colors : (ref.colors || {primary:"#48e7ff",secondary:"#4dff91",accent:"#ffe66d",glow:"#48e7ff"});
+  return {...ref, ...input, template: input.template || ref.template || 'fireflyCell', colors, rareza: input.rareza || ref.rareza || 'Común'};
+}
+function svgBaseBioforma(b, inner){
+  const c = b.colors || {};
+  const p = c.primary || "#48e7ff", s = c.secondary || "#4dff91", a = c.accent || "#ffe66d", g = c.glow || a;
+  inner = inner.replaceAll("{p}", p).replaceAll("{s}", s).replaceAll("{a}", a).replaceAll("{g}", g).replaceAll("{b_id}", b.id);
+  return `<svg class="bioforma-svg" viewBox="0 0 500 420" role="img" aria-label="${b.nombre}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="aura-${b.id}" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="${g}" stop-opacity=".55"/><stop offset="72%" stop-color="${g}" stop-opacity=".13"/><stop offset="100%" stop-color="${g}" stop-opacity="0"/></radialGradient>
+      <linearGradient id="grad-${b.id}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${p}"/><stop offset="55%" stop-color="${s}"/><stop offset="100%" stop-color="${a}"/></linearGradient>
+    </defs>
+    <ellipse class="aura" cx="250" cy="230" rx="190" ry="150" fill="url(#aura-${b.id})"/>
+    ${inner}
+    <text class="question-mark" x="250" y="238" text-anchor="middle" font-family="monospace" font-weight="900" font-size="110" fill="#dce7ff" opacity="0">?</text>
+  </svg>`;
+}
+function renderBioformaSVG(input, captured=false, size="card", opts={}){
+  const b = getBioformaSVGData(input);
+  const state = captured ? "unlocked" : "locked";
+  const reveal = opts.reveal ? "reveal" : "";
+  const rarityClass = slugCssBioforma(b.rareza);
+  const tpl = BIOFORMA_SVG_TEMPLATES[b.template] || BIOFORMA_SVG_TEMPLATES.fireflyCell;
+  const sizeClass = (typeof size === 'string') ? size : 'dynamic';
+  const inlineStyle = (typeof size === 'number') ? `style="width:${size}px;max-width:100%"` : '';
+  return `<div class="bioforma-wrap ${state} ${sizeClass} ${rarityClass} ${reveal}" ${inlineStyle} data-bioforma="${b.id}">${svgBaseBioforma(b, tpl)}</div>`;
+}
+function injectBioformaSVGStyles(){
+  if(typeof document === "undefined" || document.getElementById("bioforma-svg-styles")) return;
+  const style = document.createElement("style");
+  style.id = "bioforma-svg-styles";
+  style.textContent = BIOFORMA_SVG_STYLES;
+  document.head.appendChild(style);
+}
+function slugCssBioforma(s){
+  return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+}
+if(typeof window !== "undefined"){
+  window.BIOFORMAS_SVG_DATA = BIOFORMAS_SVG_DATA;
+  window.BIOFORMA_SVG_STYLES = BIOFORMA_SVG_STYLES;
+  window.renderBioformaSVG = renderBioformaSVG;
+  window.injectBioformaSVGStyles = injectBioformaSVGStyles;
+}
+
+</script>
+<script>
+const STORAGE_KEY = "biodex_bionova_alumno_v15";
+const ENFORCE_EVOLUTION_ORDER = true;
+const RARITY_ORDER = ["Común","Poco común","Rara","Épica","Legendaria"];
+const BIOFORMAS = [{"id": "B001", "num": "001", "nombre": "Nimbel", "slug": "NIMBEL", "tipo": "Aurora", "rareza": "Común", "zona": "Sector Aurora", "oa": "Ruta 1", "linea": "sexualidad-integral", "etapa": 1, "evolucionaDe": null, "evolucionaA": "B002", "codigo": "CAP-NIMBEL-104", "nivel": 1, "habilidad": "Observación Serena", "shape": "orb", "colors": ["#ff8bd1", "#48e7ff", "#ffe66d"], "descN": "Bioforma inicial detectada en expediciones científicas de Ciudad BioNova.", "descE": "Representa curiosidad, observación y registro de evidencias.", "stats": {"vida": 42, "analisis": 46, "evidencia": 40, "comunicacion": 62, "energia": 55}, "preguntas": [{"id": "B001-SOC-01", "q": "¿Por qué la ciencia es importante para la sociedad?", "correcta": "Porque ayuda a tomar decisiones informadas", "distractores": ["Porque evita hacer preguntas", "Porque solo sirve en laboratorios", "Porque siempre entrega respuestas mágicas"]}, {"id": "B001-SOC-02", "q": "Cuando una investigación afecta a personas, es importante considerar: ", "correcta": "Respeto, ética y bienestar", "distractores": ["Solo rapidez", "Solo ganar una discusión", "Solo ocultar información"]}, {"id": "B001-SOC-03", "q": "Comunicar ciencia con claridad ayuda a: ", "correcta": "Que más personas comprendan y tomen mejores decisiones", "distractores": ["Confundir a la comunidad", "Evitar el diálogo", "Eliminar toda evidencia"]}]}, {"id": "B002", "num": "002", "nombre": "Auralis", "slug": "AURALIS", "tipo": "Aurora", "rareza": "Poco común", "zona": "Sector Aurora", "oa": "Ruta 1", "linea": "sexualidad-integral", "etapa": 2, "evolucionaDe": "B001", "evolucionaA": "B003", "codigo": "CAP-AURALIS-216", "nivel": 6, "habilidad": "Escucha Mutua", "shape": "wing", "colors": ["#ff8bd1", "#a477ff", "#48e7ff"], "descN": "Bioforma intermedia que aparece cuando el registro y el análisis se vuelven más precisos.", "descE": "Representa comparación de datos, uso de modelos y comunicación clara.", "stats": {"vida": 58, "analisis": 48, "evidencia": 52, "comunicacion": 78, "energia": 62}, "preguntas": [{"id": "B002-SOC-02", "q": "Cuando una investigación afecta a personas, es importante considerar: ", "correcta": "Respeto, ética y bienestar", "distractores": ["Solo rapidez", "Solo ganar una discusión", "Solo ocultar información"]}, {"id": "B002-SOC-03", "q": "Comunicar ciencia con claridad ayuda a: ", "correcta": "Que más personas comprendan y tomen mejores decisiones", "distractores": ["Confundir a la comunidad", "Evitar el diálogo", "Eliminar toda evidencia"]}, {"id": "B002-SOC-04", "q": "Una decisión responsable basada en ciencia debe considerar: ", "correcta": "Evidencia, contexto e impacto en las personas", "distractores": ["Solo rumores", "Solo miedo", "Solo la primera opinión escuchada"]}]}, {"id": "B003", "num": "003", "nombre": "Prismara", "slug": "PRISMARA", "tipo": "Aurora", "rareza": "Rara", "zona": "Sector Aurora", "oa": "Ruta 1", "linea": "sexualidad-integral", "etapa": 3, "evolucionaDe": "B002", "evolucionaA": null, "codigo": "CAP-PRISMARA-337", "nivel": 12, "habilidad": "Acuerdo Claro", "shape": "crystal", "colors": ["#ff4fd8", "#ffe66d", "#48e7ff"], "descN": "Bioforma avanzada que refleja un mayor dominio del proceso de investigación.", "descE": "Representa pensamiento crítico, toma de decisiones y aplicación responsable de la ciencia.", "stats": {"vida": 72, "analisis": 66, "evidencia": 70, "comunicacion": 84, "energia": 76}, "preguntas": [{"id": "B003-SOC-03", "q": "Comunicar ciencia con claridad ayuda a: ", "correcta": "Que más personas comprendan y tomen mejores decisiones", "distractores": ["Confundir a la comunidad", "Evitar el diálogo", "Eliminar toda evidencia"]}, {"id": "B003-SOC-04", "q": "Una decisión responsable basada en ciencia debe considerar: ", "correcta": "Evidencia, contexto e impacto en las personas", "distractores": ["Solo rumores", "Solo miedo", "Solo la primera opinión escuchada"]}, {"id": "B003-SOC-01", "q": "¿Por qué la ciencia es importante para la sociedad?", "correcta": "Porque ayuda a tomar decisiones informadas", "distractores": ["Porque evita hacer preguntas", "Porque solo sirve en laboratorios", "Porque siempre entrega respuestas mágicas"]}]}, {"id": "B004", "num": "004", "nombre": "Lunor", "slug": "LUNOR", "tipo": "Prisma", "rareza": "Común", "zona": "Santuario Prisma", "oa": "Ruta 2", "linea": "formacion-vida", "etapa": 1, "evolucionaDe": null, "evolucionaA": "B005", "codigo": "CAP-LUNOR-441", "nivel": 1, "habilidad": "Registro de Ciclos", "shape": "orb", "colors": ["#ff9d4d", "#ffe66d", "#ff8bd1"], "descN": "Bioforma inicial detectada en expediciones científicas de Ciudad BioNova.", "descE": "Representa curiosidad, observación y registro de evidencias.", "stats": {"vida": 44, "analisis": 58, "evidencia": 54, "comunicacion": 48, "energia": 60}, "preguntas": [{"id": "B004-MOD-01", "q": "¿Para qué sirve un modelo científico?", "correcta": "Para representar y explicar un fenómeno", "distractores": ["Para reemplazar siempre la realidad", "Para evitar usar evidencia", "Para decorar una respuesta"]}, {"id": "B004-MOD-02", "q": "Un buen modelo científico debe: ", "correcta": "Ayudar a comprender un fenómeno y reconocer sus límites", "distractores": ["Ser perfecto en todo", "No relacionarse con datos", "Impedir hacer preguntas"]}, {"id": "B004-MOD-03", "q": "¿Por qué se usan modelos para fenómenos microscópicos o geológicos?", "correcta": "Porque ayudan a explicar procesos difíciles de observar directamente", "distractores": ["Porque los datos no importan", "Porque reemplazan toda investigación", "Porque siempre son inventados sin evidencia"]}]}, {"id": "B005", "num": "005", "nombre": "Orbelix", "slug": "ORBELIX", "tipo": "Prisma", "rareza": "Poco común", "zona": "Santuario Prisma", "oa": "Ruta 2", "linea": "formacion-vida", "etapa": 2, "evolucionaDe": "B004", "evolucionaA": "B006", "codigo": "CAP-ORBELIX-512", "nivel": 7, "habilidad": "Modelo Celular", "shape": "cell", "colors": ["#ff9d4d", "#48e7ff", "#4dff91"], "descN": "Bioforma intermedia que aparece cuando el registro y el análisis se vuelven más precisos.", "descE": "Representa comparación de datos, uso de modelos y comunicación clara.", "stats": {"vida": 56, "analisis": 68, "evidencia": 62, "comunicacion": 56, "energia": 68}, "preguntas": [{"id": "B005-MOD-02", "q": "Un buen modelo científico debe: ", "correcta": "Ayudar a comprender un fenómeno y reconocer sus límites", "distractores": ["Ser perfecto en todo", "No relacionarse con datos", "Impedir hacer preguntas"]}, {"id": "B005-MOD-03", "q": "¿Por qué se usan modelos para fenómenos microscópicos o geológicos?", "correcta": "Porque ayudan a explicar procesos difíciles de observar directamente", "distractores": ["Porque los datos no importan", "Porque reemplazan toda investigación", "Porque siempre son inventados sin evidencia"]}, {"id": "B005-MOD-04", "q": "Si un modelo no explica bien nuevos datos, se debe: ", "correcta": "Ajustar o mejorar el modelo", "distractores": ["Ocultar los datos nuevos", "Prohibir nuevas observaciones", "Mantenerlo igual aunque falle"]}]}, {"id": "B006", "num": "006", "nombre": "Solvian", "slug": "SOLVIAN", "tipo": "Prisma", "rareza": "Rara", "zona": "Santuario Prisma", "oa": "Ruta 2", "linea": "formacion-vida", "etapa": 3, "evolucionaDe": "B005", "evolucionaA": null, "codigo": "CAP-SOLVIAN-633", "nivel": 13, "habilidad": "Decisión Informada", "shape": "shield", "colors": ["#ffe66d", "#ff9d4d", "#ff4fd8"], "descN": "Bioforma avanzada que refleja un mayor dominio del proceso de investigación.", "descE": "Representa pensamiento crítico, toma de decisiones y aplicación responsable de la ciencia.", "stats": {"vida": 78, "analisis": 72, "evidencia": 82, "comunicacion": 70, "energia": 80}, "preguntas": [{"id": "B006-MOD-03", "q": "¿Por qué se usan modelos para fenómenos microscópicos o geológicos?", "correcta": "Porque ayudan a explicar procesos difíciles de observar directamente", "distractores": ["Porque los datos no importan", "Porque reemplazan toda investigación", "Porque siempre son inventados sin evidencia"]}, {"id": "B006-MOD-04", "q": "Si un modelo no explica bien nuevos datos, se debe: ", "correcta": "Ajustar o mejorar el modelo", "distractores": ["Ocultar los datos nuevos", "Prohibir nuevas observaciones", "Mantenerlo igual aunque falle"]}, {"id": "B006-MOD-01", "q": "¿Para qué sirve un modelo científico?", "correcta": "Para representar y explicar un fenómeno", "distractores": ["Para reemplazar siempre la realidad", "Para evitar usar evidencia", "Para decorar una respuesta"]}]}, {"id": "B007", "num": "007", "nombre": "Vireon", "slug": "VIREON", "tipo": "Nexo", "rareza": "Común", "zona": "Distrito Nexo", "oa": "Ruta 3", "linea": "prevencion-its", "etapa": 1, "evolucionaDe": null, "evolucionaA": "B008", "codigo": "CAP-VIREON-745", "nivel": 1, "habilidad": "Pregunta Oportuna", "shape": "microbe", "colors": ["#ff5f7a", "#ffe66d", "#48e7ff"], "descN": "Bioforma inicial detectada en expediciones científicas de Ciudad BioNova.", "descE": "Representa curiosidad, observación y registro de evidencias.", "stats": {"vida": 40, "analisis": 52, "evidencia": 46, "comunicacion": 58, "energia": 54}, "preguntas": [{"id": "B007-SEG-01", "q": "¿Por qué existen normas de seguridad en ciencias?", "correcta": "Para proteger a las personas, las muestras y el ambiente", "distractores": ["Para hacer más lento todo sin razón", "Para evitar aprender", "Para reemplazar la evidencia"]}, {"id": "B007-SEG-02", "q": "En temas de salud, una fuente confiable suele ser: ", "correcta": "Un centro de salud o material científico revisado", "distractores": ["Un rumor anónimo", "Un meme sin autor", "La primera publicación que aparece"]}, {"id": "B007-SEG-03", "q": "Si una información puede afectar la salud de otros, conviene: ", "correcta": "Comunicarla con cuidado y verificarla antes", "distractores": ["Difundirla sin revisar", "Exagerarla para llamar la atención", "Ocultarla siempre"]}]}, {"id": "B008", "num": "008", "nombre": "Nexora", "slug": "NEXORA", "tipo": "Nexo", "rareza": "Poco común", "zona": "Distrito Nexo", "oa": "Ruta 3", "linea": "prevencion-its", "etapa": 2, "evolucionaDe": "B007", "evolucionaA": "B009", "codigo": "CAP-NEXORA-856", "nivel": 7, "habilidad": "Fuente Segura", "shape": "shield", "colors": ["#ff5f7a", "#4dff91", "#48e7ff"], "descN": "Bioforma intermedia que aparece cuando el registro y el análisis se vuelven más precisos.", "descE": "Representa comparación de datos, uso de modelos y comunicación clara.", "stats": {"vida": 60, "analisis": 60, "evidencia": 70, "comunicacion": 72, "energia": 66}, "preguntas": [{"id": "B008-SEG-02", "q": "En temas de salud, una fuente confiable suele ser: ", "correcta": "Un centro de salud o material científico revisado", "distractores": ["Un rumor anónimo", "Un meme sin autor", "La primera publicación que aparece"]}, {"id": "B008-SEG-03", "q": "Si una información puede afectar la salud de otros, conviene: ", "correcta": "Comunicarla con cuidado y verificarla antes", "distractores": ["Difundirla sin revisar", "Exagerarla para llamar la atención", "Ocultarla siempre"]}, {"id": "B008-SEG-04", "q": "Una actitud ética en ciencias es: ", "correcta": "Reconocer límites, cuidar datos y respetar a las personas", "distractores": ["Inventar resultados", "Burlarse de dudas", "Copiar conclusiones sin revisar"]}]}, {"id": "B009", "num": "009", "nombre": "Clyrion", "slug": "CLYRION", "tipo": "Nexo", "rareza": "Rara", "zona": "Distrito Nexo", "oa": "Ruta 3", "linea": "prevencion-its", "etapa": 3, "evolucionaDe": "B008", "evolucionaA": null, "codigo": "CAP-CLYRION-967", "nivel": 14, "habilidad": "Red de Cuidado", "shape": "wing", "colors": ["#ff5f7a", "#ff8bd1", "#ffe66d"], "descN": "Bioforma avanzada que refleja un mayor dominio del proceso de investigación.", "descE": "Representa pensamiento crítico, toma de decisiones y aplicación responsable de la ciencia.", "stats": {"vida": 76, "analisis": 70, "evidencia": 84, "comunicacion": 80, "energia": 82}, "preguntas": [{"id": "B009-SEG-03", "q": "Si una información puede afectar la salud de otros, conviene: ", "correcta": "Comunicarla con cuidado y verificarla antes", "distractores": ["Difundirla sin revisar", "Exagerarla para llamar la atención", "Ocultarla siempre"]}, {"id": "B009-SEG-04", "q": "Una actitud ética en ciencias es: ", "correcta": "Reconocer límites, cuidar datos y respetar a las personas", "distractores": ["Inventar resultados", "Burlarse de dudas", "Copiar conclusiones sin revisar"]}, {"id": "B009-SEG-01", "q": "¿Por qué existen normas de seguridad en ciencias?", "correcta": "Para proteger a las personas, las muestras y el ambiente", "distractores": ["Para hacer más lento todo sin razón", "Para evitar aprender", "Para reemplazar la evidencia"]}]}, {"id": "B010", "num": "010", "nombre": "Terral", "slug": "TERRAL", "tipo": "Nova", "rareza": "Común", "zona": "Muralla Nova", "oa": "Ruta 4", "linea": "defensa-cuerpo", "etapa": 1, "evolucionaDe": null, "evolucionaA": "B011", "codigo": "CAP-TERRAL-178", "nivel": 1, "habilidad": "Primera Barrera", "shape": "shield", "colors": ["#4dff91", "#48e7ff", "#ffe66d"], "descN": "Bioforma inicial detectada en expediciones científicas de Ciudad BioNova.", "descE": "Representa curiosidad, observación y registro de evidencias.", "stats": {"vida": 58, "analisis": 48, "evidencia": 52, "comunicacion": 44, "energia": 50}, "preguntas": [{"id": "B010-MOD-01", "q": "¿Para qué sirve un modelo científico?", "correcta": "Para representar y explicar un fenómeno", "distractores": ["Para reemplazar siempre la realidad", "Para evitar usar evidencia", "Para decorar una respuesta"]}, {"id": "B010-MOD-02", "q": "Un buen modelo científico debe: ", "correcta": "Ayudar a comprender un fenómeno y reconocer sus límites", "distractores": ["Ser perfecto en todo", "No relacionarse con datos", "Impedir hacer preguntas"]}, {"id": "B010-MOD-03", "q": "¿Por qué se usan modelos para fenómenos microscópicos o geológicos?", "correcta": "Porque ayudan a explicar procesos difíciles de observar directamente", "distractores": ["Porque los datos no importan", "Porque reemplazan toda investigación", "Porque siempre son inventados sin evidencia"]}]}, {"id": "B011", "num": "011", "nombre": "Valtrix", "slug": "VALTRIX", "tipo": "Nova", "rareza": "Poco común", "zona": "Muralla Nova", "oa": "Ruta 4", "linea": "defensa-cuerpo", "etapa": 2, "evolucionaDe": "B010", "evolucionaA": "B012", "codigo": "CAP-VALTRIX-289", "nivel": 8, "habilidad": "Respuesta Basada en Datos", "shape": "cell", "colors": ["#4dff91", "#a477ff", "#48e7ff"], "descN": "Bioforma intermedia que aparece cuando el registro y el análisis se vuelven más precisos.", "descE": "Representa comparación de datos, uso de modelos y comunicación clara.", "stats": {"vida": 70, "analisis": 72, "evidencia": 74, "comunicacion": 54, "energia": 66}, "preguntas": [{"id": "B011-MOD-02", "q": "Un buen modelo científico debe: ", "correcta": "Ayudar a comprender un fenómeno y reconocer sus límites", "distractores": ["Ser perfecto en todo", "No relacionarse con datos", "Impedir hacer preguntas"]}, {"id": "B011-MOD-03", "q": "¿Por qué se usan modelos para fenómenos microscópicos o geológicos?", "correcta": "Porque ayudan a explicar procesos difíciles de observar directamente", "distractores": ["Porque los datos no importan", "Porque reemplazan toda investigación", "Porque siempre son inventados sin evidencia"]}, {"id": "B011-MOD-04", "q": "Si un modelo no explica bien nuevos datos, se debe: ", "correcta": "Ajustar o mejorar el modelo", "distractores": ["Ocultar los datos nuevos", "Prohibir nuevas observaciones", "Mantenerlo igual aunque falle"]}]}, {"id": "B012", "num": "012", "nombre": "Aegira", "slug": "AEGIRA", "tipo": "Nova", "rareza": "Rara", "zona": "Muralla Nova", "oa": "Ruta 4", "linea": "defensa-cuerpo", "etapa": 3, "evolucionaDe": "B011", "evolucionaA": null, "codigo": "CAP-AEGIRA-390", "nivel": 15, "habilidad": "Memoria de Evidencia", "shape": "crystal", "colors": ["#4dff91", "#ffe66d", "#48e7ff"], "descN": "Bioforma avanzada que refleja un mayor dominio del proceso de investigación.", "descE": "Representa pensamiento crítico, toma de decisiones y aplicación responsable de la ciencia.", "stats": {"vida": 86, "analisis": 76, "evidencia": 90, "comunicacion": 68, "energia": 84}, "preguntas": [{"id": "B012-MOD-03", "q": "¿Por qué se usan modelos para fenómenos microscópicos o geológicos?", "correcta": "Porque ayudan a explicar procesos difíciles de observar directamente", "distractores": ["Porque los datos no importan", "Porque reemplazan toda investigación", "Porque siempre son inventados sin evidencia"]}, {"id": "B012-MOD-04", "q": "Si un modelo no explica bien nuevos datos, se debe: ", "correcta": "Ajustar o mejorar el modelo", "distractores": ["Ocultar los datos nuevos", "Prohibir nuevas observaciones", "Mantenerlo igual aunque falle"]}, {"id": "B012-MOD-01", "q": "¿Para qué sirve un modelo científico?", "correcta": "Para representar y explicar un fenómeno", "distractores": ["Para reemplazar siempre la realidad", "Para evitar usar evidencia", "Para decorar una respuesta"]}]}, {"id": "B013", "num": "013", "nombre": "Myrka", "slug": "MYRKA", "tipo": "Bruma", "rareza": "Común", "zona": "Laboratorio Bruma", "oa": "Ruta 5", "linea": "microorganismos", "etapa": 1, "evolucionaDe": null, "evolucionaA": "B014", "codigo": "CAP-MYRKA-402", "nivel": 1, "habilidad": "Escala Invisible", "shape": "microbe", "colors": ["#9cffd2", "#48e7ff", "#a477ff"], "descN": "Bioforma inicial detectada en expediciones científicas de Ciudad BioNova.", "descE": "Representa curiosidad, observación y registro de evidencias.", "stats": {"vida": 36, "analisis": 58, "evidencia": 50, "comunicacion": 42, "energia": 48}, "preguntas": [{"id": "B013-MOD-01", "q": "¿Para qué sirve un modelo científico?", "correcta": "Para representar y explicar un fenómeno", "distractores": ["Para reemplazar siempre la realidad", "Para evitar usar evidencia", "Para decorar una respuesta"]}, {"id": "B013-MOD-02", "q": "Un buen modelo científico debe: ", "correcta": "Ayudar a comprender un fenómeno y reconocer sus límites", "distractores": ["Ser perfecto en todo", "No relacionarse con datos", "Impedir hacer preguntas"]}, {"id": "B013-MOD-03", "q": "¿Por qué se usan modelos para fenómenos microscópicos o geológicos?", "correcta": "Porque ayudan a explicar procesos difíciles de observar directamente", "distractores": ["Porque los datos no importan", "Porque reemplazan toda investigación", "Porque siempre son inventados sin evidencia"]}]}, {"id": "B014", "num": "014", "nombre": "Zephor", "slug": "ZEPHOR", "tipo": "Bruma", "rareza": "Poco común", "zona": "Laboratorio Bruma", "oa": "Ruta 5", "linea": "microorganismos", "etapa": 2, "evolucionaDe": "B013", "evolucionaA": "B015", "codigo": "CAP-ZEPHOR-513", "nivel": 7, "habilidad": "Comparación Microscópica", "shape": "microbe", "colors": ["#9cffd2", "#4dff91", "#ffe66d"], "descN": "Bioforma intermedia que aparece cuando el registro y el análisis se vuelven más precisos.", "descE": "Representa comparación de datos, uso de modelos y comunicación clara.", "stats": {"vida": 62, "analisis": 72, "evidencia": 66, "comunicacion": 52, "energia": 62}, "preguntas": [{"id": "B014-MOD-02", "q": "Un buen modelo científico debe: ", "correcta": "Ayudar a comprender un fenómeno y reconocer sus límites", "distractores": ["Ser perfecto en todo", "No relacionarse con datos", "Impedir hacer preguntas"]}, {"id": "B014-MOD-03", "q": "¿Por qué se usan modelos para fenómenos microscópicos o geológicos?", "correcta": "Porque ayudan a explicar procesos difíciles de observar directamente", "distractores": ["Porque los datos no importan", "Porque reemplazan toda investigación", "Porque siempre son inventados sin evidencia"]}, {"id": "B014-MOD-04", "q": "Si un modelo no explica bien nuevos datos, se debe: ", "correcta": "Ajustar o mejorar el modelo", "distractores": ["Ocultar los datos nuevos", "Prohibir nuevas observaciones", "Mantenerlo igual aunque falle"]}]}, {"id": "B015", "num": "015", "nombre": "Spirel", "slug": "SPIREL", "tipo": "Bruma", "rareza": "Rara", "zona": "Laboratorio Bruma", "oa": "Ruta 5", "linea": "microorganismos", "etapa": 3, "evolucionaDe": "B014", "evolucionaA": null, "codigo": "CAP-SPIREL-624", "nivel": 13, "habilidad": "Patrón de Esporas", "shape": "flower", "colors": ["#9cffd2", "#ff8bd1", "#ffe66d"], "descN": "Bioforma avanzada que refleja un mayor dominio del proceso de investigación.", "descE": "Representa pensamiento crítico, toma de decisiones y aplicación responsable de la ciencia.", "stats": {"vida": 76, "analisis": 78, "evidencia": 72, "comunicacion": 64, "energia": 76}, "preguntas": [{"id": "B015-MOD-03", "q": "¿Por qué se usan modelos para fenómenos microscópicos o geológicos?", "correcta": "Porque ayudan a explicar procesos difíciles de observar directamente", "distractores": ["Porque los datos no importan", "Porque reemplazan toda investigación", "Porque siempre son inventados sin evidencia"]}, {"id": "B015-MOD-04", "q": "Si un modelo no explica bien nuevos datos, se debe: ", "correcta": "Ajustar o mejorar el modelo", "distractores": ["Ocultar los datos nuevos", "Prohibir nuevas observaciones", "Mantenerlo igual aunque falle"]}, {"id": "B015-MOD-01", "q": "¿Para qué sirve un modelo científico?", "correcta": "Para representar y explicar un fenómeno", "distractores": ["Para reemplazar siempre la realidad", "Para evitar usar evidencia", "Para decorar una respuesta"]}]}, {"id": "B016", "num": "016", "nombre": "Embera", "slug": "EMBERA", "tipo": "Lumen", "rareza": "Común", "zona": "Fábrica Lumen", "oa": "Ruta 6", "linea": "biotecnologia", "etapa": 1, "evolucionaDe": null, "evolucionaA": "B017", "codigo": "CAP-EMBERA-735", "nivel": 1, "habilidad": "Proceso Controlado", "shape": "cell", "colors": ["#a477ff", "#ffe66d", "#4dff91"], "descN": "Bioforma inicial detectada en expediciones científicas de Ciudad BioNova.", "descE": "Representa curiosidad, observación y registro de evidencias.", "stats": {"vida": 48, "analisis": 60, "evidencia": 58, "comunicacion": 48, "energia": 68}, "preguntas": [{"id": "B016-SOC-01", "q": "¿Por qué la ciencia es importante para la sociedad?", "correcta": "Porque ayuda a tomar decisiones informadas", "distractores": ["Porque evita hacer preguntas", "Porque solo sirve en laboratorios", "Porque siempre entrega respuestas mágicas"]}, {"id": "B016-SOC-02", "q": "Cuando una investigación afecta a personas, es importante considerar: ", "correcta": "Respeto, ética y bienestar", "distractores": ["Solo rapidez", "Solo ganar una discusión", "Solo ocultar información"]}, {"id": "B016-SOC-03", "q": "Comunicar ciencia con claridad ayuda a: ", "correcta": "Que más personas comprendan y tomen mejores decisiones", "distractores": ["Confundir a la comunidad", "Evitar el diálogo", "Eliminar toda evidencia"]}]}, {"id": "B017", "num": "017", "nombre": "Cylar", "slug": "CYLAR", "tipo": "Lumen", "rareza": "Poco común", "zona": "Fábrica Lumen", "oa": "Ruta 6", "linea": "biotecnologia", "etapa": 2, "evolucionaDe": "B016", "evolucionaA": "B018", "codigo": "CAP-CYLAR-846", "nivel": 8, "habilidad": "Solución Diseñada", "shape": "crystal", "colors": ["#a477ff", "#48e7ff", "#4dff91"], "descN": "Bioforma intermedia que aparece cuando el registro y el análisis se vuelven más precisos.", "descE": "Representa comparación de datos, uso de modelos y comunicación clara.", "stats": {"vida": 64, "analisis": 74, "evidencia": 76, "comunicacion": 62, "energia": 80}, "preguntas": [{"id": "B017-SOC-02", "q": "Cuando una investigación afecta a personas, es importante considerar: ", "correcta": "Respeto, ética y bienestar", "distractores": ["Solo rapidez", "Solo ganar una discusión", "Solo ocultar información"]}, {"id": "B017-SOC-03", "q": "Comunicar ciencia con claridad ayuda a: ", "correcta": "Que más personas comprendan y tomen mejores decisiones", "distractores": ["Confundir a la comunidad", "Evitar el diálogo", "Eliminar toda evidencia"]}, {"id": "B017-SOC-04", "q": "Una decisión responsable basada en ciencia debe considerar: ", "correcta": "Evidencia, contexto e impacto en las personas", "distractores": ["Solo rumores", "Solo miedo", "Solo la primera opinión escuchada"]}]}, {"id": "B018", "num": "018", "nombre": "Orynx", "slug": "ORYNX", "tipo": "Lumen", "rareza": "Rara", "zona": "Fábrica Lumen", "oa": "Ruta 6", "linea": "biotecnologia", "etapa": 3, "evolucionaDe": "B017", "evolucionaA": null, "codigo": "CAP-ORYNX-957", "nivel": 14, "habilidad": "Impacto Social", "shape": "shield", "colors": ["#a477ff", "#ff5f7a", "#ffe66d"], "descN": "Bioforma avanzada que refleja un mayor dominio del proceso de investigación.", "descE": "Representa pensamiento crítico, toma de decisiones y aplicación responsable de la ciencia.", "stats": {"vida": 78, "analisis": 78, "evidencia": 84, "comunicacion": 72, "energia": 88}, "preguntas": [{"id": "B018-SOC-03", "q": "Comunicar ciencia con claridad ayuda a: ", "correcta": "Que más personas comprendan y tomen mejores decisiones", "distractores": ["Confundir a la comunidad", "Evitar el diálogo", "Eliminar toda evidencia"]}, {"id": "B018-SOC-04", "q": "Una decisión responsable basada en ciencia debe considerar: ", "correcta": "Evidencia, contexto e impacto en las personas", "distractores": ["Solo rumores", "Solo miedo", "Solo la primera opinión escuchada"]}, {"id": "B018-SOC-01", "q": "¿Por qué la ciencia es importante para la sociedad?", "correcta": "Porque ayuda a tomar decisiones informadas", "distractores": ["Porque evita hacer preguntas", "Porque solo sirve en laboratorios", "Porque siempre entrega respuestas mágicas"]}]}, {"id": "B019", "num": "019", "nombre": "Altor", "slug": "ALTOR", "tipo": "Vector", "rareza": "Común", "zona": "Campo Vector", "oa": "Ruta 7", "linea": "fuerzas", "etapa": 1, "evolucionaDe": null, "evolucionaA": "B020", "codigo": "CAP-ALTOR-167", "nivel": 1, "habilidad": "Pregunta Medible", "shape": "force", "colors": ["#ffe66d", "#48e7ff", "#ff9d4d"], "descN": "Bioforma inicial detectada en expediciones científicas de Ciudad BioNova.", "descE": "Representa curiosidad, observación y registro de evidencias.", "stats": {"vida": 50, "analisis": 62, "evidencia": 54, "comunicacion": 44, "energia": 56}, "preguntas": [{"id": "B019-VAR-01", "q": "¿Qué significa controlar variables?", "correcta": "Mantener algunos factores iguales para comparar mejor", "distractores": ["Cambiar todo al mismo tiempo", "No registrar datos", "Elegir la respuesta más rápida"]}, {"id": "B019-VAR-02", "q": "¿Por qué repetir una medición puede mejorar una investigación?", "correcta": "Porque ayuda a detectar errores y confirmar resultados", "distractores": ["Porque elimina la necesidad de pensar", "Porque cambia la hipótesis automáticamente", "Porque evita usar evidencia"]}, {"id": "B019-VAR-03", "q": "En una comparación justa, lo ideal es: ", "correcta": "Cambiar solo el factor que se quiere estudiar", "distractores": ["Cambiar todas las condiciones", "No observar nada", "No anotar resultados"]}]}, {"id": "B020", "num": "020", "nombre": "Dravik", "slug": "DRAVIK", "tipo": "Vector", "rareza": "Poco común", "zona": "Campo Vector", "oa": "Ruta 7", "linea": "fuerzas", "etapa": 2, "evolucionaDe": "B019", "evolucionaA": "B021", "codigo": "CAP-DRAVIK-278", "nivel": 7, "habilidad": "Variable Controlada", "shape": "force", "colors": ["#ffe66d", "#ff5f7a", "#48e7ff"], "descN": "Bioforma intermedia que aparece cuando el registro y el análisis se vuelven más precisos.", "descE": "Representa comparación de datos, uso de modelos y comunicación clara.", "stats": {"vida": 60, "analisis": 78, "evidencia": 68, "comunicacion": 52, "energia": 62}, "preguntas": [{"id": "B020-VAR-02", "q": "¿Por qué repetir una medición puede mejorar una investigación?", "correcta": "Porque ayuda a detectar errores y confirmar resultados", "distractores": ["Porque elimina la necesidad de pensar", "Porque cambia la hipótesis automáticamente", "Porque evita usar evidencia"]}, {"id": "B020-VAR-03", "q": "En una comparación justa, lo ideal es: ", "correcta": "Cambiar solo el factor que se quiere estudiar", "distractores": ["Cambiar todas las condiciones", "No observar nada", "No anotar resultados"]}, {"id": "B020-VAR-04", "q": "Una tabla o gráfico sirve para: ", "correcta": "Organizar datos y ver patrones", "distractores": ["Reemplazar toda investigación", "Ocultar información", "Adivinar conclusiones"]}]}, {"id": "B021", "num": "021", "nombre": "Velion", "slug": "VELION", "tipo": "Vector", "rareza": "Rara", "zona": "Campo Vector", "oa": "Ruta 7", "linea": "fuerzas", "etapa": 3, "evolucionaDe": "B020", "evolucionaA": null, "codigo": "CAP-VELION-389", "nivel": 13, "habilidad": "Ensayo Repetible", "shape": "force", "colors": ["#ffe66d", "#4dff91", "#a477ff"], "descN": "Bioforma avanzada que refleja un mayor dominio del proceso de investigación.", "descE": "Representa pensamiento crítico, toma de decisiones y aplicación responsable de la ciencia.", "stats": {"vida": 72, "analisis": 86, "evidencia": 78, "comunicacion": 60, "energia": 74}, "preguntas": [{"id": "B021-VAR-03", "q": "En una comparación justa, lo ideal es: ", "correcta": "Cambiar solo el factor que se quiere estudiar", "distractores": ["Cambiar todas las condiciones", "No observar nada", "No anotar resultados"]}, {"id": "B021-VAR-04", "q": "Una tabla o gráfico sirve para: ", "correcta": "Organizar datos y ver patrones", "distractores": ["Reemplazar toda investigación", "Ocultar información", "Adivinar conclusiones"]}, {"id": "B021-VAR-01", "q": "¿Qué significa controlar variables?", "correcta": "Mantener algunos factores iguales para comparar mejor", "distractores": ["Cambiar todo al mismo tiempo", "No registrar datos", "Elegir la respuesta más rápida"]}]}, {"id": "B022", "num": "022", "nombre": "Umbrin", "slug": "UMBRIN", "tipo": "Umbral", "rareza": "Común", "zona": "Cámara Umbral", "oa": "Ruta 8", "linea": "presion", "etapa": 1, "evolucionaDe": null, "evolucionaA": "B023", "codigo": "CAP-UMBRIN-490", "nivel": 1, "habilidad": "Medición Clara", "shape": "orb", "colors": ["#48e7ff", "#ffe66d", "#c7d2ff"], "descN": "Bioforma inicial detectada en expediciones científicas de Ciudad BioNova.", "descE": "Representa curiosidad, observación y registro de evidencias.", "stats": {"vida": 48, "analisis": 62, "evidencia": 58, "comunicacion": 46, "energia": 54}, "preguntas": [{"id": "B022-VAR-01", "q": "¿Qué significa controlar variables?", "correcta": "Mantener algunos factores iguales para comparar mejor", "distractores": ["Cambiar todo al mismo tiempo", "No registrar datos", "Elegir la respuesta más rápida"]}, {"id": "B022-VAR-02", "q": "¿Por qué repetir una medición puede mejorar una investigación?", "correcta": "Porque ayuda a detectar errores y confirmar resultados", "distractores": ["Porque elimina la necesidad de pensar", "Porque cambia la hipótesis automáticamente", "Porque evita usar evidencia"]}, {"id": "B022-VAR-03", "q": "En una comparación justa, lo ideal es: ", "correcta": "Cambiar solo el factor que se quiere estudiar", "distractores": ["Cambiar todas las condiciones", "No observar nada", "No anotar resultados"]}]}, {"id": "B023", "num": "023", "nombre": "Caelix", "slug": "CAELIX", "tipo": "Umbral", "rareza": "Poco común", "zona": "Cámara Umbral", "oa": "Ruta 8", "linea": "presion", "etapa": 2, "evolucionaDe": "B022", "evolucionaA": "B024", "codigo": "CAP-CAELIX-601", "nivel": 8, "habilidad": "Modelo de Profundidad", "shape": "cell", "colors": ["#48e7ff", "#4dff91", "#ffe66d"], "descN": "Bioforma intermedia que aparece cuando el registro y el análisis se vuelven más precisos.", "descE": "Representa comparación de datos, uso de modelos y comunicación clara.", "stats": {"vida": 64, "analisis": 74, "evidencia": 70, "comunicacion": 56, "energia": 66}, "preguntas": [{"id": "B023-VAR-02", "q": "¿Por qué repetir una medición puede mejorar una investigación?", "correcta": "Porque ayuda a detectar errores y confirmar resultados", "distractores": ["Porque elimina la necesidad de pensar", "Porque cambia la hipótesis automáticamente", "Porque evita usar evidencia"]}, {"id": "B023-VAR-03", "q": "En una comparación justa, lo ideal es: ", "correcta": "Cambiar solo el factor que se quiere estudiar", "distractores": ["Cambiar todas las condiciones", "No observar nada", "No anotar resultados"]}, {"id": "B023-VAR-04", "q": "Una tabla o gráfico sirve para: ", "correcta": "Organizar datos y ver patrones", "distractores": ["Reemplazar toda investigación", "Ocultar información", "Adivinar conclusiones"]}]}, {"id": "B024", "num": "024", "nombre": "Nuvora", "slug": "NUVORA", "tipo": "Umbral", "rareza": "Rara", "zona": "Cámara Umbral", "oa": "Ruta 8", "linea": "presion", "etapa": 3, "evolucionaDe": "B023", "evolucionaA": null, "codigo": "CAP-NUVORA-712", "nivel": 14, "habilidad": "Partículas en Modelo", "shape": "orb", "colors": ["#48e7ff", "#ff4fd8", "#ffe66d"], "descN": "Bioforma avanzada que refleja un mayor dominio del proceso de investigación.", "descE": "Representa pensamiento crítico, toma de decisiones y aplicación responsable de la ciencia.", "stats": {"vida": 74, "analisis": 82, "evidencia": 74, "comunicacion": 68, "energia": 80}, "preguntas": [{"id": "B024-VAR-03", "q": "En una comparación justa, lo ideal es: ", "correcta": "Cambiar solo el factor que se quiere estudiar", "distractores": ["Cambiar todas las condiciones", "No observar nada", "No anotar resultados"]}, {"id": "B024-VAR-04", "q": "Una tabla o gráfico sirve para: ", "correcta": "Organizar datos y ver patrones", "distractores": ["Reemplazar toda investigación", "Ocultar información", "Adivinar conclusiones"]}, {"id": "B024-VAR-01", "q": "¿Qué significa controlar variables?", "correcta": "Mantener algunos factores iguales para comparar mejor", "distractores": ["Cambiar todo al mismo tiempo", "No registrar datos", "Elegir la respuesta más rápida"]}]}, {"id": "B025", "num": "025", "nombre": "Lithor", "slug": "LITHOR", "tipo": "Arcana", "rareza": "Común", "zona": "Cordillera Arcana", "oa": "Ruta 9", "linea": "geologia-dinamica", "etapa": 1, "evolucionaDe": null, "evolucionaA": "B026", "codigo": "CAP-LITHOR-823", "nivel": 1, "habilidad": "Tiempo Profundo", "shape": "mountain", "colors": ["#ff9d4d", "#c7d2ff", "#ffe66d"], "descN": "Bioforma inicial detectada en expediciones científicas de Ciudad BioNova.", "descE": "Representa curiosidad, observación y registro de evidencias.", "stats": {"vida": 62, "analisis": 66, "evidencia": 60, "comunicacion": 44, "energia": 58}, "preguntas": [{"id": "B025-EVI-01", "q": "¿Qué debe tener una conclusión científica confiable?", "correcta": "Evidencia que la respalde", "distractores": ["Una opinión sin datos", "Una frase copiada sin revisar", "Una respuesta elegida al azar"]}, {"id": "B025-EVI-02", "q": "¿Cuál es una diferencia entre evidencia y opinión?", "correcta": "La evidencia se apoya en datos u observaciones", "distractores": ["La opinión siempre es más exacta", "La evidencia no necesita revisión", "Son exactamente lo mismo"]}, {"id": "B025-EVI-03", "q": "¿Qué conviene hacer antes de aceptar una información científica?", "correcta": "Revisar la fuente y compararla con otras evidencias", "distractores": ["Creerla solo porque está en internet", "Compartirla sin leer", "Elegir la que suena más dramática"]}]}, {"id": "B026", "num": "026", "nombre": "Quarza", "slug": "QUARZA", "tipo": "Arcana", "rareza": "Poco común", "zona": "Cordillera Arcana", "oa": "Ruta 9", "linea": "geologia-dinamica", "etapa": 2, "evolucionaDe": "B025", "evolucionaA": "B027", "codigo": "CAP-QUARZA-934", "nivel": 8, "habilidad": "Registro de Ondas", "shape": "force", "colors": ["#ff9d4d", "#48e7ff", "#ff5f7a"], "descN": "Bioforma intermedia que aparece cuando el registro y el análisis se vuelven más precisos.", "descE": "Representa comparación de datos, uso de modelos y comunicación clara.", "stats": {"vida": 72, "analisis": 78, "evidencia": 82, "comunicacion": 58, "energia": 76}, "preguntas": [{"id": "B026-EVI-02", "q": "¿Cuál es una diferencia entre evidencia y opinión?", "correcta": "La evidencia se apoya en datos u observaciones", "distractores": ["La opinión siempre es más exacta", "La evidencia no necesita revisión", "Son exactamente lo mismo"]}, {"id": "B026-EVI-03", "q": "¿Qué conviene hacer antes de aceptar una información científica?", "correcta": "Revisar la fuente y compararla con otras evidencias", "distractores": ["Creerla solo porque está en internet", "Compartirla sin leer", "Elegir la que suena más dramática"]}, {"id": "B026-EVI-04", "q": "¿Por qué se comparan resultados en ciencias?", "correcta": "Para buscar patrones y verificar si las ideas se sostienen", "distractores": ["Para ocultar errores", "Para evitar preguntas", "Para cambiar los datos"]}]}, {"id": "B027", "num": "027", "nombre": "Pyronix", "slug": "PYRONIX", "tipo": "Arcana", "rareza": "Épica", "zona": "Cordillera Arcana", "oa": "Ruta 9", "linea": "geologia-dinamica", "etapa": 3, "evolucionaDe": "B026", "evolucionaA": null, "codigo": "CAP-PYRONIX-145", "nivel": 18, "habilidad": "Riesgo Comunicado", "shape": "mountain", "colors": ["#ff5f7a", "#ff9d4d", "#ffe66d"], "descN": "Bioforma avanzada que refleja un mayor dominio del proceso de investigación.", "descE": "Representa pensamiento crítico, toma de decisiones y aplicación responsable de la ciencia.", "stats": {"vida": 94, "analisis": 84, "evidencia": 88, "comunicacion": 76, "energia": 96}, "preguntas": [{"id": "B027-EVI-03", "q": "¿Qué conviene hacer antes de aceptar una información científica?", "correcta": "Revisar la fuente y compararla con otras evidencias", "distractores": ["Creerla solo porque está en internet", "Compartirla sin leer", "Elegir la que suena más dramática"]}, {"id": "B027-EVI-04", "q": "¿Por qué se comparan resultados en ciencias?", "correcta": "Para buscar patrones y verificar si las ideas se sostienen", "distractores": ["Para ocultar errores", "Para evitar preguntas", "Para cambiar los datos"]}, {"id": "B027-EVI-01", "q": "¿Qué debe tener una conclusión científica confiable?", "correcta": "Evidencia que la respalde", "distractores": ["Una opinión sin datos", "Una frase copiada sin revisar", "Una respuesta elegida al azar"]}]}, {"id": "B028", "num": "028", "nombre": "Strata", "slug": "STRATA", "tipo": "Terra", "rareza": "Común", "zona": "Archivo Terra", "oa": "Ruta 10", "linea": "rocas-clima", "etapa": 1, "evolucionaDe": null, "evolucionaA": "B029", "codigo": "CAP-STRATA-256", "nivel": 1, "habilidad": "Evidencia en Capas", "shape": "crystal", "colors": ["#c7d2ff", "#ffe66d", "#48e7ff"], "descN": "Bioforma inicial detectada en expediciones científicas de Ciudad BioNova.", "descE": "Representa curiosidad, observación y registro de evidencias.", "stats": {"vida": 60, "analisis": 70, "evidencia": 72, "comunicacion": 48, "energia": 54}, "preguntas": [{"id": "B028-EVI-01", "q": "¿Qué debe tener una conclusión científica confiable?", "correcta": "Evidencia que la respalde", "distractores": ["Una opinión sin datos", "Una frase copiada sin revisar", "Una respuesta elegida al azar"]}, {"id": "B028-EVI-02", "q": "¿Cuál es una diferencia entre evidencia y opinión?", "correcta": "La evidencia se apoya en datos u observaciones", "distractores": ["La opinión siempre es más exacta", "La evidencia no necesita revisión", "Son exactamente lo mismo"]}, {"id": "B028-EVI-03", "q": "¿Qué conviene hacer antes de aceptar una información científica?", "correcta": "Revisar la fuente y compararla con otras evidencias", "distractores": ["Creerla solo porque está en internet", "Compartirla sin leer", "Elegir la que suena más dramática"]}]}, {"id": "B029", "num": "029", "nombre": "Borelia", "slug": "BORELIA", "tipo": "Terra", "rareza": "Rara", "zona": "Archivo Terra", "oa": "Ruta 10", "linea": "rocas-clima", "etapa": 2, "evolucionaDe": "B028", "evolucionaA": "B030", "codigo": "CAP-BORELIA-367", "nivel": 14, "habilidad": "Dato Ambiental", "shape": "flower", "colors": ["#69e36f", "#48e7ff", "#ff8bd1"], "descN": "Bioforma intermedia que aparece cuando el registro y el análisis se vuelven más precisos.", "descE": "Representa comparación de datos, uso de modelos y comunicación clara.", "stats": {"vida": 78, "analisis": 82, "evidencia": 86, "comunicacion": 72, "energia": 88}, "preguntas": [{"id": "B029-EVI-02", "q": "¿Cuál es una diferencia entre evidencia y opinión?", "correcta": "La evidencia se apoya en datos u observaciones", "distractores": ["La opinión siempre es más exacta", "La evidencia no necesita revisión", "Son exactamente lo mismo"]}, {"id": "B029-EVI-03", "q": "¿Qué conviene hacer antes de aceptar una información científica?", "correcta": "Revisar la fuente y compararla con otras evidencias", "distractores": ["Creerla solo porque está en internet", "Compartirla sin leer", "Elegir la que suena más dramática"]}, {"id": "B029-EVI-04", "q": "¿Por qué se comparan resultados en ciencias?", "correcta": "Para buscar patrones y verificar si las ideas se sostienen", "distractores": ["Para ocultar errores", "Para evitar preguntas", "Para cambiar los datos"]}]}, {"id": "B030", "num": "030", "nombre": "Gaian", "slug": "GAIAN", "tipo": "Terra", "rareza": "Legendaria", "zona": "Archivo Terra", "oa": "Ruta 10", "linea": "rocas-clima", "etapa": 3, "evolucionaDe": "B029", "evolucionaA": null, "codigo": "CAP-GAIAN-478", "nivel": 25, "habilidad": "Decisión Planetaria", "shape": "wing", "colors": ["#4dff91", "#ffe66d", "#48e7ff"], "descN": "Bioforma avanzada que refleja un mayor dominio del proceso de investigación.", "descE": "Representa pensamiento crítico, toma de decisiones y aplicación responsable de la ciencia.", "stats": {"vida": 126, "analisis": 96, "evidencia": 100, "comunicacion": 94, "energia": 130}, "preguntas": [{"id": "B030-EVI-03", "q": "¿Qué conviene hacer antes de aceptar una información científica?", "correcta": "Revisar la fuente y compararla con otras evidencias", "distractores": ["Creerla solo porque está en internet", "Compartirla sin leer", "Elegir la que suena más dramática"]}, {"id": "B030-EVI-04", "q": "¿Por qué se comparan resultados en ciencias?", "correcta": "Para buscar patrones y verificar si las ideas se sostienen", "distractores": ["Para ocultar errores", "Para evitar preguntas", "Para cambiar los datos"]}, {"id": "B030-EVI-01", "q": "¿Qué debe tener una conclusión científica confiable?", "correcta": "Evidencia que la respalde", "distractores": ["Una opinión sin datos", "Una frase copiada sin revisar", "Una respuesta elegida al azar"]}]}]
+const ZONAS = [{"id": "Z01", "nombre": "Sector Aurora", "icon": "AU", "theme": "aurora", "desc": "Zona inicial de exploración y descubrimiento.", "bioformas": ["B001", "B002", "B003"]}, {"id": "Z02", "nombre": "Santuario Prisma", "icon": "PR", "theme": "prisma", "desc": "Sector de observación, ciclos y patrones.", "bioformas": ["B004", "B005", "B006"]}, {"id": "Z03", "nombre": "Distrito Nexo", "icon": "NX", "theme": "nexo", "desc": "Zona de conexión, análisis y decisiones.", "bioformas": ["B007", "B008", "B009"]}, {"id": "Z04", "nombre": "Muralla Nova", "icon": "NV", "theme": "nova", "desc": "Sector de defensa, estrategia y memoria.", "bioformas": ["B010", "B011", "B012"]}, {"id": "Z05", "nombre": "Laboratorio Bruma", "icon": "BR", "theme": "bruma", "desc": "Espacio para fenómenos pequeños y hallazgos inesperados.", "bioformas": ["B013", "B014", "B015"]}, {"id": "Z06", "nombre": "Fábrica Lumen", "icon": "LM", "theme": "lumen", "desc": "Zona de creación, transformación y energía.", "bioformas": ["B016", "B017", "B018"]}, {"id": "Z07", "nombre": "Campo Vector", "icon": "VC", "theme": "vector", "desc": "Terreno para fuerzas, movimiento y pruebas.", "bioformas": ["B019", "B020", "B021"]}, {"id": "Z08", "nombre": "Cámara Umbral", "icon": "UM", "theme": "umbral", "desc": "Sector de cambios, presión y equilibrio.", "bioformas": ["B022", "B023", "B024"]}, {"id": "Z09", "nombre": "Cordillera Arcana", "icon": "AR", "theme": "arcana", "desc": "Zona de relieve, riesgo y gran escala.", "bioformas": ["B025", "B026", "B027"]}, {"id": "Z10", "nombre": "Archivo Terra", "icon": "TR", "theme": "terra", "desc": "Espacio de memoria, ambiente y visión global.", "bioformas": ["B028", "B029", "B030"]}]
+const INVENTARIO = [
+  {nombre:"Orbe de captura",icon:"◉",desc:"Representa los códigos liberados al completar misiones."},
+  {nombre:"Núcleo evolutivo",icon:"◆",desc:"Recuerda que algunas Bioformas requieren tener capturada la etapa anterior."},
+  {nombre:"Mapa BioNova",icon:"⌖",desc:"Muestra sectores SVG y progreso general."},
+  {nombre:"Registro local",icon:"▣",desc:"Tu avance se guarda en este navegador con localStorage."},
+  {nombre:"Respaldo",icon:"↯",desc:"Permite exportar e importar tu progreso."},
+  {nombre:"Medalla de misión",icon:"★",desc:"Marca simbólica de desafíos superados."}
+];
+const LOGROS = [
+  {id:"L01",nombre:"Primera Bioforma",desc:"Captura tu primera Bioforma."},
+  {id:"L02",nombre:"Explorador inicial",desc:"Captura 5 Bioformas."},
+  {id:"L03",nombre:"Investigador BioNova",desc:"Captura 10 Bioformas."},
+  {id:"L04",nombre:"Rastreador avanzado",desc:"Captura 15 Bioformas."},
+  {id:"L05",nombre:"Maestro BioDex",desc:"Captura 20 Bioformas."},
+  {id:"L06",nombre:"Archivo casi completo",desc:"Captura 25 Bioformas."},
+  {id:"L07",nombre:"BioDex completa",desc:"Captura las 30 Bioformas."},
+  {id:"L08",nombre:"Primera evolución",desc:"Captura una Bioforma de etapa 2."},
+  {id:"L09",nombre:"Línea completa",desc:"Completa una línea evolutiva de 3 etapas."},
+  {id:"L10",nombre:"Hallazgo épico",desc:"Captura una Bioforma épica."},
+  {id:"L11",nombre:"Registro legendario",desc:"Captura una Bioforma legendaria."},
+  {id:"L12",nombre:"Explorador interdisciplinar",desc:"Captura Bioformas de vida y física/tierra."}
+];
+let progreso=null, view="panel", filterStatus="todos", filterTipo="todos", filterOA="todos", searchTerm="", preguntaActual=null;
+let typing={timer:null,full:"",done:true};
+function defaultProgress(){return{jugador:"",fechaRegistro:"",capturadas:[],codigosUsados:[],preguntasUsadas:{},intentos:[],logros:[],configuracion:{crt:true},ultimaBioforma:null,bienvenidaVista:false,
+    gimnasios:{abiertos:{}},sectores:{abiertos:{}}};}
+function bootSequence(){const lines=["> Cargando archivo local...","> Renderizando siluetas SVG...","> Banco de preguntas de ciencia cargado...","> Sistema de captura listo...","> Esperando explorador/a..."];const target=document.getElementById("bootLines"),bar=document.getElementById("bootBarInner");let i=0;function step(){if(i<lines.length){target.innerHTML+=`<div class="boot-line">${lines[i]}</div>`;bar.style.width=`${(i+1)*20}%`;i++;setTimeout(step,330);}else setTimeout(()=>{document.getElementById("bootScreen").style.display="none";init();},450);}step();}
+function init(){injectBioformaSVGStyles();cargarProgreso();document.body.classList.toggle("crt",progreso?.configuracion?.crt!==false);render();if(progreso&&progreso.jugador&&!progreso.bienvenidaVista){progreso.bienvenidaVista=true;guardarProgreso();showNPC("Dra. Lira",`Bienvenido/a, ${progreso.jugador}. Esta BioDex ahora trabaja con Bioformas: primero verás siluetas, y al capturarlas se revelarán a color.`);}}
+function cargarProgreso(){try{progreso=JSON.parse(localStorage.getItem(STORAGE_KEY))||defaultProgress();}catch(e){progreso=defaultProgress();}}
+function guardarProgreso(){localStorage.setItem(STORAGE_KEY,JSON.stringify(progreso));}
+function render(){const app=document.getElementById("app");if(!progreso||!progreso.jugador){app.innerHTML=renderRegistro();return;}app.innerHTML=renderShell();renderView();actualizarLogros(false);}
+function renderRegistro(){return `<section class="hero"><div class="register rpg-window"><div class="terminal">&gt; Terminal BioDex Alumno v1.8<br>&gt; Bioformas SVG listas<br>&gt; Progreso local preparado <span class="blink">█</span></div><span class="rpg-title">Registro del explorador/a</span><h1>BIODEX: CIUDAD BIONOVA</h1><p class="muted">Ingresa tu nombre. Tu progreso se guardará en este navegador y podrás exportarlo si usas otro computador o tablet.</p><label>Nombre del jugador/a</label><input id="regNombre" placeholder="Ej: Valentina" maxlength="32" onkeydown="if(event.key==='Enter') registrarJugador()"><div class="modal-actions"><button onclick="registrarJugador()">Iniciar expedición</button></div><p class="footer-note">Flujo: misión → código → reflexión metacognitiva → Bioforma revelada a color.</p></div></section>`;}
+function registrarJugador(){const n=document.getElementById("regNombre").value.trim();if(!n){toast("Escribe tu nombre para iniciar.","warn");return;}progreso=defaultProgress();progreso.jugador=n;progreso.fechaRegistro=new Date().toISOString();guardarProgreso();render();}
+function renderShell(){return `<header class="topbar"><div class="brand"><div class="logo">BD</div><div><h1>BIODEX</h1><div class="subtitle">Archivo de Bioformas de Ciudad BioNova · Alumno v1.8</div></div></div><div class="tag">${escapeHtml(progreso.jugador)} · Progreso local</div></header><nav class="nav">${navButton("panel","⌂ Panel")}${navButton("biodex","▦ BioDex")}${navButton("codigo","⌘ Código")}${navButton("mapa","◫ Ciudad")}${navButton("lineas","⇄ Evoluciones")}${navButton("inventario","▣ Inventario")}${navButton("logros","★ Logros")}${navButton("respaldo","↯ Respaldo")}${navButton("ayuda","? Ayuda")}</nav><main id="view"></main>`;}
+function navButton(id,label){return `<button class="${view===id?'active':''}" onclick="go('${id}')">${label}</button>`;}
+function go(v){view=v;render();}
+function renderView(){const map={panel:renderPanel,biodex:renderBiodex,codigo:renderCodigo,mapa:renderMapa,lineas:renderLineas,inventario:renderInventario,logros:renderLogros,respaldo:renderRespaldo,ayuda:renderAyuda};document.getElementById("view").innerHTML=(map[view]||renderPanel)();}
+function renderPanel(){const cap=progreso.capturadas.length,pct=Math.round((cap/BIOFORMAS.length)*100),rareza=getRarezaAlta(),ultima=progreso.ultimaBioforma?getBioforma(progreso.ultimaBioforma):null;return `<section class="rpg-window"><span class="rpg-title">Panel principal</span><h2>Terminal de ${escapeHtml(progreso.jugador)}</h2><p class="muted">Completa misiones, recibe códigos del profesor y captura Bioformas. Cada captura incluye un momento de reflexión personal.</p><div class="stats-row">${stat("Rango",getRango(cap))}${stat("Capturadas",`${cap} / ${BIOFORMAS.length}`)}${stat("Reflexiones",totalPreguntasUsadas())}${stat("Rareza alta",rareza)}</div><div class="progress"><div style="width:${pct}%"></div></div><p class="small muted">BioDex completada: <b>${pct}%</b></p></section><div class="grid three" style="margin-top:14px"><div class="card">${ultima?'<div class="stamp">ÚLTIMA</div>':''}<div class="card-title">Última Bioforma</div>${ultima?`<div class="bio-svg-wrap capture-reveal">${renderBioformaSVG(ultima,true,130)}</div><p><b>${ultima.nombre}</b><br><span class="pill type-${slugCss(ultima.tipo)}">${ultima.tipo}</span></p>`:"<p>Aún no hay capturas.</p>"}</div><div class="card"><div class="card-title">Captura rápida</div><p>Ingresa un código obtenido tras una misión.</p><button onclick="go('codigo')">Ingresar código</button></div><div class="card"><div class="card-title">Líneas evolutivas</div><p>Las Bioformas evolucionan por rutas de aprendizaje.</p><button onclick="go('lineas')">Ver líneas</button></div></div>`;}
+function stat(label,value){return `<div class="stat"><b>${label}</b><span>${value}</span></div>`;}
+function getRango(c){if(c>=30)return"Archivista legendario";if(c>=25)return"Maestro BioDex";if(c>=20)return"Guardián BioNova";if(c>=15)return"Rastreador avanzado";if(c>=10)return"Investigador BioNova";if(c>=5)return"Explorador inicial";return"Aspirante";}
+function getRarezaAlta(){const caps=BIOFORMAS.filter(b=>progreso.capturadas.includes(b.id));if(!caps.length)return"Ninguna";return caps.sort((a,b)=>RARITY_ORDER.indexOf(b.rareza)-RARITY_ORDER.indexOf(a.rareza))[0].rareza;}
+function totalPreguntasUsadas(){return Object.values(progreso.preguntasUsadas||{}).reduce((a,arr)=>a+arr.length,0);}
+function renderBiodex(){const tipos=[...new Set(BIOFORMAS.map(b=>b.tipo))],oas=[...new Set(BIOFORMAS.map(b=>b.oa))];return `<section class="rpg-window"><span class="rpg-title">Archivo BioDex</span><div class="filters"><input placeholder="Buscar por nombre, tipo, OA o zona..." value="${escapeHtml(searchTerm)}" oninput="searchTerm=this.value; document.getElementById('bioformaGrid').innerHTML=renderBioformaCards()"><select onchange="filterStatus=this.value; document.getElementById('bioformaGrid').innerHTML=renderBioformaCards()">${opt("todos","Todos",filterStatus)}${opt("capturada","Capturadas",filterStatus)}${opt("disponible","Disponibles",filterStatus)}${opt("evo","Evolución bloqueada",filterStatus)}</select><select onchange="filterTipo=this.value; document.getElementById('bioformaGrid').innerHTML=renderBioformaCards()">${opt("todos","Todos los tipos",filterTipo)}${tipos.map(t=>opt(t,t,filterTipo)).join("")}</select><select onchange="filterOA=this.value; document.getElementById('bioformaGrid').innerHTML=renderBioformaCards()">${opt("todos","Todos los OA",filterOA)}${oas.map(o=>opt(o,o,filterOA)).join("")}</select></div><div id="bioformaGrid" class="bioforma-grid">${renderBioformaCards()}</div></section>`;}
+function opt(v,t,sel){return `<option value="${v}" ${v===sel?'selected':''}>${t}</option>`;}
+function estadoBioforma(b){if(progreso.capturadas.includes(b.id))return"capturada";if(!canCaptureEvolution(b))return"evo";return"disponible";}
+function renderBioformaCards(){const term=searchTerm.trim().toLowerCase();return BIOFORMAS.filter(b=>{const st=estadoBioforma(b);if(filterStatus==="capturada"&&st!=="capturada")return false;if(filterStatus==="disponible"&&st!=="disponible")return false;if(filterStatus==="evo"&&st!=="evo")return false;if(filterTipo!=="todos"&&b.tipo!==filterTipo)return false;if(filterOA!=="todos"&&b.oa!==filterOA)return false;if(term&&!(b.nombre.toLowerCase().includes(term)||b.tipo.toLowerCase().includes(term)||b.oa.toLowerCase().includes(term)||b.zona.toLowerCase().includes(term)))return false;return true;}).map(bioformaCard).join("")||`<p class="muted">No hay resultados con esos filtros.</p>`;}
+function bioformaCard(b){const st=estadoBioforma(b),captured=st==="capturada",cls=captured?`rarity-${slugCss(b.rareza)}`:(st==="evo"?"evo-locked locked":"locked");return `<article class="card bioforma ${cls}" onclick="renderFicha('${b.id}')"><div>${captured?'<div class="stamp">CAPTURADA</div>':st==="disponible"?'<div class="stamp" style="border-color:var(--cyan);color:var(--cyan)">SILUETA</div>':'<div class="stamp" style="border-color:var(--yellow);color:var(--yellow)">EVOLUCIÓN</div>'}<div class="status">B${b.num} · Etapa ${b.etapa} · ${labelEstado(st)}</div><div class="bio-svg-wrap">${renderBioformaSVG(b,captured,130)}</div><div class="card-title">${b.nombre}</div><span class="pill type-${slugCss(b.tipo)}">${b.tipo}</span><span class="pill">${b.oa}</span><span class="pill">${b.rareza}</span><p class="small muted">${captured?b.descE:(st==="disponible"?'Silueta detectada. Usa el código de misión para intentar captura.':'Requiere capturar la etapa anterior de la línea evolutiva.')}</p></div><button class="ghost">Ver ficha</button></article>`;}
+function labelEstado(st){return st==="capturada"?"Capturada":st==="evo"?"Evolución bloqueada":"Disponible";}
+function renderFicha(id){const b=getBioforma(id),st=estadoBioforma(b),captured=st==="capturada",evo=lineaBioformas(b.linea).map(x=>`${progreso.capturadas.includes(x.id)?x.icon||'●':'?'} ${x.nombre}`).join(" → ");openModal(`<span class="rpg-title">Ficha de Bioforma</span><h2>${b.nombre}</h2><div class="bio-svg-wrap" style="height:180px">${renderBioformaSVG(b,captured,190)}</div><p class="status">B${b.num} · ${b.oa} · Etapa ${b.etapa} · ${labelEstado(st)}</p><p><span class="pill type-${slugCss(b.tipo)}">${b.tipo}</span><span class="pill">${b.rareza}</span><span class="pill">Zona: ${b.zona}</span></p><p><b>Descripción narrativa:</b> ${b.descN}</p>${captured?`<p><b>Descripción educativa:</b> ${b.descE}</p><p><b>Habilidad:</b> ${b.habilidad}</p>${renderStats(b.stats)}`:`<p class="muted">${st==="disponible"?'Completa la misión asociada y usa el código de captura. La Bioforma se revelará a color si respondes correctamente.':'Esta Bioforma evolutiva está bloqueada hasta capturar la etapa anterior.'}</p>`}<p><b>Línea evolutiva:</b> ${evo}</p><p class="question-note">Al capturar se activa una reflexión metacognitiva sobre tu proceso de aprendizaje.</p><div class="modal-actions"><button onclick="closeModal()">Cerrar</button></div>`);}
+function renderStats(stats){return `<div>${Object.entries(stats).map(([k,v])=>`<div class="meter"><b>${capitalize(k)}</b><div class="meter-bar"><div style="width:${Math.min(100,v)}%"></div></div><span>${v}</span></div>`).join("")}</div>`;}
+function renderCodigo(){return `<section class="rpg-window"><span class="rpg-title">Terminal de captura</span><h2>Ingresar código de misión</h2><p class="muted">Ingresa el código que te entregó el profesor al completar una misión. Se abrirá una breve reflexión metacognitiva — todas las respuestas son válidas — y la Bioforma quedará registrada a color en tu BioDex.</p><label>Código de captura</label><input id="codigoInput" placeholder="Ej: CAP-ORILUX-104" onkeydown="if(event.key==='Enter') validarCodigo()"><div class="modal-actions"><button onclick="validarCodigo()">Analizar código</button><button class="secondary" onclick="document.getElementById('codigoInput').value=''">Limpiar</button></div><div class="terminal-lines"><div class="info">&gt; Código recibido por misión completada.</div><div class="ok">&gt; Reflexión metacognitiva: no hay respuesta incorrecta.</div><div class="warn">&gt; Las evoluciones pueden requerir la etapa previa.</div></div></section>`;}
+function normalizarCodigo(c){return String(c||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toUpperCase().replace(/[^A-Z0-9]/g,"");}
+function validarCodigo(){const raw=document.getElementById("codigoInput")?.value||"",norm=normalizarCodigo(raw);if(!norm){toast("Ingresa un código.","warn");return;}const b=BIOFORMAS.find(x=>normalizarCodigo(x.codigo)===norm);if(!b){showNPC("Terminal BioDex","> Código no reconocido. Revisa la misión o espera nuevos códigos liberados por el profesor.");return;}if(progreso.capturadas.includes(b.id)){showNPC("Terminal BioDex",`${b.nombre} ya está capturada en tu BioDex.`);return;}if(!canCaptureEvolution(b)){showNPC("Dra. Lira",`Señal evolutiva inestable. Primero debes capturar la etapa anterior: ${getBioforma(b.evolucionaDe).nombre}.`);return;}abrirPreguntaCaptura(b,norm);}
+function canCaptureEvolution(b){return !ENFORCE_EVOLUTION_ORDER||!b.evolucionaDe||progreso.capturadas.includes(b.evolucionaDe);}
+/* ══════════════════════════════════════════════════════
+   BANCO DE REFLEXIÓN METACOGNITIVA — BioDex v1.8
+   Sin respuesta incorrecta. Toda opción es válida.
+   El código ya valida el aprendizaje; esta instancia
+   es de reflexión personal y transferencia.
+   ══════════════════════════════════════════════════════ */
+const PREGUNTAS_METACOG = [
+  { id:"MC1", cat:"Proceso",
+    q:"¿Cuál fue el momento más difícil de la actividad que realizaste?",
+    ops:["Entender qué se pedía al inicio","Buscar o analizar la información","Tomar decisiones ante la incertidumbre","Comunicar o explicar mis conclusiones"] },
+  { id:"MC2", cat:"Estrategia",
+    q:"¿Qué fue lo que más te ayudó a completar la actividad?",
+    ops:["Trabajar o conversar con otros","Dividir el problema en partes","Conectarlo con algo que ya sabía","Intentarlo varias veces hasta lograrlo"] },
+  { id:"MC3", cat:"Autoevaluación",
+    q:"¿Cómo describes tu nivel de comprensión al terminar esta actividad?",
+    ops:["Entendí todo con claridad","Entendí lo esencial, me quedan dudas menores","Tuve que adivinar en algunas partes","Aún necesito repasar el tema con más calma"] },
+  { id:"MC4", cat:"Transferencia",
+    q:"¿En qué otro contexto podrías usar lo que aprendiste?",
+    ops:["En otra asignatura del colegio","En situaciones de mi vida cotidiana","En un trabajo o proyecto futuro","Todavía no lo veo claro, lo tengo que pensar"] },
+  { id:"MC5", cat:"Reflexión",
+    q:"Si pudieras repetir esta actividad, ¿qué cambiarías?",
+    ops:["Organizarme mejor desde el inicio","Pedir ayuda antes en vez de esperar","Investigar más antes de empezar","No cambiaría nada, creo que lo hice bien"] },
+  { id:"MC6", cat:"Aprendizaje",
+    q:"¿Cómo describirías lo que aprendiste hoy?",
+    ops:["Aprendí algo completamente nuevo","Profundicé algo que ya sabía superficialmente","Confirmé una idea que tenía pero no estaba seguro/a","Reorganicé ideas que tenía confusas"] },
+  { id:"MC7", cat:"Conexión",
+    q:"¿Qué relación encuentras entre esta actividad y el mundo real?",
+    ops:["Es muy relevante, lo veo en mi entorno o en noticias","Tiene cierta relación aunque no es obvia","Es más académico, aún no veo la conexión","Me hizo pensar en algo que no había conectado antes"] },
+  { id:"MC8", cat:"Colaboración",
+    q:"¿Cómo fue tu rol durante el proceso de esta actividad?",
+    ops:["Participé activamente y aporté ideas propias","Contribuí cuando me lo pidieron","Principalmente observé y escuché","Trabajé de forma más individual que grupal"] }
+];
+
+function elegirMetacog(){
+  if(!progreso.preguntasUsadas._metacog) progreso.preguntasUsadas._metacog=[];
+  let usadas = progreso.preguntasUsadas._metacog;
+  let disponibles = PREGUNTAS_METACOG.filter(q=>!usadas.includes(q.id));
+  if(disponibles.length===0){ progreso.preguntasUsadas._metacog=[]; disponibles=[...PREGUNTAS_METACOG]; }
+  const q = disponibles[Math.floor(Math.random()*disponibles.length)];
+  progreso.preguntasUsadas._metacog.push(q.id);
+  guardarProgreso();
+  return q;
+}
+
+function abrirPreguntaCaptura(b, codigo){
+  const q = elegirMetacog();
+  preguntaActual = {b, codigo, q};
+  openModal(`
+    <span class="rpg-title">Reflexión de captura</span>
+    <div style="display:flex;align-items:center;gap:14px;margin:10px 0 14px">
+      <div class="bio-svg-wrap" style="height:90px;width:90px;flex-shrink:0">${renderBioformaSVG(b,false,88)}</div>
+      <div>
+        <div class="card-title">${b.nombre}</div>
+        <p class="small muted" style="margin:4px 0 0">Antes de registrar esta Bioforma, tómate un momento para reflexionar.</p>
+      </div>
+    </div>
+    <div class="metacog-card">
+      <div style="color:var(--yellow);font-size:.75rem;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">${q.cat}</div>
+      <p style="margin:0 0 4px;font-size:.95rem;line-height:1.45">${q.q}</p>
+      <p class="small muted" style="margin:0 0 2px">Elige la opción que mejor refleje tu experiencia — todas son válidas.</p>
+      <div class="metacog-options">${q.ops.map((op,i)=>`<button onclick="responderReflexion(${i})">${String.fromCharCode(65+i)}. ${op}</button>`).join("")}</div>
+    </div>`);
+}
+
+function responderReflexion(i){
+  if(!preguntaActual) return;
+  const {b, codigo, q} = preguntaActual;
+  const respuesta = q.ops[i];
+  // Registro de reflexión
+  progreso.capturadas.push(b.id);
+  progreso.ultimaBioforma = b.id;
+  if(!progreso.codigosUsados.includes(codigo)) progreso.codigosUsados.push(codigo);
+  progreso.intentos.push({bioforma:b.id, reflexion:q.id, cat:q.cat, respuesta, fecha:new Date().toISOString()});
+  actualizarLogros(true);
+  guardarProgreso();
+  preguntaActual = null;
+  closeModal();
+  secuenciaCaptura(b);
+  mensajeCaptura(b);
+}
+
+function secuenciaCaptura(b){
+  const RARITY_COLORS = {
+    'Común':'#8ca3c7','Poco común':'#4dff91','Rara':'#48e7ff',
+    'Épica':'#ff4fd8','Legendaria':'#ffe66d'
+  };
+  const col = RARITY_COLORS[b.rareza] || '#48e7ff';
+  // Buscar el glow del SVG data
+  const svgData = (typeof BIOFORMAS_SVG_DATA !== 'undefined')
+    ? BIOFORMAS_SVG_DATA.find(x=>x.id===b.id) : null;
+  const glow = svgData?.colors?.glow || col;
+
+  // ── Flash blanco ──────────────────────────────────────────────────────────
+  const flash = document.createElement('div');
+  flash.className = 'cap-flash';
+  document.body.appendChild(flash);
+  setTimeout(()=>flash.remove(), 400);
+
+  // ── Construir overlay ─────────────────────────────────────────────────────
+  const ov = document.getElementById('captureOverlay');
+  ov.style.cssText = `--cap-col:${col};--cap-glow:${glow}`;
+  ov.style.display = 'flex';
+
+  // Fondo radial animado
+  const bg = document.createElement('div');
+  bg.className = 'cap-bg';
+  bg.style.background = `radial-gradient(circle,${glow}55 0%,${col}22 35%,transparent 65%)`;
+  ov.appendChild(bg);
+
+  // Anillos expansivos
+  [col, '#ffffff', glow].forEach((c,i)=>{
+    const r = document.createElement('div');
+    r.className = 'cap-ring';
+    r.style.cssText = `border-color:${c};animation-delay:${i*0.22}s`;
+    ov.appendChild(r);
+  });
+
+  // Partículas
+  for(let p=0; p<32; p++){
+    const angle = (p/32)*Math.PI*2 + Math.random()*0.2;
+    const dist = 100 + Math.random()*240;
+    const size = 5 + Math.random()*11;
+    const el = document.createElement('div');
+    el.className = 'cap-particle';
+    el.style.cssText = `
+      width:${size}px;height:${size}px;
+      background:${[col,'#fff',glow,'#48e7ff','#ff4fd8'][p%5]};
+      --cdx:${Math.cos(angle)*dist}px;--cdy:${Math.sin(angle)*dist}px;
+      --cdur:${.7+Math.random()*.9}s;--cdel:${.25+Math.random()*.5}s;
+      box-shadow:0 0 ${Math.round(size*1.5)}px ${[col,glow,'#fff'][p%3]};
+    `;
+    ov.appendChild(el);
+  }
+
+  // Stage central
+  const stage = document.createElement('div');
+  stage.className = 'cap-stage';
+  stage.innerHTML = `
+    <div class="cap-svg-wrap" style="--cap-glow:${glow}">
+      ${renderBioformaSVG(b, true, 210)}
+      <div class="cap-scanline" style="--cap-col:${col}"></div>
+    </div>
+    <div class="cap-name" style="color:${col}">${b.nombre}</div>
+    <div><span class="cap-rarity" style="--cap-col:${col}">${b.rareza}</span></div>
+    <div class="cap-cta">
+      <button onclick="cerrarCapturaOverlay('${b.id}')">▶ Ver en BioDex</button>
+    </div>`;
+  ov.appendChild(stage);
+}
+
+function cerrarCapturaOverlay(bioId){
+  const ov = document.getElementById('captureOverlay');
+  ov.style.transition = 'opacity .35s';
+  ov.style.opacity = '0';
+  setTimeout(()=>{
+    ov.style.display = 'none';
+    ov.style.opacity = '';
+    ov.style.transition = '';
+    ov.innerHTML = '';
+    const b = getBioforma(bioId);
+    if(!b) return;
+    openModal(`
+      <span class="rpg-title">¡Bioforma registrada!</span>
+      <h2>${b.nombre}</h2>
+      <div class="bio-svg-wrap capture-reveal" style="height:180px">${renderBioformaSVG(b,true,190)}</div>
+      <p><span class="pill type-${slugCss(b.tipo)}">${b.tipo}</span>
+         <span class="pill">${b.rareza}</span>
+         <span class="pill">Zona: ${b.zona}</span></p>
+      <p class="muted">${b.descE}</p>
+      ${renderStats(b.stats)}
+      <div class="modal-actions">
+        <button onclick="closeModal(); go('biodex')">▦ Ver BioDex</button>
+        <button class="ghost" onclick="closeModal(); go('panel')">⌂ Panel</button>
+      </div>`);
+  }, 380);
+}
+
+function mensajeCaptura(b){
+  const msgs = {
+    Legendaria:`¡Registro legendario! ${b.nombre} marca un hito en tu trayectoria.`,
+    Épica:`¡Hallazgo épico! ${b.nombre} es una captura extraordinaria.`,
+  };
+  const msg = msgs[b.rareza] || (b.etapa===3
+    ? `¡Línea completa! ${b.nombre} cierra una ruta entera de misiones.`
+    : `${b.nombre} ya forma parte de tu BioDex. ¡Sigue explorando!`);
+  setTimeout(()=>showNPC("Dra. Lira", msg), 200);
+}
+function renderMapa(){
+  ensureSectorProgress();
+  return `<section class="rpg-window">
+    <span class="rpg-title">Ciudad BioNova</span>
+    <h2>Mapa de la Ciudad</h2>
+    <p class="muted">El profesor activa cada sector con un código de zona. Una vez activo, verás sus 3 gimnasios de misión y las Bioformas disponibles para capturar.</p>
+    <div class="gym-command-row">
+      <input id="sectorCodeInput" placeholder="Código de activación de sector (entregado por el profesor)" onkeydown="if(event.key==='Enter') validarCodigoSector()">
+      <button onclick="validarCodigoSector()">Activar sector</button>
+    </div>
+    <div class="gym-actions" style="margin-bottom:16px">
+      <button class="ghost" onclick="go('codigo')">⌘ Ir a captura</button>
+      <button class="ghost" onclick="mostrarCodigosInicio()">? Cómo funciona</button>
+    </div>
+    <div class="sector-grid">${SECTORES_CIUDAD.map(renderSectorCard).join("")}</div>
+  </section>`;
+}
+function zoneCard(z){const cap=z.bioformas.filter(id=>progreso.capturadas.includes(id)).length,pct=Math.round((cap/z.bioformas.length)*100),estado=pct===100?"Sector completado":pct>0?"Exploración en curso":"Sin registros";return `<article class="card zone-node"><div class="zone-svg">${renderZonaSVG(z.theme, pct===100?"completado":pct>0?"progreso":"cerrado")}</div><div class="node-top"><div class="node-icon">${z.icon}</div><div><div class="card-title">${z.nombre}</div><span class="pill">${estado}</span></div></div><p class="small muted" style="margin-top:10px">${z.desc}</p><div class="progress"><div style="width:${pct}%"></div></div></article>`;}
+function renderLineas(){const lineas=[...new Set(BIOFORMAS.map(b=>b.linea))];return `<section class="rpg-window"><span class="rpg-title">Líneas evolutivas</span><h2>Trayectorias de aprendizaje</h2><p class="muted">Cada línea tiene 3 etapas. La silueta se revela a color cuando capturas la Bioforma.</p><div class="grid two">${lineas.map(lineaCard).join("")}</div></section>`;}
+function lineaCard(linea){const arr=lineaBioformas(linea),pct=Math.round(arr.filter(b=>progreso.capturadas.includes(b.id)).length/arr.length*100);return `<article class="card"><div class="card-title">${arr[0].zona}</div><div class="grid three">${arr.map(b=>`<div><div class="bio-svg-wrap" style="height:100px">${renderBioformaSVG(b,progreso.capturadas.includes(b.id),105)}</div><p class="small"><b>${b.nombre}</b><br>Etapa ${b.etapa}</p></div>`).join("")}</div><div class="progress"><div style="width:${pct}%"></div></div><p class="small muted">${arr[0].oa} / ruta de 3 actividades</p></article>`;}
+function lineaBioformas(linea){return BIOFORMAS.filter(b=>b.linea===linea).sort((a,b)=>a.etapa-b.etapa);}
+function renderInventario(){return `<section class="rpg-window"><span class="rpg-title">Inventario</span><h2>Objetos de expedición</h2><div class="inventory">${INVENTARIO.map(it=>`<div class="card slot"><div style="font-size:2rem">${it.icon}</div><b>${it.nombre}</b><p class="small muted">${it.desc}</p></div>`).join("")}</div></section>`;}
+function renderLogros(){actualizarLogros(false);return `<section class="rpg-window"><span class="rpg-title">Logros</span><h2>Medallas de BioNova</h2><div class="grid three">${LOGROS.map(l=>`<div class="card achievement ${progreso.logros.includes(l.id)?'unlocked':'locked'}"><div class="card-title">${progreso.logros.includes(l.id)?'✓':'?'} ${l.nombre}</div><p class="small muted">${l.desc}</p></div>`).join("")}</div></section>`;}
+function actualizarLogros(notify){const before=progreso.logros.length,add=id=>{if(!progreso.logros.includes(id))progreso.logros.push(id);},c=progreso.capturadas.length,caps=BIOFORMAS.filter(b=>progreso.capturadas.includes(b.id));if(c>=1)add("L01");if(c>=5)add("L02");if(c>=10)add("L03");if(c>=15)add("L04");if(c>=20)add("L05");if(c>=25)add("L06");if(c>=30)add("L07");if(caps.some(b=>b.etapa===2))add("L08");const lineas=[...new Set(BIOFORMAS.map(b=>b.linea))];if(lineas.some(l=>lineaBioformas(l).every(b=>progreso.capturadas.includes(b.id))))add("L09");if(caps.some(b=>b.rareza==="Épica"))add("L10");if(caps.some(b=>b.rareza==="Legendaria"))add("L11");if(caps.some(b=>["Aurora","Prisma","Nexo","Nova","Bruma","Lumen"].includes(b.tipo))&&caps.some(b=>["Vector","Umbral","Arcana","Terra"].includes(b.tipo)))add("L12");if(progreso.logros.length!==before){guardarProgreso();if(notify)toast("Nuevo logro desbloqueado.");}}
+function renderRespaldo(){return `<section class="rpg-window"><span class="rpg-title">Respaldo local</span><h2>Exportar / importar progreso</h2><div class="grid two"><div class="card"><div class="card-title">Exportar avance</div><p class="small muted">Copia este código si usarás otra tablet o computador.</p><button onclick="exportarProgreso()">Generar respaldo</button><textarea id="exportBox" rows="8" placeholder="Aquí aparecerá tu respaldo..."></textarea><div class="modal-actions"><button class="secondary" onclick="copiarExport()">Copiar</button><button onclick="descargarExport()">Descargar .txt</button></div></div><div class="card"><div class="card-title">Importar avance</div><p class="small muted">Esto reemplazará el avance actual de esta BioDex.</p><textarea id="importBox" rows="10" placeholder="Pega aquí tu respaldo..."></textarea><button class="danger" onclick="importarProgreso()">Importar progreso</button></div></div><div class="card" style="margin-top:14px"><div class="card-title">Reiniciar</div><p class="small muted">Borra el progreso local. Exporta antes si quieres conservarlo.</p><button class="danger" onclick="reiniciarProgreso()">Reiniciar BioDex</button></div></section>`;}
+function exportarProgreso(){const payload={version:"1.8",fechaExportacion:new Date().toISOString(),progreso};const text=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));document.getElementById("exportBox").value=text;toast("Respaldo generado.");}
+function copiarExport(){const box=document.getElementById("exportBox");if(!box.value)exportarProgreso();box.select();if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(box.value).then(()=>toast("Respaldo copiado.")).catch(()=>{try{document.execCommand("copy");toast("Respaldo copiado.");}catch(e){toast("Selecciona y copia manualmente.","warn");}});}else{try{document.execCommand("copy");toast("Respaldo copiado.");}catch(e){toast("Selecciona y copia manualmente.","warn");}}}
+function descargarExport(){const box=document.getElementById("exportBox");if(!box.value)exportarProgreso();const blob=new Blob([box.value],{type:"text/plain"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`BioDex_Bioformas_${progreso.jugador}_${new Date().toISOString().slice(0,10)}.txt`;a.click();URL.revokeObjectURL(a.href);}
+function importarProgreso(){const raw=document.getElementById("importBox").value.trim();if(!raw){toast("Pega un respaldo válido.","warn");return;}try{const payload=JSON.parse(decodeURIComponent(escape(atob(raw))));if(!payload.progreso||!payload.progreso.jugador)throw new Error("inválido");if(!confirm("Importar reemplazará el avance actual. ¿Continuar?"))return;progreso={...defaultProgress(),...payload.progreso};guardarProgreso();document.body.classList.toggle("crt",progreso.configuracion?.crt!==false);render();toast("Progreso importado.");}catch(e){toast("No se pudo importar. Respaldo inválido.","warn");}}
+function reiniciarProgreso(){if(confirm("Esto borrará tu progreso local. ¿Continuar?")){localStorage.removeItem(STORAGE_KEY);progreso=defaultProgress();render();}}
+function renderAyuda(){return `<section class="rpg-window"><span class="rpg-title">Ayuda</span><h2>Cómo usar la BioDex v1.8</h2><div class="grid two"><div class="card"><div class="card-title">Flujo de captura</div><p class="small">1. El profesor realiza una actividad/misión.<br>2. Al completarla, el profesor entrega un código.<br>3. Ingresas el código en Terminal de captura.<br>4. Aparece una reflexión metacognitiva (no hay respuesta incorrecta).<br>5. Al responder, la Bioforma se revela a color con animación.</p></div><div class="card"><div class="card-title">Reflexión metacognitiva</div><p class="small">En vez de preguntas de contenido, cada captura activa una reflexión sobre tu proceso: estrategias, dificultades, transferencia y aprendizaje. Funciona para cualquier asignatura. Todas las opciones son válidas.</p></div><div class="card"><div class="card-title">Evoluciones</div><p class="small">Algunas Bioformas requieren capturar la etapa anterior. El código no se consume si la evolución está bloqueada.</p></div><div class="card"><div class="card-title">Modo CRT</div><p class="small">Puedes activar o desactivar el efecto visual retro.</p><button onclick="toggleCRT()">Alternar Modo CRT</button></div></div></section>`;}
+function toggleCRT(){progreso.configuracion.crt=!progreso.configuracion.crt;guardarProgreso();document.body.classList.toggle("crt",progreso.configuracion.crt);toast(`Modo CRT ${progreso.configuracion.crt?'activado':'desactivado'}.`);}
+function getBioforma(id){return BIOFORMAS.find(b=>b.id===id);}
+function openModal(html){document.getElementById("modalContent").innerHTML=html;document.getElementById("modalBack").classList.add("show");}
+function closeModal(e){if(e&&e.target.id!=="modalBack")return;document.getElementById("modalBack").classList.remove("show");preguntaActual=null;}
+function showNPC(name,text){const d=document.getElementById("dialogue"),n=document.getElementById("dialogueName"),t=document.getElementById("dialogueText");n.textContent=name;t.textContent="";d.classList.add("show");typing.full=text;typing.done=false;let i=0;clearInterval(typing.timer);typing.timer=setInterval(()=>{t.textContent=text.slice(0,i++);if(i>text.length){clearInterval(typing.timer);typing.done=true;}},18);}
+function skipDialogue(){const t=document.getElementById("dialogueText");if(!typing.done){clearInterval(typing.timer);t.textContent=typing.full;typing.done=true;}else closeDialogue();}
+function closeDialogue(){clearInterval(typing.timer);document.getElementById("dialogue").classList.remove("show");}
+function toast(msg,type){const el=document.getElementById("toast");el.textContent=msg;el.style.borderColor=type==="warn"?"var(--yellow)":"var(--green)";el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2600);}
+function escapeHtml(s){return String(s||"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));}
+function slugCss(s){return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
+function capitalize(s){return String(s).charAt(0).toUpperCase()+String(s).slice(1);}
+
+/* === Gimnasios BioNova integrados === */
+const GIMNASIOS_BIONOVA = [{"id": "GYM01", "nombre": "Gimnasio Aurora", "zona": "Sector Aurora", "codigoInicio": "GYM-AURORA-001", "bioformas": ["B001", "B002", "B003"], "dificultad": "Inicial", "theme": "aurora", "narrativa": "Las primeras señales de Ciudad BioNova despiertan en el horizonte. Este gimnasio abre una ruta de exploración inicial.", "objetivo": "Completar una actividad de observación, registro y explicación simple."}, {"id": "GYM02", "nombre": "Gimnasio Prisma", "zona": "Santuario Prisma", "codigoInicio": "GYM-PRISMA-002", "bioformas": ["B004", "B005", "B006"], "dificultad": "Inicial", "theme": "prisma", "narrativa": "Una estructura cristalina divide la luz en rutas de análisis. Cada decisión abre una nueva posibilidad.", "objetivo": "Analizar patrones, comparar información y construir una explicación ordenada."}, {"id": "GYM03", "nombre": "Gimnasio Nexo", "zona": "Distrito Nexo", "codigoInicio": "GYM-NEXO-003", "bioformas": ["B007", "B008", "B009"], "dificultad": "Intermedia", "theme": "nexo", "narrativa": "En este distrito todo se conecta: datos, decisiones, evidencias y consecuencias.", "objetivo": "Relacionar evidencias con decisiones responsables y comunicar una conclusión clara."}, {"id": "GYM04", "nombre": "Gimnasio Nova", "zona": "Muralla Nova", "codigoInicio": "GYM-NOVA-004", "bioformas": ["B010", "B011", "B012"], "dificultad": "Intermedia", "theme": "nova", "narrativa": "La muralla central protege los archivos de BioNova. Solo se abre con argumentos bien defendidos.", "objetivo": "Usar modelos, evidencias y explicaciones para defender una idea científica."}, {"id": "GYM05", "nombre": "Gimnasio Bruma", "zona": "Laboratorio Bruma", "codigoInicio": "GYM-BRUMA-005", "bioformas": ["B013", "B014", "B015"], "dificultad": "Intermedia", "theme": "bruma", "narrativa": "Entre niebla y microscopios aparecen señales difíciles de interpretar. No todo se ve a simple vista.", "objetivo": "Distinguir observación, inferencia y evidencia al investigar fenómenos pequeños o invisibles."}, {"id": "GYM06", "nombre": "Gimnasio Lumen", "zona": "Fábrica Lumen", "codigoInicio": "GYM-LUMEN-006", "bioformas": ["B016", "B017", "B018"], "dificultad": "Intermedia", "theme": "lumen", "narrativa": "La fábrica transforma ideas en soluciones. Cada mecanismo exige creatividad y pensamiento crítico.", "objetivo": "Proponer soluciones usando ciencia, tecnología, evidencia y evaluación de impacto."}, {"id": "GYM07", "nombre": "Gimnasio Vector", "zona": "Campo Vector", "codigoInicio": "GYM-VECTOR-007", "bioformas": ["B019", "B020", "B021"], "dificultad": "Avanzada", "theme": "vector", "narrativa": "Flechas de energía cruzan el campo. Para avanzar hay que identificar interacciones y variables.", "objetivo": "Reconocer variables, controlar condiciones y explicar cambios a partir de relaciones observables."}, {"id": "GYM08", "nombre": "Gimnasio Umbral", "zona": "Cámara Umbral", "codigoInicio": "GYM-UMBRAL-008", "bioformas": ["B022", "B023", "B024"], "dificultad": "Avanzada", "theme": "umbral", "narrativa": "La cámara cambia con cada decisión. Entrar al umbral implica medir, comparar y justificar.", "objetivo": "Interpretar resultados, reconocer límites de un modelo y justificar conclusiones con datos."}, {"id": "GYM09", "nombre": "Gimnasio Arcana", "zona": "Cordillera Arcana", "codigoInicio": "GYM-ARCANA-009", "bioformas": ["B025", "B026", "B027"], "dificultad": "Avanzada", "theme": "arcana", "narrativa": "La cordillera guarda procesos lentos y poderosos. Sus señales requieren mirar más allá de lo inmediato.", "objetivo": "Usar escalas, modelos y evidencias para explicar fenómenos complejos."}, {"id": "GYM10", "nombre": "Gimnasio Terra", "zona": "Archivo Terra", "codigoInicio": "GYM-TERRA-010", "bioformas": ["B028", "B029", "B030"], "dificultad": "Final", "theme": "terra", "narrativa": "El archivo final reúne memoria, ambiente y futuro. Aquí la ciencia se conecta con la sociedad.", "objetivo": "Argumentar cómo la ciencia ayuda a tomar decisiones informadas para cuidar la vida y el entorno."}];
+/* === SECTORES CIUDAD BIONOVA: 7 sectores × 3 gimnasios de misión === */
+const SECTORES_CIUDAD = [
+  {
+    id:"S01", nombre:"Sector Aurora", icono:"AU", theme:"aurora",
+    codigoActivacion:"SEC-AURORA-001",
+    desc:"Zona inicial de exploración. Aquí despiertan las primeras señales de BioNova.",
+    gimnasios:[
+      {id:"GYM-S01-A", nombre:"Laboratorio Nimbel", dificultad:"Inicial",
+       bioformas:["B001","B002"],
+       objetivo:"Observación inicial: registra señales del entorno y formula una hipótesis simple."},
+      {id:"GYM-S01-B", nombre:"Estación Prismara", dificultad:"Inicial",
+       bioformas:["B003"],
+       objetivo:"Analiza patrones y construye una explicación ordenada a partir de datos."},
+      {id:"GYM-S01-C", nombre:"Campo Lunor", dificultad:"Inicial",
+       bioformas:["B004","B005"],
+       objetivo:"Identifica ciclos biológicos y compara dos situaciones usando evidencia."}
+    ]
+  },
+  {
+    id:"S02", nombre:"Santuario Prisma", icono:"PR", theme:"prisma",
+    codigoActivacion:"SEC-PRISMA-002",
+    desc:"Sector de observación, ciclos y análisis de patrones del mundo vivo.",
+    gimnasios:[
+      {id:"GYM-S02-A", nombre:"Cámara Solvian", dificultad:"Inicial",
+       bioformas:["B006"],
+       objetivo:"Diseña una observación sistemática y registra variables de forma ordenada."},
+      {id:"GYM-S02-B", nombre:"Guarida Vireon", dificultad:"Inicial",
+       bioformas:["B007","B008"],
+       objetivo:"Distingue observación directa e inferencia al investigar un fenómeno."},
+      {id:"GYM-S02-C", nombre:"Torre Nexora", dificultad:"Inicial",
+       bioformas:["B009"],
+       objetivo:"Conecta evidencias con una conclusión y comunícala claramente."}
+    ]
+  },
+  {
+    id:"S03", nombre:"Distrito Nexo", icono:"NX", theme:"nexo",
+    codigoActivacion:"SEC-NEXO-003",
+    desc:"Zona de conexión, análisis de evidencias y toma de decisiones responsables.",
+    gimnasios:[
+      {id:"GYM-S03-A", nombre:"Fuerte Clyrion", dificultad:"Intermedia",
+       bioformas:["B010","B011"],
+       objetivo:"Relaciona evidencias con decisiones responsables en contextos de salud."},
+      {id:"GYM-S03-B", nombre:"Cueva Aegira", dificultad:"Intermedia",
+       bioformas:["B012"],
+       objetivo:"Usa modelos para defender una idea científica ante preguntas críticas."},
+      {id:"GYM-S03-C", nombre:"Bunker Myrka", dificultad:"Intermedia",
+       bioformas:["B013"],
+       objetivo:"Evalúa distintas fuentes de información y justifica cuál es más confiable."}
+    ]
+  },
+  {
+    id:"S04", nombre:"Muralla Nova", icono:"NV", theme:"nova",
+    codigoActivacion:"SEC-NOVA-004",
+    desc:"Sector de defensa, estrategia y argumentación científica rigurosa.",
+    gimnasios:[
+      {id:"GYM-S04-A", nombre:"Mazmorra Zephor", dificultad:"Intermedia",
+       bioformas:["B014","B015"],
+       objetivo:"Investiga fenómenos microscópicos y distingue lo observable de lo inferido."},
+      {id:"GYM-S04-B", nombre:"Taller Embera", dificultad:"Intermedia",
+       bioformas:["B016"],
+       objetivo:"Propone soluciones biotecnológicas evaluando su impacto y viabilidad."},
+      {id:"GYM-S04-C", nombre:"Horno Cylar", dificultad:"Intermedia",
+       bioformas:["B017","B018"],
+       objetivo:"Aplica creatividad y pensamiento crítico para diseñar una solución innovadora."}
+    ]
+  },
+  {
+    id:"S05", nombre:"Laboratorio Bruma", icono:"BR", theme:"bruma",
+    codigoActivacion:"SEC-BRUMA-005",
+    desc:"Espacio de fenómenos pequeños, hallazgos inesperados y análisis de variables.",
+    gimnasios:[
+      {id:"GYM-S05-A", nombre:"Nebulosa Altor", dificultad:"Avanzada",
+       bioformas:["B019","B020"],
+       objetivo:"Reconoce variables dependientes e independientes y explica los cambios observados."},
+      {id:"GYM-S05-B", nombre:"Pantano Dravik", dificultad:"Avanzada",
+       bioformas:["B021"],
+       objetivo:"Controla condiciones de un experimento y redacta un protocolo claro."},
+      {id:"GYM-S05-C", nombre:"Fosa Velion", dificultad:"Avanzada",
+       bioformas:["B022"],
+       objetivo:"Interpreta resultados con justificación numérica y reconoce incertidumbre."}
+    ]
+  },
+  {
+    id:"S06", nombre:"Campo Vector", icono:"VC", theme:"vector",
+    codigoActivacion:"SEC-VECTOR-006",
+    desc:"Terreno de fuerzas, movimiento, presión y pruebas experimentales.",
+    gimnasios:[
+      {id:"GYM-S06-A", nombre:"Abismo Caelix", dificultad:"Avanzada",
+       bioformas:["B023","B024"],
+       objetivo:"Mide, compara magnitudes y justifica conclusiones usando datos cuantitativos."},
+      {id:"GYM-S06-B", nombre:"Grieta Lithor", dificultad:"Avanzada",
+       bioformas:["B025"],
+       objetivo:"Reconoce los límites de un modelo y propone mejoras argumentadas."},
+      {id:"GYM-S06-C", nombre:"Montaña Quarza", dificultad:"Avanzada",
+       bioformas:["B026"],
+       objetivo:"Usa escalas y modelos para explicar fenómenos de gran magnitud."}
+    ]
+  },
+  {
+    id:"S07", nombre:"Archivo Terra", icono:"TR", theme:"terra",
+    codigoActivacion:"SEC-TERRA-007",
+    desc:"El archivo final: memoria, ambiente, riesgo geológico y visión global.",
+    gimnasios:[
+      {id:"GYM-S07-A", nombre:"Cráter Pyronix", dificultad:"Final",
+       bioformas:["B027","B028"],
+       objetivo:"Evalúa riesgos geológicos y ambientales a partir de evidencias históricas."},
+      {id:"GYM-S07-B", nombre:"Bosque Borelia", dificultad:"Final",
+       bioformas:["B029"],
+       objetivo:"Analiza cambios en ecosistemas y argumenta medidas de conservación."},
+      {id:"GYM-S07-C", nombre:"Santuario Gaian", dificultad:"Final",
+       bioformas:["B030"],
+       objetivo:"Argumenta cómo la ciencia ayuda a tomar decisiones globales informadas."}
+    ]
+  }
+];
+
+const BIOFORMAS_GYM = [{"id": "B001", "nombre": "Nimbel", "codigo": "CAP-NIMBEL-104"}, {"id": "B002", "nombre": "Auralis", "codigo": "CAP-AURALIS-216"}, {"id": "B003", "nombre": "Prismara", "codigo": "CAP-PRISMARA-337"}, {"id": "B004", "nombre": "Lunor", "codigo": "CAP-LUNOR-441"}, {"id": "B005", "nombre": "Orbelix", "codigo": "CAP-ORBELIX-512"}, {"id": "B006", "nombre": "Solvian", "codigo": "CAP-SOLVIAN-633"}, {"id": "B007", "nombre": "Vireon", "codigo": "CAP-VIREON-745"}, {"id": "B008", "nombre": "Nexora", "codigo": "CAP-NEXORA-856"}, {"id": "B009", "nombre": "Clyrion", "codigo": "CAP-CLYRION-967"}, {"id": "B010", "nombre": "Terral", "codigo": "CAP-TERRAL-178"}, {"id": "B011", "nombre": "Valtrix", "codigo": "CAP-VALTRIX-289"}, {"id": "B012", "nombre": "Aegira", "codigo": "CAP-AEGIRA-390"}, {"id": "B013", "nombre": "Myrka", "codigo": "CAP-MYRKA-402"}, {"id": "B014", "nombre": "Zephor", "codigo": "CAP-ZEPHOR-513"}, {"id": "B015", "nombre": "Spirel", "codigo": "CAP-SPIREL-624"}, {"id": "B016", "nombre": "Embera", "codigo": "CAP-EMBERA-735"}, {"id": "B017", "nombre": "Cylar", "codigo": "CAP-CYLAR-846"}, {"id": "B018", "nombre": "Orynx", "codigo": "CAP-ORYNX-957"}, {"id": "B019", "nombre": "Altor", "codigo": "CAP-ALTOR-167"}, {"id": "B020", "nombre": "Dravik", "codigo": "CAP-DRAVIK-278"}, {"id": "B021", "nombre": "Velion", "codigo": "CAP-VELION-389"}, {"id": "B022", "nombre": "Umbrin", "codigo": "CAP-UMBRIN-490"}, {"id": "B023", "nombre": "Caelix", "codigo": "CAP-CAELIX-601"}, {"id": "B024", "nombre": "Nuvora", "codigo": "CAP-NUVORA-712"}, {"id": "B025", "nombre": "Lithor", "codigo": "CAP-LITHOR-823"}, {"id": "B026", "nombre": "Quarza", "codigo": "CAP-QUARZA-934"}, {"id": "B027", "nombre": "Pyronix", "codigo": "CAP-PYRONIX-145"}, {"id": "B028", "nombre": "Strata", "codigo": "CAP-STRATA-256"}, {"id": "B029", "nombre": "Borelia", "codigo": "CAP-BORELIA-367"}, {"id": "B030", "nombre": "Gaian", "codigo": "CAP-GAIAN-478"}];
+
+/* === Funciones Sector Ciudad BioNova === */
+
+function ensureSectorProgress(){
+  if(!progreso.sectores) progreso.sectores = {abiertos:{}};
+  if(!progreso.sectores.abiertos) progreso.sectores.abiertos = {};
+}
+
+function validarCodigoSector(){
+  ensureSectorProgress();
+  const input = document.getElementById("sectorCodeInput");
+  const raw = input ? input.value : "";
+  const norm = normalizarCodigoGimnasio(raw);
+  if(!norm) return toast("Ingresa un código de activación de sector.", "warn");
+  const sector = SECTORES_CIUDAD.find(s => normalizarCodigoGimnasio(s.codigoActivacion) === norm);
+  if(!sector){ toast("Código no reconocido. Revisa el código entregado por el profesor.", "warn"); return; }
+  if(progreso.sectores.abiertos[sector.id]){
+    toast(`${sector.nombre} ya estaba activado.`);
+  } else {
+    progreso.sectores.abiertos[sector.id] = {abierto:true, fecha:new Date().toISOString(), codigo:sector.codigoActivacion};
+    guardarProgreso();
+    showNPC("Dra. Lira", `¡Sector activado! ${sector.nombre} ya está disponible. Completa las actividades de cada gimnasio para recibir los códigos de captura.`);
+    toast(`${sector.nombre} activado.`);
+  }
+  if(input) input.value = "";
+  render();
+  setTimeout(() => {
+    const el = document.querySelector(`[data-sector="${sector.id}"]`);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 150);
+}
+
+function getSectorEstado(sector){
+  ensureSectorProgress();
+  if(!progreso.sectores.abiertos[sector.id]) return "bloqueado";
+  const allBios = sector.gimnasios.flatMap(g => g.bioformas);
+  const captured = allBios.filter(id => progreso.capturadas.includes(id)).length;
+  if(captured === allBios.length) return "completado";
+  if(captured > 0) return "progreso";
+  return "activo";
+}
+
+function renderSectorCard(sector){
+  ensureSectorProgress();
+  const estado = getSectorEstado(sector);
+  const bloqueado = estado === "bloqueado";
+  const allBios = sector.gimnasios.flatMap(g => g.bioformas);
+  const capturedCount = allBios.filter(id => progreso.capturadas.includes(id)).length;
+  const pct = allBios.length > 0 ? Math.round(capturedCount/allBios.length*100) : 0;
+  const estadoLabels = {bloqueado:"BLOQUEADO", activo:"ACTIVO", progreso:"EN PROGRESO", completado:"COMPLETADO"};
+  const estadoClasses = {bloqueado:"gym-status-closed", activo:"gym-status-open", progreso:"gym-status-progress", completado:"gym-status-complete"};
+  return `<article class="card sector-card${bloqueado?' sector-locked':''}" data-sector="${sector.id}">
+    <div class="gym-status-pill ${estadoClasses[estado]}">${estadoLabels[estado]}</div>
+    <div class="gym-zone-svg">${renderZonaSVG(sector.theme, estado)}</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <div class="node-icon">${sector.icono}</div>
+      <div class="card-title" style="margin-bottom:0">${sector.nombre}</div>
+    </div>
+    <p class="small muted" style="margin-bottom:10px">${sector.desc}</p>
+    ${bloqueado
+      ? `<div class="sector-locked-panel">
+           <div style="font-size:1.8rem;margin-bottom:6px;opacity:.6">🔒</div>
+           <p class="small muted" style="margin:0">Sector bloqueado.<br>El profesor entregará el código de activación.</p>
+         </div>`
+      : `<div class="progress" style="margin-bottom:6px"><div style="width:${pct}%"></div></div>
+         <p class="small muted" style="margin-bottom:10px">${capturedCount} / ${allBios.length} Bioformas capturadas · ${pct}%</p>
+         <div class="sector-gyms">${sector.gimnasios.map(g => renderGymMiniCard(g)).join("")}</div>`
+    }
+  </article>`;
+}
+
+function renderGymMiniCard(gym){
+  const captured = gym.bioformas.filter(id => progreso.capturadas.includes(id)).length;
+  const total = gym.bioformas.length;
+  const done = captured === total;
+  const inProg = captured > 0 && !done;
+  const stateClass = done ? "gym-mini-done" : inProg ? "gym-mini-progress" : "";
+  const stateIcon = done ? "✓" : inProg ? "◉" : "○";
+  const iconColor = done ? "var(--green)" : inProg ? "var(--yellow)" : "var(--muted)";
+  return `<div class="gym-mini-card ${stateClass}">
+    <div class="gym-mini-header">
+      <span style="color:${iconColor};font-size:.95rem">${stateIcon}</span>
+      <b style="font-size:.82rem">${gym.nombre}</b>
+      <span class="pill" style="margin-left:auto;font-size:.66rem;padding:2px 5px">${gym.dificultad}</span>
+    </div>
+    <p class="small muted" style="margin:4px 0 6px;font-size:.74rem">${gym.objetivo}</p>
+    <div class="gym-mini-bios">
+      ${gym.bioformas.map(id => {
+        const b = getBioforma(id);
+        const cap = progreso.capturadas.includes(id);
+        return `<span class="gym-bio-pill${cap?' captured':' pending'}">${b ? b.nombre : id}</span>`;
+      }).join("")}
+    </div>
+    <div style="text-align:right;margin-top:6px">
+      <button class="ghost" style="font-size:.72rem;padding:5px 8px;box-shadow:none" onclick="go('codigo')">⌘ Capturar</button>
+    </div>
+  </div>`;
+}
+
+function ensureGymProgress(){
+  if(!progreso.gimnasios) progreso.gimnasios = {abiertos:{}};
+  if(!progreso.gimnasios.abiertos) progreso.gimnasios.abiertos = {};
+}
+
+function normalizarCodigoGimnasio(c){
+  return String(c || "").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+}
+
+function validarCodigoGimnasio(){
+  ensureGymProgress();
+  const input = document.getElementById("gymCodeInput");
+  const raw = input ? input.value : "";
+  const norm = normalizarCodigoGimnasio(raw);
+  if(!norm) return toast("Ingresa un código de inicio de gimnasio.", "warn");
+  const gym = GIMNASIOS_BIONOVA.find(g => normalizarCodigoGimnasio(g.codigoInicio) === norm);
+  if(!gym){ toast("Código no reconocido. Revisa el código de inicio entregado por el profesor.", "warn"); return; }
+  if(progreso.gimnasios.abiertos[gym.id]){ toast(`${gym.nombre} ya estaba abierto.`); }
+  else {
+    progreso.gimnasios.abiertos[gym.id] = {abierto:true,fechaInicio:new Date().toISOString(),codigoUsado:gym.codigoInicio};
+    guardarProgreso();
+    toast(`${gym.nombre} abierto. Bioformas disponibles reveladas.`);
+  }
+  if(input) input.value = "";
+  render();
+  setTimeout(() => {
+    const el = document.querySelector(`[data-gym="${gym.id}"]`);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
+  }, 120);
+}
+
+function getGymProgress(gym){
+  const captured = progreso.capturadas || [];
+  const count = gym.bioformas.filter(id => captured.includes(id)).length;
+  return {count, total:gym.bioformas.length, pct:Math.round(count/gym.bioformas.length*100)};
+}
+
+function getGymEstado(gym){
+  ensureGymProgress();
+  if(!progreso.gimnasios.abiertos[gym.id]) return "cerrado";
+  const p = getGymProgress(gym);
+  if(p.count === 0) return "abierto";
+  if(p.count < p.total) return "progreso";
+  return "completado";
+}
+
+function gymEstadoLabel(estado){ return {cerrado:"CERRADO",abierto:"ABIERTO",progreso:"EN PROGRESO",completado:"COMPLETADO"}[estado] || estado; }
+function gymEstadoClass(estado){ return {cerrado:"gym-status-closed",abierto:"gym-status-open",progreso:"gym-status-progress",completado:"gym-status-complete"}[estado] || ""; }
+
+function renderGimnasiosBioNova(){
+  ensureGymProgress();
+  return `<div class="card" style="margin-top:4px">
+    <span class="rpg-title">Gimnasios BioNova</span>
+    <h2>Ciudad BioNova: rutas de exploración</h2>
+    <p class="muted">Cada gimnasio representa una actividad liberada por tu profesor. El código de inicio lo entrega el profesor y permite abrir el gimnasio. Luego, cuando la actividad esté completada, el profesor entregará los códigos de captura correspondientes.</p>
+    <div class="gym-command-row">
+      <input id="gymCodeInput" placeholder="Ingresa el código de inicio entregado por tu profesor" onkeydown="if(event.key==='Enter') validarCodigoGimnasio()">
+      <button onclick="validarCodigoGimnasio()">Abrir gimnasio</button>
+    </div>
+    <div class="gym-actions">
+      <button class="ghost" onclick="go('codigo')">Ir a terminal de captura</button>
+    </div>
+    <div class="gym-grid">${GIMNASIOS_BIONOVA.map(renderGymCard).join("")}</div>
+  </div>`;
+}
+
+function renderGymCard(gym){
+  const estado = getGymEstado(gym);
+  const abierto = estado !== "cerrado";
+  const p = getGymProgress(gym);
+  return `<article class="card gym-card ${estado}" data-gym="${gym.id}">
+    <div class="gym-status-pill ${gymEstadoClass(estado)}">${gymEstadoLabel(estado)}</div>
+    <div class="gym-zone-svg">${renderZonaSVG(gym.theme, estado)}</div>
+    <div class="card-title">${gym.nombre}</div>
+    <p class="small muted"><b>${gym.zona}</b> · ${gym.dificultad}</p>
+    <p class="small">${gym.narrativa}</p>
+    <p class="small muted"><b>Objetivo:</b> ${gym.objetivo}</p>
+    <div class="progress"><div style="width:${abierto ? p.pct : 0}%"></div></div>
+    <p class="small muted">${abierto ? `${p.count} / ${p.total} Bioformas registradas` : "Ingresa el código de inicio para revelar sus Bioformas."}</p>
+    ${abierto ? renderBioformasGym(gym) : `<div class="gym-locked-panel">Gimnasio bloqueado<br>Requiere código de inicio de actividad.</div>`}
+    <div class="gym-actions">${abierto ? `<button onclick="verDetalleGym('${gym.id}')">Ver gimnasio</button><button class="ghost" onclick="go('codigo')">Ir a captura</button>` : `<button class="ghost" onclick="enfocarCodigoGimnasio()">Ingresar código</button>`}</div>
+  </article>`;
+}
+
+function renderBioformasGym(gym){
+  const captured = progreso.capturadas || [];
+  return `<div class="gym-bio-list">${gym.bioformas.map(id => {
+    const b = BIOFORMAS_GYM.find(x => x.id === id) || getBioforma(id);
+    const done = captured.includes(id);
+    return `<div class="gym-bio-token ${done ? "done" : "locked"}">
+      <div class="gym-bio-mini">${typeof renderBioformaSVG === "function" ? renderBioformaSVG(getBioforma(id)||b, done, 54) : renderMiniBioformaGym(done)}</div>
+      <b>${b.nombre}</b><span class="pill">${done ? "capturada" : "pendiente"}</span>
+    </div>`;
+  }).join("")}</div>`;
+}
+
+function renderMiniBioformaGym(done){
+  if(done) return `<svg viewBox="0 0 100 90" aria-hidden="true"><ellipse cx="50" cy="45" rx="34" ry="31" fill="#4dff91" opacity=".25"/><path d="M50 12 C76 28,80 62,50 80 C20 62,24 28,50 12Z" fill="#48e7ff" stroke="#071023" stroke-width="5"/></svg>`;
+  return `<svg viewBox="0 0 100 90" aria-hidden="true"><ellipse cx="50" cy="45" rx="34" ry="31" fill="#000" opacity=".5"/><path d="M50 12 C76 28,80 62,50 80 C20 62,24 28,50 12Z" fill="#070912" stroke="#1e2740" stroke-width="5"/><text x="50" y="57" text-anchor="middle" fill="#e8f0ff" font-size="34" font-family="monospace" font-weight="900">?</text></svg>`;
+}
+
+function enfocarCodigoGimnasio(){ const input=document.getElementById("gymCodeInput"); if(input){ input.focus(); input.scrollIntoView({behavior:"smooth",block:"center"}); } }
+
+function mostrarCodigosInicio(){
+  openModal(`<span class="rpg-title">Códigos de inicio</span><h2>Información</h2><p class="muted">Los códigos de inicio y captura son entregados directamente por el profesor durante las actividades.</p><div class="gym-actions"><button onclick="closeModal()">Cerrar</button></div>`);
+}
+
+function verDetalleGym(id){
+  const gym = GIMNASIOS_BIONOVA.find(g => g.id === id);
+  const p = getGymProgress(gym);
+  const bios = gym.bioformas.map(id => BIOFORMAS_GYM.find(b => b.id === id) || getBioforma(id));
+  openModal(`<span class="rpg-title">${gym.nombre}</span><h2>${gym.zona}</h2><p class="muted">${gym.narrativa}</p><p><b>Objetivo:</b> ${gym.objetivo}</p><p><b>Progreso:</b> ${p.count} / ${p.total} Bioformas capturadas</p><div class="progress"><div style="width:${p.pct}%"></div></div><h3 style="margin-top:14px">Bioformas de este gimnasio</h3><div class="gym-code-list">${bios.map(b => `<div class="gym-code-line"><b>${b.id} · ${b.nombre}</b><br><span class="muted">Código CAP entregado por el profesor al completar la actividad.</span></div>`).join("")}</div><div class="gym-actions"><button onclick="closeModal()">Cerrar</button><button class="ghost" onclick="closeModal(); go('codigo')">Ir a captura</button></div>`);
+}
+
+function renderZonaSVG(theme, estado){
+  const locked = estado === "cerrado" || estado === "bloqueado";
+  const opacity = locked ? ".42" : "1";
+  const stroke = locked ? "#2d355c" : "#48e7ff";
+  const glow = locked ? "#111827" : "#4dff91";
+  const map = {
+    aurora: `<svg viewBox="0 0 500 180"><rect width="500" height="180" fill="#071026"/><path d="M0 144 C90 84,150 120,230 62 C330 0,410 70,500 24 V180 H0Z" fill="${glow}" opacity=".18"/><circle cx="380" cy="54" r="28" fill="#ffe66d" opacity="${opacity}"/><path d="M70 132 H430" stroke="${stroke}" stroke-width="5"/><path d="M125 132 V82 H190 V132 M240 132 V54 H315 V132 M350 132 V96 H405 V132" fill="none" stroke="${stroke}" stroke-width="6"/></svg>`,
+    prisma: `<svg viewBox="0 0 500 180"><rect width="500" height="180" fill="#070b22"/><path d="M250 28 L356 138 H144Z" fill="#a477ff" opacity=".24" stroke="${stroke}" stroke-width="6"/><path d="M250 28 L250 138 M144 138 L356 138 M205 92 H295" stroke="#ffe66d" stroke-width="4" opacity="${opacity}"/><circle cx="250" cy="90" r="24" fill="${glow}" opacity=".3"/></svg>`,
+    nexo: `<svg viewBox="0 0 500 180"><rect width="500" height="180" fill="#071026"/><circle cx="135" cy="90" r="34" fill="#ff5f7a" opacity=".3" stroke="${stroke}" stroke-width="5"/><circle cx="250" cy="56" r="34" fill="#48e7ff" opacity=".3" stroke="${stroke}" stroke-width="5"/><circle cx="365" cy="112" r="34" fill="#ffe66d" opacity=".3" stroke="${stroke}" stroke-width="5"/><path d="M166 82 L220 62 M280 70 L334 102 M164 100 L334 116" stroke="${stroke}" stroke-width="5"/></svg>`,
+    nova: `<svg viewBox="0 0 500 180"><rect width="500" height="180" fill="#06111f"/><path d="M70 138 H430 V76 H390 V48 H340 V76 H300 V48 H250 V76 H200 V48 H150 V76 H110 V138Z" fill="#4dff91" opacity=".22" stroke="${stroke}" stroke-width="6"/><path d="M95 106 H405 M150 76 V138 M250 76 V138 M350 76 V138" stroke="#e8f0ff" stroke-width="3" opacity=".5"/></svg>`,
+    bruma: `<svg viewBox="0 0 500 180"><rect width="500" height="180" fill="#06091b"/><path d="M75 116 C130 76,190 134,250 92 C318 44,380 124,430 82" fill="none" stroke="${stroke}" stroke-width="10" opacity=".5"/><circle cx="178" cy="92" r="24" fill="#a477ff" opacity=".35"/><circle cx="292" cy="98" r="18" fill="#4dff91" opacity=".35"/><path d="M150 140 H350 M190 140 V92 H310 V140" stroke="${stroke}" stroke-width="5"/></svg>`,
+    lumen: `<svg viewBox="0 0 500 180"><rect width="500" height="180" fill="#071026"/><path d="M98 138 V78 H166 V138 M196 138 V46 H268 V138 M304 138 V92 H402 V138" fill="#a477ff" opacity=".22" stroke="${stroke}" stroke-width="6"/><path d="M306 92 C340 54,366 62,402 36" stroke="#4dff91" stroke-width="6" opacity="${opacity}"/><circle cx="402" cy="36" r="14" fill="#ffe66d"/></svg>`,
+    vector: `<svg viewBox="0 0 500 180"><rect width="500" height="180" fill="#071026"/><path d="M70 138 H430" stroke="${stroke}" stroke-width="5"/><path d="M110 120 L210 50 M210 50 L202 82 M210 50 L180 58" stroke="#ffe66d" stroke-width="8" stroke-linecap="round"/><path d="M260 120 L385 82 M385 82 L362 108 M385 82 L350 70" stroke="#ff9d4d" stroke-width="8" stroke-linecap="round"/><circle cx="180" cy="132" r="18" fill="#48e7ff" opacity=".35"/></svg>`,
+    umbral: `<svg viewBox="0 0 500 180"><rect width="500" height="180" fill="#06111f"/><path d="M142 140 C132 78,178 36,250 36 C322 36,368 78,358 140Z" fill="#48e7ff" opacity=".18" stroke="${stroke}" stroke-width="6"/><circle cx="250" cy="92" r="40" fill="#bdf9ff" opacity=".23" stroke="#ffe66d" stroke-width="4"/><path d="M250 92 L280 70" stroke="#ff8bd1" stroke-width="5"/><path d="M126 140 H374" stroke="${stroke}" stroke-width="6"/></svg>`,
+    arcana: `<svg viewBox="0 0 500 180"><rect width="500" height="180" fill="#071026"/><path d="M38 142 L145 58 L210 142Z" fill="#7b8499" opacity=".35" stroke="${stroke}" stroke-width="5"/><path d="M180 142 L285 36 L400 142Z" fill="#ff9d4d" opacity=".23" stroke="${stroke}" stroke-width="5"/><path d="M310 142 L390 78 L470 142Z" fill="#7b8499" opacity=".3" stroke="${stroke}" stroke-width="5"/><path d="M284 36 C262 20,298 10,290 0" stroke="#ff5f3d" stroke-width="7" fill="none"/></svg>`,
+    terra: `<svg viewBox="0 0 500 180"><rect width="500" height="180" fill="#06111f"/><circle cx="250" cy="88" r="54" fill="#4dff91" opacity=".22" stroke="${stroke}" stroke-width="6"/><path d="M250 42 C224 78,228 112,250 140 C272 112,276 78,250 42Z" fill="#ffe66d" opacity=".38"/><path d="M250 142 V72 M210 118 C240 104,260 104,290 118 M208 92 C238 78,262 78,292 92" stroke="#4dff91" stroke-width="6" fill="none"/><path d="M140 146 H360" stroke="${stroke}" stroke-width="6"/></svg>`
+  };
+  return map[theme] || map.aurora;
+}
+
+window.addEventListener("load",bootSequence);
+</script>
+</body>
+</html>
