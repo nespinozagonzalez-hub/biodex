@@ -44,3 +44,20 @@ test('los 47 códigos originales se mantienen en el backend',()=>{const b=backen
 test('todas las bioformas se capturan solo en orden y se conservan logros',()=>{const b=backend(),a=b.register();const cat=JSON.parse(vm.runInContext('JSON.stringify(CATALOGO_BIODEX)',b.context));for(const entry of cat.filter(x=>x.prev))assert.equal(b.call({action:'redeem',token:a.token,code:entry.codigo}).ok,false,entry.id);assert.equal(b.call({action:'load',token:a.token}).progreso.capturadas.length,0);for(const entry of cat)assert.equal(b.call({action:'redeem',token:a.token,code:entry.codigo}).ok,true,entry.id);const p=b.call({action:'load',token:a.token}).progreso;assert.equal(p.capturadas.length,30);assert.equal(p.logros.length,12);});
 test('sesiones vencidas no recuperan datos y cerrar registro no bloquea cuentas existentes',()=>{const b=backend(),a=b.register();b.properties.set('REGISTRO_ABIERTO','false');assert.equal(b.register('Nueva Cuenta').ok,false);assert.equal(b.call({action:'login',name:'Prueba Uno',pin:'000123'}).ok,true);b.sheets.get('Sesiones').data[1][2]=Date.now()-1;assert.equal(b.call({action:'load',token:a.token}).ok,false);});
 test('cada activación y preferencia sobrevive al reingreso sin perder las anteriores',()=>{const b=backend(),a=b.register();const codes=JSON.parse(fs.readFileSync(path.join(__dirname,'original-codes.json'),'utf8'));for(const code of codes)assert.equal(b.call({action:'redeem',token:a.token,code}).ok,true,code);b.call({action:'settings',token:a.token,crt:true});const r=b.call({action:'login',name:'Prueba Uno',pin:'000123'});assert.equal(r.progreso.capturadas.length,30);assert.equal(Object.keys(r.progreso.sectores.abiertos).length,7);assert.equal(Object.keys(r.progreso.gimnasios.abiertos).length,10);assert.equal(r.progreso.intentos.length,47);assert.equal(r.progreso.codigosUsados.length,47);assert.equal(r.progreso.configuracion.crt,true);});
+test('avatar y paisaje se guardan al registrar y se recuperan al ingresar',()=>{
+ const b=backend(),r=b.call({action:'register',name:'Exploradora Nueva',pin:'000123',avatarId:'prisma',landscapeId:'arcana'});
+ assert.equal(r.ok,true);assert.equal(r.progreso.configuracion.avatarId,'prisma');assert.equal(r.progreso.configuracion.landscapeId,'arcana');
+ b.call({action:'redeem',token:r.token,code:'CAP-NIMBEL-104'});
+ assert.equal(b.call({action:'settings',token:r.token,crt:true,avatarId:'terra',landscapeId:'bruma'}).ok,true);
+ const p=b.call({action:'login',name:'Exploradora Nueva',pin:'000123'}).progreso;
+ assert.deepEqual(p.configuracion,{crt:true,avatarId:'terra',landscapeId:'bruma'});assert.deepEqual(p.capturadas,['B001']);
+ assert.equal(b.call({action:'settings',token:r.token,avatarId:'aurora'}).progreso.configuracion.landscapeId,'bruma');
+});
+test('solo acepta personalización permitida, sin aceptar snapshots',()=>{
+ const b=backend(),r=b.register();
+ for(const fields of [{avatarId:'../../x'},{landscapeId:'https://otro.test'},{crt:'true'},{}])assert.equal(b.call({action:'settings',token:r.token,...fields}).ok,false);
+ assert.equal(b.call({action:'register',name:'Inválida',pin:'000123',avatarId:'<img>'}).ok,false);
+ assert.equal(b.call({action:'load',token:r.token}).progreso.configuracion.avatarId,'aurora');
+ assert.equal(b.call({action:'settings',token:r.token,avatarId:'nexo',capturadas:['B030']}).ok,true);
+ assert.equal(b.call({action:'load',token:r.token}).progreso.capturadas.length,0);
+});

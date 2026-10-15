@@ -7,10 +7,10 @@ async function run(){
   const page=await browser.newPage({viewport});page.on('pageerror',e=>errors.push(e.message));
   await page.goto('http://127.0.0.1:8000/');await page.getByRole('button',{name:'Explorar vista previa',exact:true}).waitFor();
   assert.equal(await page.locator('.access-submit').isDisabled(),true);
-  assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()),'#0a1916','La paleta del remaster debe prevalecer sobre los estilos antiguos');
+  assert.equal(await page.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()),'#092d2c','La paleta FIELD-02 debe prevalecer sobre los estilos antiguos');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   await page.getByRole('button',{name:'Explorar vista previa',exact:true}).click();
-  for(const target of ['biodex','mapa','gimnasios','lineas','inventario','logros','respaldo','ayuda','codigo']){
+  for(const target of ['biodex','mapa','gimnasios','lineas','inventario','logros','respaldo','ayuda','perfil','codigo']){
    await page.evaluate(v=>go(v),target);
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'horizontal overflow '+target+' '+viewport.width);
   }

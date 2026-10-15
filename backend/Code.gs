@@ -434,7 +434,14 @@ function pinHash_(pin,salt){
   return bytesHex_(Utilities.computeHmacSha256Signature(salt+':'+pin,pepper,Utilities.Charset.UTF_8));
 }
 function same_(a,b){a=String(a);b=String(b);let d=a.length^b.length;for(let i=0;i<Math.max(a.length,b.length);i++)d|=(a.charCodeAt(i)||0)^(b.charCodeAt(i)||0);return d===0;}
-function empty_(name){return {jugador:name,fechaRegistro:new Date().toISOString(),capturadas:[],codigosUsados:[],preguntasUsadas:{},intentos:[],logros:[],configuracion:{crt:false},ultimaBioforma:null,bienvenidaVista:true,gimnasios:{abiertos:{}},sectores:{abiertos:{}}};}
+function empty_(name){return {jugador:name,fechaRegistro:new Date().toISOString(),capturadas:[],codigosUsados:[],preguntasUsadas:{},intentos:[],logros:[],configuracion:{crt:false,avatarId:'aurora',landscapeId:'bosque'},ultimaBioforma:null,bienvenidaVista:true,gimnasios:{abiertos:{}},sectores:{abiertos:{}}};}
+function profileFields_(data){
+  const clean={};
+  const allowed={avatarId:['aurora','nexo','prisma','terra'],landscapeId:['bosque','prisma','bruma','arcana']};
+  Object.keys(allowed).forEach(key=>{if(data[key]!==undefined){if(!allowed[key].includes(data[key]))throw new Error('Personalización no válida.');clean[key]=data[key];}});
+  if(data.crt!==undefined){if(typeof data.crt!=='boolean')throw new Error('Preferencia inválida.');clean.crt=data.crt;}
+  return clean;
+}
 function achievements_(p) {
   const caps=CATALOGO_BIODEX.filter(b=>p.capturadas.includes(b.id)), n=caps.length, ids=[];
   [1,5,10,15,20,25,30].forEach((count,i)=>{if(n>=count)ids.push('L0'+(i+1));});
@@ -474,7 +481,9 @@ function auth_(data) {
   if(data.action==='register') {
     if(PropertiesService.getScriptProperties().getProperty('REGISTRO_ABIERTO')!=='true')throw new Error('El registro de nuevas cuentas está cerrado. Consulta a tu docente.');
     if(u)throw new Error('Ese nombre ya está registrado. Ingresa con tu clave o elige un nombre distinto.');
-    const salt=Utilities.getUuid(),p=empty_(f.name),row=[f.key,f.name,salt,pinHash_(f.pin,salt),new Date().toISOString(),new Date().toISOString(),JSON.stringify(p),0,0];
+    const profile=profileFields_(data),salt=Utilities.getUuid(),p=empty_(f.name);
+    p.configuracion=Object.assign(p.configuracion,profile);
+    const row=[f.key,f.name,salt,pinHash_(f.pin,salt),new Date().toISOString(),new Date().toISOString(),JSON.stringify(p),0,0];
     sheet_('Usuarios').appendRow(row);
     return {ok:true,token:createSession_(f.key),progreso:p};
   }
@@ -513,8 +522,8 @@ function handle_(data){
   if(data.action==='load')return result_(u);
   if(data.action==='redeem')return redeem_(u,data.code);
   if(data.action==='settings'){
-    if(typeof data.crt!=='boolean')throw new Error('Preferencia inválida.');
-    const p=JSON.parse(u.data[6]);p.configuracion.crt=data.crt;return write_(u,p,'preferencias','crt='+data.crt);
+    const fields=profileFields_(data);if(!Object.keys(fields).length)throw new Error('Preferencia inválida.');
+    const p=JSON.parse(u.data[6]);p.configuracion=Object.assign({crt:false,avatarId:'aurora',landscapeId:'bosque'},p.configuracion||{},fields);return write_(u,p,'preferencias',JSON.stringify(fields));
   }
   if(data.action==='logout'){
     const rows=rows_('Sesiones'),digest=hash_(data.token);
