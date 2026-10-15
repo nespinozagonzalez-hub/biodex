@@ -26,6 +26,11 @@ renderBioformaSVG = function(input, captured=false, size='card', opts={}) {
 };
 
 function sessionKey(){return 'biodex_session_v2';}
+function rememberSession(){
+  try{sessionStorage.setItem(sessionKey(),JSON.stringify(sesion));return true;}
+  catch(e){return false;}
+}
+function forgetSession(){try{sessionStorage.removeItem(sessionKey());}catch(e){}}
 function setStatus(message) {
   cloudStatus=message;
   const el=document.getElementById('cloudStatus');
@@ -54,15 +59,15 @@ async function api(action, fields={}) {
 function applyCloud(data) {
   progreso={...defaultProgress(),...data.progreso};
   progreso.configuracion={crt:false,...data.progreso.configuracion};
-  sessionStorage.setItem(sessionKey(),JSON.stringify(sesion));
-  setStatus('Guardado en BioNova');
+  const remembered=rememberSession();
+  setStatus(remembered?'Guardado en BioNova':'Guardado en BioNova · ingresa otra vez al recargar');
   document.body.classList.toggle('crt',progreso.configuracion.crt===true);
 }
 function cargarProgreso(){progreso=defaultProgress();}
 // Esta función se conserva para las pantallas heredadas. Nunca sube un snapshot
 // del navegador: capturas y activaciones solo se escriben mediante acciones validadas.
 function guardarProgreso(){
-  if(sesion?.preview)sessionStorage.setItem('biodex_preview_v2',JSON.stringify(progreso));
+  if(sesion?.preview){try{sessionStorage.setItem('biodex_preview_v2',JSON.stringify(progreso));}catch(e){/* La vista previa puede funcionar solo en memoria. */}}
 }
 async function init(){
   injectBioformaSVGStyles(); progreso=defaultProgress();
@@ -71,7 +76,7 @@ async function init(){
   if(sesion?.token && CONFIG.endpoint) {
     renderLoading();
     try{applyCloud(await api('load'));render();return;}
-    catch(e){sesion=null;sessionStorage.removeItem(sessionKey());render();toast(e.message,'warn');return;}
+    catch(e){sesion=null;forgetSession();render();toast(e.message,'warn');return;}
   }
   sesion=null;render();
 }
@@ -109,7 +114,7 @@ function startPreview(){
 async function logout(){
   if(busy){toast('Espera a que termine el guardado.','warn');return;}
   if(sesion?.token){busy=true;try{await api('logout');}catch(e){/* El token local se elimina aunque no haya red. */}finally{busy=false;}}
-  sesion=null;progreso=defaultProgress();sessionStorage.removeItem(sessionKey());closeModal();closeDialogue();view='panel';render();
+  sesion=null;progreso=defaultProgress();forgetSession();closeModal();closeDialogue();view='panel';render();
 }
 function renderShell(){return `<header class="topbar"><div class="brand"><div class="logo">B<span>✧</span></div><div><h1>BioDex<span class="brand-dot">.</span></h1><div class="subtitle">CRÓNICAS DE BIONOVA</div></div></div><div class="account"><span>${escapeHtml(progreso.jugador)}</span><small id="cloudStatus">${escapeHtml(cloudStatus)}</small><button class="ghost" onclick="refreshCloud()">Actualizar</button><button class="ghost" onclick="logout()">Salir</button></div></header>
   ${sesion?.preview?'<aside class="preview-banner">VISTA PREVIA · Sin cuenta ni guardado en Google Sheets. Las capturas de muestra no son progreso real.</aside>':''}

@@ -31,6 +31,11 @@ completa los pasos de [INSTALACION_SHEETS.md](backend/INSTALACION_SHEETS.md).
 - La clave de seis dígitos no se guarda en HTML, exportaciones ni texto plano en la hoja.
 - Al salir se revoca la sesión; al restablecer una clave se revocan todas las sesiones.
 - El progreso local antiguo se conserva; su migración requiere revisión docente.
+- El remaster visual se carga después de los estilos heredados para evitar que la
+  paleta antigua sobrescriba el diseño nuevo.
+- Si el navegador bloquea sessionStorage (por ejemplo en ciertos iframes), la
+  sesión puede funcionar en memoria: una captura confirmada no deja de mostrarse
+  por ese bloqueo. Se avisa que habrá que ingresar otra vez al recargar.
 
 ## Alcance de seguridad
 
