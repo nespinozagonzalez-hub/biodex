@@ -1,4 +1,4 @@
-# BioDex 2.2 · FIELD-02
+# BioDex 2.3 · FIELD-02
 
 Remaster de la colección original: 30 bioformas, mismos códigos CAP, SEC y GYM,
 capturas animadas, sectores, gimnasios, inventario, medallas y evoluciones.
@@ -10,8 +10,7 @@ de cualquier asignatura y entrega los códigos existentes.
 La aplicación está conectada al Apps Script del docente mediante `config.js`.
 Al abrir, **Ingresar** pide el nombre y la clave de seis dígitos ya creados.
 **Crear personaje** registra una cuenta nueva con su avatar y paisaje. Un diálogo
-retro muestra la consulta mientras se recupera la colección. La demo está dentro
-de «Probar el dispositivo sin cuenta» y conserva su almacenamiento independiente.
+retro muestra la consulta mientras se recupera la colección. El acceso a la colección requiere una cuenta. No hay demo, captura local ni códigos de ejemplo.
 
 Sitio principal: https://nespinozagonzalez-hub.github.io/biodex/
 La URL anterior de vista previa continúa disponible con la misma versión conectada.
@@ -29,20 +28,21 @@ conservan las ilustraciones completas. La animación original permanece.
 La bienvenida y el refugio muestran exclusivamente al entrenador ampliado sobre
 el paisaje pixel art. En el refugio, el nombre del jugador protagoniza la pantalla.
 
-La demo permite probar los 47 códigos originales, con evoluciones en orden,
-activación de siete territorios y diez gimnasios, logros y respaldo. Su progreso,
-nombre, avatar, paisaje y textura CRT se guardan en una clave local separada
-(`biodex_field_preview_v3`), sin PIN. No es progreso acreditado por el docente,
-no es una cuenta real y no se sincroniza con otros equipos. Si el navegador
-bloquea el almacenamiento persistente, se avisa y se conserva solo en sesión o
-memoria. La colección de la edición anterior no se modifica.
+La edición definitiva retira la exportación, importación y recuperación manual de
+respaldos de la interfaz. La cuenta guarda y recupera el avance automáticamente.
+Los datos locales de la edición anterior no se borran. La ruta antigua de Archivo
+redirige al perfil; no puede importar ni sobrescribir la colección.
+
+El escáner usa una señal genérica sin revelar una bioforma. Los gimnasios tienen
+paisajes, emblemas, estados y filtros; las doce medallas muestran su progreso.
+La mochila usa el mismo lenguaje de emblemas y describe el pasaporte de cuenta.
 
 ## Archivos
 
 - `index.html`: colección, mecánicas originales, SVG de respaldo y animación de captura.
 - `remaster.js`: acceso, validación remota, guardado confirmado e interfaz transversal.
 - `remaster.css`: dirección visual bosque/pergamino/dorado, adaptación móvil.
-- `retro.js` / `retro.css`: dispositivo FIELD-02, perfil y laboratorio local.
+- `retro.js` / `retro.css`: dispositivo FIELD-02, perfil, rutas de gimnasio y medallas.
 - `assets/bioformas/`: ilustraciones optimizadas por bioforma.
 - `assets/cutouts/`, `assets/avatars/`, `assets/landscapes/`: 38 recursos nuevos.
 - `assets/FIELD_ART.md`: usos, direcciones de arte y prompts finales.
@@ -88,12 +88,10 @@ simulan servicios de Apps Script y un DOM mínimo. El resultado de la prueba
 contra el despliegue real se registra sin claves ni tokens en
 [tests/LIVE_SHEETS_QA.json](tests/LIVE_SHEETS_QA.json).
 
-`node tests/ui-smoke.cjs` prepara la revisión de navegador a 1440, 390 y 320 px.
-Requiere Playwright y su navegador Chromium instalado, no disponible localmente
-en el entorno de creación. Como alternativa, se verificó la vista publicada en
-un navegador real: 44 comprobaciones de once pantallas a 320, 390, 768 y 1280 px
-mediante `viewport.html`, sin controles recortados horizontalmente. El marco no
-emula un sistema operativo móvil ni la entrada táctil. Ver [QA_FIELD.md](tests/QA_FIELD.md).
+La verificación visual usa instantáneas de los renderizadores reales, sin sesión
+ni solicitudes de cuenta, dentro de marcos de 320, 390, 768 y 1280 px. No equivale
+a una emulación de iOS o Android ni a una prueba de acceso en un dispositivo físico.
+Ver [QA_FIELD.md](tests/QA_FIELD.md).
 
 ![Dispositivo FIELD-02](docs/field02-preview-20261015-01.jpg)
 

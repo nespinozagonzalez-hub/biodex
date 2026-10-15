@@ -82,3 +82,24 @@ La prueba real usa una cuenta sintética identificada con el prefijo «QA BioDex
 Comprueba sesiones independientes mediante solicitudes HTTP al despliegue de
 Google; no equivale a una prueba de login manual en dos dispositivos físicos.
 La revisión visual del formulario conectado se realiza por separado en navegador.
+
+
+## Edición definitiva 2.3
+
+- 33 pruebas actuales aprobadas, incluyendo sesión obligatoria, ausencia de rutas
+  de captura local, señal genérica tras cualquier captura, filtros de gimnasio,
+  medallas y retirada de respaldos de la interfaz.
+- Se retiran las pruebas de demo, ya que ese modo no existe en la aplicación.
+- Los 47 códigos y el backend no cambian. El reporte de integración real de la
+  versión 2.2 se conserva como evidencia del mismo despliegue de Google.
+- La revisión visual utiliza ocho instantáneas HTML de los renderizadores reales,
+  sin credenciales ni llamadas a Sheets. El visor temporal se elimina al publicar.
+- No se ha realizado una nueva prueba manual de login en iOS/Android físicos.
+
+Resultado de distribución 2.3: **32 comprobaciones aprobadas**, ocho vistas a
+320, 390, 768 y 1280 px. Sin desplazamiento horizontal ni botones, campos o
+cards fuera del ancho. Vistas: escáner, gimnasios cerrados, gimnasio abierto,
+medallas pendientes, medallas obtenidas, mochila, ingreso y registro.
+El formulario real publicado en /preview/ se comprobó además por separado:
+submit activo, patrón de seis dígitos, confirmación de clave, cuatro avatares y
+cuatro paisajes al registrar; cero botones de demo. No se escribieron credenciales.

@@ -172,8 +172,8 @@ input,select,textarea{width:100%;font-family:var(--font);background:#050816;colo
 .cap-cta button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #000}
 
 </style>
-<link rel="stylesheet" href="remaster.css?v=2.2.1">
-<link rel="stylesheet" href="retro.css?v=2.2.1">
+<link rel="stylesheet" href="remaster.css?v=2.3.0">
+<link rel="stylesheet" href="retro.css?v=2.3.0">
 </head>
 <body>
 <div class="particles"></div>
@@ -335,7 +335,7 @@ function bootSequence(){const lines=["> Cargando archivo local...","> Renderizan
 function render(){const app=document.getElementById("app");if(!progreso||!progreso.jugador){app.innerHTML=renderRegistro();return;}app.innerHTML=renderShell();renderView();actualizarLogros(false);}
 function navButton(id,label){return `<button class="${view===id?'active':''}" onclick="go('${id}')">${label}</button>`;}
 function go(v){view=v;render();}
-function renderView(){const map={panel:renderPanel,biodex:renderBiodex,codigo:renderCodigo,mapa:renderMapa,lineas:renderLineas,inventario:renderInventario,logros:renderLogros,respaldo:renderRespaldo,ayuda:renderAyuda};document.getElementById("view").innerHTML=(map[view]||renderPanel)();}
+function renderView(){const map={panel:renderPanel,biodex:renderBiodex,codigo:renderCodigo,mapa:renderMapa,lineas:renderLineas,inventario:renderInventario,logros:renderLogros,ayuda:renderAyuda};document.getElementById("view").innerHTML=(map[view]||renderPanel)();}
 function renderPanel(){const cap=progreso.capturadas.length,pct=Math.round((cap/BIOFORMAS.length)*100),rareza=getRarezaAlta(),ultima=progreso.ultimaBioforma?getBioforma(progreso.ultimaBioforma):null;return `<section class="rpg-window"><span class="rpg-title">Panel principal</span><h2>Terminal de ${escapeHtml(progreso.jugador)}</h2><p class="muted">Completa misiones, recibe códigos del profesor y captura Bioformas. Cada código reconoce una actividad realizada con tu docente.</p><div class="stats-row">${stat("Rango",getRango(cap))}${stat("Capturadas",`${cap} / ${BIOFORMAS.length}`)}${stat("Sectores activos",Object.keys(progreso.sectores?.abiertos||{}).length)}${stat("Rareza alta",rareza)}</div><div class="progress"><div style="width:${pct}%"></div></div><p class="small muted">BioDex completada: <b>${pct}%</b></p></section><div class="grid three" style="margin-top:14px"><div class="card">${ultima?'<div class="stamp">ÚLTIMA</div>':''}<div class="card-title">Última Bioforma</div>${ultima?`<div class="bio-svg-wrap capture-reveal">${renderBioformaSVG(ultima,true,130)}</div><p><b>${ultima.nombre}</b><br><span class="pill type-${slugCss(ultima.tipo)}">${ultima.tipo}</span></p>`:"<p>Aún no hay capturas.</p>"}</div><div class="card"><div class="card-title">Captura rápida</div><p>Ingresa un código obtenido tras una misión.</p><button onclick="go('codigo')">Ingresar código</button></div><div class="card"><div class="card-title">Líneas evolutivas</div><p>Las Bioformas evolucionan por rutas de aprendizaje.</p><button onclick="go('lineas')">Ver líneas</button></div></div>`;}
 function stat(label,value){return `<div class="stat"><b>${label}</b><span>${value}</span></div>`;}
 function getRango(c){if(c>=30)return"Archivista legendario";if(c>=25)return"Maestro BioDex";if(c>=20)return"Guardián BioNova";if(c>=15)return"Rastreador avanzado";if(c>=10)return"Investigador BioNova";if(c>=5)return"Explorador inicial";return"Aspirante";}
@@ -479,9 +479,6 @@ function lineaBioformas(linea){return BIOFORMAS.filter(b=>b.linea===linea).sort(
 function renderInventario(){return `<section class="rpg-window"><span class="rpg-title">Inventario</span><h2>Objetos de expedición</h2><div class="inventory">${INVENTARIO.map(it=>`<div class="card slot"><div style="font-size:2rem">${it.icon}</div><b>${it.nombre}</b><p class="small muted">${it.desc}</p></div>`).join("")}</div></section>`;}
 function renderLogros(){actualizarLogros(false);return `<section class="rpg-window"><span class="rpg-title">Logros</span><h2>Medallas de BioNova</h2><div class="grid three">${LOGROS.map(l=>`<div class="card achievement ${progreso.logros.includes(l.id)?'unlocked':'locked'}"><div class="card-title">${progreso.logros.includes(l.id)?'✓':'?'} ${l.nombre}</div><p class="small muted">${l.desc}</p></div>`).join("")}</div></section>`;}
 function actualizarLogros(notify){const before=progreso.logros.length,add=id=>{if(!progreso.logros.includes(id))progreso.logros.push(id);},c=progreso.capturadas.length,caps=BIOFORMAS.filter(b=>progreso.capturadas.includes(b.id));if(c>=1)add("L01");if(c>=5)add("L02");if(c>=10)add("L03");if(c>=15)add("L04");if(c>=20)add("L05");if(c>=25)add("L06");if(c>=30)add("L07");if(caps.some(b=>b.etapa===2))add("L08");const lineas=[...new Set(BIOFORMAS.map(b=>b.linea))];if(lineas.some(l=>lineaBioformas(l).every(b=>progreso.capturadas.includes(b.id))))add("L09");if(caps.some(b=>b.rareza==="Épica"))add("L10");if(caps.some(b=>b.rareza==="Legendaria"))add("L11");if(caps.some(b=>["Aurora","Prisma","Nexo","Nova","Bruma","Lumen"].includes(b.tipo))&&caps.some(b=>["Vector","Umbral","Arcana","Terra"].includes(b.tipo)))add("L12");if(progreso.logros.length!==before){guardarProgreso();if(notify)toast("Nuevo logro desbloqueado.");}}
-function exportarProgreso(){const payload={version:"2.0",fechaExportacion:new Date().toISOString(),progreso};const text=btoa(unescape(encodeURIComponent(JSON.stringify(payload))));document.getElementById("exportBox").value=text;toast("Respaldo generado.");}
-function copiarExport(){const box=document.getElementById("exportBox");if(!box.value)exportarProgreso();box.select();if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(box.value).then(()=>toast("Respaldo copiado.")).catch(()=>{try{document.execCommand("copy");toast("Respaldo copiado.");}catch(e){toast("Selecciona y copia manualmente.","warn");}});}else{try{document.execCommand("copy");toast("Respaldo copiado.");}catch(e){toast("Selecciona y copia manualmente.","warn");}}}
-function descargarExport(){const box=document.getElementById("exportBox");if(!box.value)exportarProgreso();const blob=new Blob([box.value],{type:"text/plain"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`BioDex_Bioformas_${progreso.jugador}_${new Date().toISOString().slice(0,10)}.txt`;a.click();URL.revokeObjectURL(a.href);}
 function getBioforma(id){return BIOFORMAS.find(b=>b.id===id);}
 function openModal(html){document.getElementById("modalContent").innerHTML=html;document.getElementById("modalBack").classList.add("show");}
 function closeModal(e){if(e&&e.target.id!=="modalBack")return;document.getElementById("modalBack").classList.remove("show");preguntaActual=null;}
@@ -803,8 +800,8 @@ function renderZonaSVG(theme, estado){
 
 window.addEventListener("load",bootSequence);
 </script>
-<script src="config.js?v=2.2.1"></script>
-<script src="remaster.js?v=2.2.1"></script>
-<script src="retro.js?v=2.2.1"></script>
+<script src="config.js?v=2.3.0"></script>
+<script src="remaster.js?v=2.3.0"></script>
+<script src="retro.js?v=2.3.0"></script>
 </body>
 </html>

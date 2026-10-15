@@ -80,3 +80,15 @@ Escenas:
   forest, warm window light, mountain silhouettes.
 - Arcana: volcanic mountain highlands at sunset, copper grass, slate rocks,
   distant lava glow, dramatic violet sky.
+
+
+## Gremio de exploradores (2.3)
+
+Archivo: `assets/landscapes/gremio.webp`. Generado con la herramienta integrada
+image_gen; convertido a WebP sin cambios en la composición para la web.
+Prompt: Panoramic pixel art exploration guild sanctuary in an ancient forest,
+central copper-and-emerald glass observatory atrium, luminous crystal doorway,
+stone terraces, ivy, brass lanterns, waterfalls and blue mountains. Architectural
+hero on the right, darker foliage on the left for HTML headings. Golden afternoon
+light, emerald / parchment gold / turquoise. No people, creatures, text, logos,
+interface, frames or collage. Master: 1536 × 1024.

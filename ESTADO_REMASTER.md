@@ -56,3 +56,17 @@
 La prueba real del backend se documenta en `tests/LIVE_SHEETS_QA.json`.
 La edición original sigue recuperable en el historial de Git; la publicación final
 mantiene la dirección principal y la dirección de vista previa.
+
+
+## Edición definitiva 2.3
+
+- [x] Sin demo, captura local, pruebas de animación ni códigos de ejemplo.
+- [x] Colección accesible solo con sesión de cuenta.
+- [x] Señal genérica del escáner antes y después de capturar.
+- [x] Sin exportación, importación ni recuperación manual de respaldos.
+- [x] Ingreso simplificado; avatar y paisaje se eligen al crear personaje.
+- [x] Gimnasios con paisaje, emblemas, filtros, estados y detalle de hallazgos.
+- [x] Doce medallas con identidad visual, requisito y progreso.
+- [x] Mochila renovada sin objetos de prueba ni respaldo local.
+- [x] Animación PNG, ilustraciones completas y 47 códigos conservados.
+- [x] 33 pruebas actuales aprobadas. Las pruebas de demo se sustituyen por las del acceso definitivo.
