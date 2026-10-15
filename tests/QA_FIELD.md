@@ -52,3 +52,13 @@ La demo no comprueba ni guarda el PIN y no acredita progreso del docente.
 
 La publicación modifica solo `/preview/`. Se comprobó que el `index.html`
 original mantiene el blob `41ee788123e38e302b08fb457726b48ebec25893`.
+
+## Actualización: identidad del entrenador
+
+Se retiraron las bioformas de bienvenida y refugio, ampliando al entrenador y
+destacando el nombre del jugador. Verificadas ambas pantallas a 320, 390, 768 y
+1280 px: ocho comprobaciones sin controles recortados ni imágenes de bioformas
+en los paisajes. El avatar mide entre 260 y 350 px de alto según pantalla y ancho.
+Las 31 pruebas automatizadas siguen aprobadas.
+
+Vista de la [portada con entrenador](../docs/field02-trainer-welcome.jpg).

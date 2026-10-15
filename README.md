@@ -23,6 +23,9 @@ paisajes seleccionables al entrar o desde el perfil. Los 30 recortes PNG
 transparentes se usan durante la captura y el escáner; la BioDex y las fichas
 conservan las ilustraciones completas. La animación original permanece.
 
+La bienvenida y el refugio muestran exclusivamente al entrenador ampliado sobre
+el paisaje pixel art. En el refugio, el nombre del jugador protagoniza la pantalla.
+
 La demo permite probar los 47 códigos originales, con evoluciones en orden,
 activación de siete territorios y diez gimnasios, logros y respaldo. Su progreso,
 nombre, avatar, paisaje y textura CRT se guardan en una clave local separada
