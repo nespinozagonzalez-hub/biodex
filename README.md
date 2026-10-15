@@ -82,8 +82,12 @@ simulan servicios de Apps Script y un DOM mínimo; **no sustituyen** una prueba
 real del despliegue de Google ni la revisión visual en un navegador.
 
 `node tests/ui-smoke.cjs` prepara la revisión de navegador a 1440, 390 y 320 px.
-Requiere Playwright y su navegador Chromium instalado. En el entorno de creación
-no se pudo ejecutar esta última revisión porque Chromium no estaba disponible y
-su descarga no se completó. La verificación visual sigue pendiente.
+Requiere Playwright y su navegador Chromium instalado, no disponible localmente
+en el entorno de creación. Como alternativa, se verificó la vista publicada en
+un navegador real: 44 comprobaciones de once pantallas a 320, 390, 768 y 1280 px
+mediante `viewport.html`, sin controles recortados horizontalmente. El marco no
+emula un sistema operativo móvil ni la entrada táctil. Ver [QA_FIELD.md](tests/QA_FIELD.md).
+
+![Dispositivo FIELD-02](docs/field02-preview-20261015-01.jpg)
 
 Para revisar el sitio: `python -m http.server 8000`, abrir `http://localhost:8000`.

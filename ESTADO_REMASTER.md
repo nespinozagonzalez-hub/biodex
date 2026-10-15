@@ -14,6 +14,9 @@
 - [x] La demo no guarda el PIN ni modifica el progreso de la edición anterior.
 - [x] Backend preparado para guardar y recuperar avatar/paisaje con validación.
 - [x] 34 PNG inspeccionados y verificados con píxeles transparentes reales.
+- [x] 44 comprobaciones en navegador de once pantallas a 320, 390, 768 y 1280 px.
+- [x] Captura PNG → ficha WebP, bloqueo evolutivo y recuperación local probados en vivo.
+- [x] Publicación aislada verificada; el índice de la edición original no cambia.
 
 ## Implementado
 
