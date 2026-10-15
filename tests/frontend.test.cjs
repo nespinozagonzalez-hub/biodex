@@ -10,12 +10,12 @@ test('el remaster visual se carga después de todos los estilos heredados',()=>{
  assert.equal(html.split(marker).length-1,1);
  assert.ok(html.indexOf(marker)>html.lastIndexOf('</style>'),'Los estilos antiguos no deben sobrescribir el remaster');
  assert.ok(html.indexOf('src="config.js?')<html.indexOf('src="remaster.js?'));
- for(const file of ['config.js','remaster.js','retro.js','remaster.css','retro.css'])assert.ok(html.includes(file+'?v=2.1.2'),'El runtime necesita versión anticaché: '+file);
+ for(const file of ['config.js','remaster.js','retro.js','remaster.css','retro.css'])assert.ok(html.includes(file+'?v=2.2.1'),'El runtime necesita versión anticaché: '+file);
 });
 function frontend(){
  const elements=new Map(),local=new Map(),session=new Map();
  const classes=()=>{const s=new Set();return {add:x=>s.add(x),remove:x=>s.delete(x),contains:x=>s.has(x),toggle:(x,on)=>on?s.add(x):s.delete(x)};};
- function element(id){if(elements.has(id))return elements.get(id);const e={id,innerHTML:'',textContent:'',value:'',style:{setProperty(k,v){this[k]=v;}},classList:classes(),children:[],appendChild(x){this.children.push(x);},remove(){},setAttribute(){},removeAttribute(){},querySelector(){return null;},querySelectorAll(){return [];},focus(){},isConnected:true};elements.set(id,e);return e;}
+ function element(id){if(elements.has(id))return elements.get(id);const e={id,innerHTML:'',textContent:'',value:'',style:{setProperty(k,v){this[k]=v;}},classList:classes(),children:[],appendChild(x){this.children.push(x);},remove(){},setAttribute(k,v){this[k]=v;},removeAttribute(k){delete this[k];},showModal(){this.open=true;},close(){this.open=false;},addEventListener(){},querySelector(){return null;},querySelectorAll(){return [];},focus(){},isConnected:true};elements.set(id,e);return e;}
  const document={getElementById:element,createElement:()=>element('created-'+Math.random()),querySelectorAll:()=>[],querySelector:()=>null,addEventListener(){},activeElement:null,body:element('body'),head:element('head')};
  const storage=map=>({getItem:k=>map.get(k)||null,setItem:(k,v)=>map.set(k,String(v)),removeItem:k=>map.delete(k)});
  const c={console,document,window:{BIODEX_CONFIG:{endpoint:'https://script.google.com/macros/s/TEST/exec',version:'2.0'},addEventListener(){}},localStorage:storage(local),sessionStorage:storage(session),setTimeout:()=>1,clearTimeout(){},setInterval:()=>1,clearInterval(){},AbortController,URL,Blob,confirm:()=>true,navigator:{},btoa:v=>Buffer.from(v,'binary').toString('base64'),atob:v=>Buffer.from(v,'base64').toString('binary'),fetch:async()=>({ok:true,json:async()=>({ok:true,progreso:JSON.parse(vm.runInContext('JSON.stringify(progreso)',c))})})};
@@ -84,4 +84,29 @@ test('la personalización remota solo se acredita al confirmarla el servidor',as
  const requests=[];f.c.fetch=async(_url,options)=>{requests.push(JSON.parse(options.body));return {ok:true,json:async()=>({ok:true,progreso:{jugador:'Cuenta',capturadas:['B001'],logros:['L01'],intentos:[],sectores:{abiertos:{}},gimnasios:{abiertos:{}},codigosUsados:[],configuracion:{crt:true,avatarId:'terra',landscapeId:'arcana'}}})};};
  await f.evaluate('chooseProfile("avatarId","terra","profile")');assert.equal(requests[0].action,'settings');assert.equal(requests[0].avatarId,'terra');assert.equal(f.evaluate('progreso.configuracion.avatarId'),'terra');assert.equal(f.evaluate('progreso.configuracion.crt'),true);
  f.c.fetch=async()=>{throw Error('Sin red');};await f.evaluate('chooseProfile("avatarId","nexo","profile")');assert.equal(f.evaluate('progreso.configuracion.avatarId'),'terra');
+});
+
+test('el acceso muestra la ventana de espera y recupera el progreso sin guardar la clave',async()=>{
+ const f=frontend();f.element('regNombre').value='Exploradora Remota';f.element('regClave').value='001234';
+ let finish;f.c.fetch=()=>new Promise(resolve=>finish=resolve);
+ const request=f.evaluate('registrarJugador()');
+ assert.equal(f.element('cloudLoading').open,true);assert.match(f.element('cloudLoadingTitle').textContent,/Recuperando/);
+ assert.equal(f.element('regClave').value,'');assert.equal(f.evaluate('busy'),true);
+ finish({ok:true,json:async()=>({ok:true,token:'synthetic-test-token',progreso:{jugador:'Exploradora Remota',capturadas:['B001'],logros:['L01'],intentos:[],sectores:{abiertos:{}},gimnasios:{abiertos:{}},codigosUsados:[],configuracion:{crt:false,avatarId:'terra',landscapeId:'bruma'}}})});
+ await request;assert.equal(f.element('cloudLoading').open,false);assert.equal(f.evaluate('busy'),false);
+ assert.equal(f.evaluate('progreso.jugador'),'Exploradora Remota');assert.equal(f.evaluate('progreso.capturadas[0]'),'B001');assert.equal(f.evaluate('progreso.configuracion.avatarId'),'terra');
+ assert.ok(!JSON.stringify([...f.session,...f.local]).includes('001234'));
+});
+test('clave incorrecta cierra la espera y permite volver a ingresar',async()=>{
+ const f=frontend();f.evaluate('progreso=defaultProgress()');f.element('regNombre').value='Cuenta';f.element('regClave').value='001234';
+ f.c.fetch=async()=>({ok:true,json:async()=>({ok:false,error:'Nombre o clave incorrectos.'})});
+ await f.evaluate('registrarJugador()');assert.equal(f.element('cloudLoading').open,false);assert.equal(f.evaluate('busy'),false);
+ assert.match(f.element('authError').textContent,/incorrectos/);assert.equal(f.evaluate('sesion'),null);assert.equal(f.evaluate('progreso.capturadas.length'),0);
+});
+test('la recuperación al recargar muestra la espera y descarta una sesión vencida',async()=>{
+ const f=frontend();f.session.set('biodex_session_v2',JSON.stringify({token:'expired'}));
+ let finish;f.c.fetch=()=>new Promise(resolve=>finish=resolve);const request=f.evaluate('init()');
+ assert.equal(f.element('cloudLoading').open,true);
+ finish({ok:true,json:async()=>({ok:false,error:'Sesión vencida. Ingresa nuevamente.'})});await request;
+ assert.equal(f.element('cloudLoading').open,false);assert.equal(f.evaluate('sesion'),null);assert.equal(f.session.has('biodex_session_v2'),false);assert.match(f.element('app').innerHTML,/regClave/);
 });

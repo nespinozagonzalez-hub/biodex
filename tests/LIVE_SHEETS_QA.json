@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-15T12:43:30.452514+00:00",
+  "account": "QA BioDex 20261015 124330",
+  "checks": [
+    "Registro real con avatar y paisaje",
+    "Evolución bloqueada sin etapa anterior",
+    "Captura inicial guardada",
+    "Evolución guardada después de su etapa anterior",
+    "Código repetido no duplica captura",
+    "Sector guardado",
+    "Gimnasio guardado",
+    "Preferencias guardadas",
+    "Cierre de sesión",
+    "Token cerrado no recupera datos",
+    "Clave incorrecta rechazada",
+    "Ingreso desde una sesión nueva recupera todo",
+    "Consulta autenticada recupera colección"
+  ],
+  "ok": true
+}

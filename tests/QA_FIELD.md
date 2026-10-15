@@ -62,3 +62,23 @@ en los paisajes. El avatar mide entre 260 y 350 px de alto según pantalla y anc
 Las 31 pruebas automatizadas siguen aprobadas.
 
 Vista de la [portada con entrenador](../docs/field02-trainer-welcome.jpg).
+
+
+## Conexión 2.2 · 2026-10-15
+
+El endpoint del docente se incorpora en `config.js`. La raíz principal se publica
+con FIELD-02; la versión original permanece recuperable en el historial.
+La vista previa también recibe la conexión y el mismo formulario actualizado.
+
+- 34 pruebas automatizadas aprobadas (backend simulado, recursos y frontend).
+- Pruebas nuevas: espera durante el ingreso, error de clave y sesión vencida.
+- El diálogo usa `<dialog>` nativo, no se cancela con Escape y respeta movimiento reducido.
+- Se limpia el PIN del formulario al enviar; no se guarda en el navegador.
+- La espera prolongada se comunica sin inventar un porcentaje completado.
+- La demo queda plegada, separada del acceso real.
+- El reporte de prueba real está en `LIVE_SHEETS_QA.json`, sin PIN ni tokens.
+
+La prueba real usa una cuenta sintética identificada con el prefijo «QA BioDex».
+Comprueba sesiones independientes mediante solicitudes HTTP al despliegue de
+Google; no equivale a una prueba de login manual en dos dispositivos físicos.
+La revisión visual del formulario conectado se realiza por separado en navegador.

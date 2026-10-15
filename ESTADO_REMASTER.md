@@ -1,4 +1,4 @@
-# Estado de BioDex 2.1 · FIELD-02
+# Estado de BioDex 2.2 · FIELD-02
 
 ## Actualizaciones retro
 
@@ -16,7 +16,7 @@
 - [x] 34 PNG inspeccionados y verificados con píxeles transparentes reales.
 - [x] 44 comprobaciones en navegador de once pantallas a 320, 390, 768 y 1280 px.
 - [x] Captura PNG → ficha WebP, bloqueo evolutivo y recuperación local probados en vivo.
-- [x] Publicación aislada verificada; el índice de la edición original no cambia.
+- [x] Publicación previa aislada verificada antes de activar las cuentas.
 
 ## Implementado
 
@@ -36,20 +36,23 @@
 - [x] Estilos adaptables, foco de formularios y movimiento reducido.
 - [x] Respaldo antiguo local intacto; migración con revisión docente.
 - [x] Instrucciones de instalación y recuperación de acceso.
-- [x] 31 pruebas automatizadas de lógica, flujo, integración y recursos pasan con servicios simulados.
+- [x] 34 pruebas automatizadas de lógica, flujo, integración y recursos pasan con servicios simulados.
 - [x] Colección completa de 30 ilustraciones propias, optimizadas en WebP.
 - [x] Orden de estilos corregido: el diseño nuevo prevalece sobre el antiguo.
 - [x] Capturas y vista previa operativas aunque el navegador bloquee el almacenamiento.
 
-## Única integración aplazada: Google Sheets
+## Conexión y publicación 2.2
 
-- [ ] Crear la hoja del docente y ejecutar `instalarBioDex`.
-- [ ] Desplegar Apps Script con la configuración permitida por la organización.
-- [ ] Incorporar su URL `/exec` en `config.js`.
-- [ ] Probar guardado real y recuperación desde dos navegadores/dispositivos.
+- [x] URL `/exec` entregada por el docente y respuesta de salud comprobada.
+- [x] Endpoint incorporado en `config.js`.
+- [x] Ingreso principal con nombre y clave de seis dígitos.
+- [x] Registro de personaje con avatar y paisaje.
+- [x] Ventana de espera al registrar, ingresar, recargar o actualizar la colección.
+- [x] Mensaje de espera prolongada y recuperación de errores sin acreditar cambios.
+- [x] La clave se limpia del formulario al enviar y no se persiste localmente.
+- [x] Demo separada bajo «Probar el dispositivo sin cuenta».
+- [x] Tres pruebas nuevas de acceso, espera, errores y sesión vencida.
 
-La vista previa se publica bajo `/preview/`. La raíz original permanece intacta
-y el PR sigue separado para revisión. El endpoint se mantiene vacío por decisión
-del usuario. Hasta conectar Sheets no hay cuentas reales, comprobación del PIN ni
-recuperación del progreso en otro equipo. Las pruebas con servicios simulados no
-sustituyen la comprobación del despliegue real de Google.
+La prueba real del backend se documenta en `tests/LIVE_SHEETS_QA.json`.
+La edición original sigue recuperable en el historial de Git; la publicación final
+mantiene la dirección principal y la dirección de vista previa.

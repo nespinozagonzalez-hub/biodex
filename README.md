@@ -1,4 +1,4 @@
-# BioDex 2.1 · FIELD-02
+# BioDex 2.2 · FIELD-02
 
 Remaster de la colección original: 30 bioformas, mismos códigos CAP, SEC y GYM,
 capturas animadas, sectores, gimnasios, inventario, medallas y evoluciones.
@@ -7,13 +7,16 @@ de cualquier asignatura y entrega los códigos existentes.
 
 ## Estado de conexión
 
-`config.js` contiene inicialmente un endpoint vacío. El sitio muestra una **vista
-previa explícita**, sin cuentas ni guardado en Google Sheets. No presenta un
-guardado local como si fuera un guardado en nube. Para habilitar las cuentas,
-completa los pasos de [INSTALACION_SHEETS.md](backend/INSTALACION_SHEETS.md).
+La aplicación está conectada al Apps Script del docente mediante `config.js`.
+Al abrir, **Ingresar** pide el nombre y la clave de seis dígitos ya creados.
+**Crear personaje** registra una cuenta nueva con su avatar y paisaje. Un diálogo
+retro muestra la consulta mientras se recupera la colección. La demo está dentro
+de «Probar el dispositivo sin cuenta» y conserva su almacenamiento independiente.
 
-Vista previa aislada: https://nespinozagonzalez-hub.github.io/biodex/preview/
-La edición original sigue en la raíz, sin cambios.
+Sitio principal: https://nespinozagonzalez-hub.github.io/biodex/
+La URL anterior de vista previa continúa disponible con la misma versión conectada.
+Las cuentas se crean dentro de la app; no se introducen PINs manualmente en Sheets.
+Instrucciones del backend: [INSTALACION_SHEETS.md](backend/INSTALACION_SHEETS.md).
 
 ## Edición retro FIELD-02
 
@@ -81,8 +84,9 @@ iframes sigan apuntando al mismo sitio.
 ## Pruebas locales
 
 Ejecutar `node --test tests/*.test.cjs`. Las pruebas
-simulan servicios de Apps Script y un DOM mínimo; **no sustituyen** una prueba
-real del despliegue de Google ni la revisión visual en un navegador.
+simulan servicios de Apps Script y un DOM mínimo. El resultado de la prueba
+contra el despliegue real se registra sin claves ni tokens en
+[tests/LIVE_SHEETS_QA.json](tests/LIVE_SHEETS_QA.json).
 
 `node tests/ui-smoke.cjs` prepara la revisión de navegador a 1440, 390 y 320 px.
 Requiere Playwright y su navegador Chromium instalado, no disponible localmente
