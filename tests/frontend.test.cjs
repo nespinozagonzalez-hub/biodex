@@ -10,7 +10,7 @@ test('el remaster visual se carga después de todos los estilos heredados',()=>{
  assert.equal(html.split(marker).length-1,1);
  assert.ok(html.indexOf(marker)>html.lastIndexOf('</style>'),'Los estilos antiguos no deben sobrescribir el remaster');
  assert.ok(html.indexOf('src="config.js?')<html.indexOf('src="remaster.js?'));
- for(const file of ['config.js','remaster.js','retro.js','remaster.css','retro.css'])assert.ok(html.includes(file+'?v=2.3.0'),'El runtime necesita versión anticaché: '+file);
+ for(const file of ['config.js','remaster.js','retro.js','remaster.css','retro.css'])assert.ok(html.includes(file+'?v=2.3.1'),'El runtime necesita versión anticaché: '+file);
 });
 const {frontend,account}=require('./frontend-harness.cjs');
 test('fallo de red no acredita captura ni dispara animación',async()=>{const f=frontend();f.evaluate('sesion={token:"test"};progreso=defaultProgress();progreso.jugador="Prueba"');f.element('codigoInput').value='CAP-NIMBEL-104';f.c.fetch=async()=>{throw vm.runInContext('new TypeError("network")',f.c);};await f.evaluate('validarCodigo()');assert.equal(f.evaluate('progreso.capturadas.length'),0);assert.notEqual(f.element('captureOverlay').style.display,'flex');assert.match(f.element('toast').textContent,/conexión/);});
