@@ -2,6 +2,8 @@
 "use strict";
 let sesion = null, busy = false, accessMode = 'login', cloudStatus = 'Sin sesión';
 const CONFIG = window.BIODEX_CONFIG || {endpoint:''};
+let serverFeatures={captureMode:'ordered',megaPrizes:0};
+function captureRuleText(){return serverFeatures.captureMode==='code-only'?'Puedes capturar cualquier bioforma con su código, sin etapas previas ni gimnasios abiertos.':'Para evolucionar, necesitas la etapa anterior.';}
 const originalBioformaSVG = renderBioformaSVG;
 const originalCaptureSequence=secuenciaCaptura, originalCaptureClose=cerrarCapturaOverlay;
 secuenciaCaptura=function(b){
@@ -83,6 +85,8 @@ async function api(action, fields={}) {
   } finally {clearTimeout(timer);if(loading)hideCloudLoading();}
 }
 function applyCloud(data) {
+  serverFeatures={captureMode:'ordered',megaPrizes:0,...data.features};
+  if(serverFeatures.captureMode==='code-only'&&filterStatus==='evo')filterStatus='todos';
   progreso={...defaultProgress(),...data.progreso};
   progreso.configuracion={crt:false,...data.progreso.configuracion};
   const remembered=rememberSession();
@@ -130,7 +134,7 @@ function renderShell(){return "";} // Carcasa FIELD-02 en retro.js.
 const legacyRenderView=renderView;
 renderView=function(){if(view==='gimnasios')document.getElementById('view').innerHTML=renderGimnasiosBioNova();else legacyRenderView();};
 function renderScanSymbol(){return `<div class="capture-signal" role="img" aria-label="Señal de bioforma desconocida"><div class="signal-ring"></div><div class="signal-orb"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 16 76 32 84 60 64 83 35 83 16 60 24 32Z"/><path d="M50 16v67M24 32l40 51M76 32 35 83M16 60h68"/></svg><span>?</span></div><span class="signal-coordinate">SEÑAL SIN IDENTIFICAR</span></div>`;}
-function renderCodigo(){return `<section class="rpg-window capture-terminal"><span class="rpg-title">ESCÁNER DE CAMPO</span><h2>Un código.<br>Un nuevo hallazgo.</h2><p class="muted">Completa el desafío de tu docente e ingresa su código para descubrir qué espera al otro lado.</p>${renderScanSymbol()}<form onsubmit="event.preventDefault();validarCodigo()"><label for="codigoInput">Código entregado por tu docente</label><input id="codigoInput" autocomplete="off" placeholder="CAP-… / SEC-… / GYM-…" maxlength="80" required><div class="modal-actions"><button type="submit" class="primary" ${busy?'disabled':''}>Activar escáner →</button><button type="reset" class="ghost">Limpiar</button></div></form><div class="capture-rules"><span>01 / Ingresa tu código</span><span>02 / Confirma tu hallazgo</span><span>03 / Amplía tu colección</span></div><p class="small muted">Cada hallazgo se guarda en tu cuenta antes de la animación. Para evolucionar, necesitas la etapa anterior.</p></section>`;}
+function renderCodigo(){return `<section class="rpg-window capture-terminal"><span class="rpg-title">ESCÁNER DE CAMPO</span><h2>Un código.<br>Un nuevo hallazgo.</h2><p class="muted">Completa el desafío de tu docente e ingresa su código para descubrir qué espera al otro lado.</p>${renderScanSymbol()}<form onsubmit="event.preventDefault();validarCodigo()"><label for="codigoInput">Código entregado por tu docente</label><input id="codigoInput" autocomplete="off" placeholder="CAP-… / SEC-… / GYM-…" maxlength="80" required><div class="modal-actions"><button type="submit" class="primary" ${busy?'disabled':''}>Activar escáner →</button><button type="reset" class="ghost">Limpiar</button></div></form><div class="capture-rules"><span>01 / Ingresa tu código</span><span>02 / Confirma tu hallazgo</span><span>03 / Amplía tu colección</span></div><p class="small muted">Cada hallazgo se guarda en tu cuenta antes de la animación. ${captureRuleText()}</p></section>`;}
 async function refreshCloud(){
   if(busy)return;busy=true;setStatus('Consultando…');
   try{applyCloud(await api('load'));render();}catch(e){setStatus('Sin confirmar · reintenta');toast(e.message,'warn');}finally{busy=false;}
@@ -151,14 +155,14 @@ async function redeem(inputId){
 function validarCodigo(){return redeem('codigoInput');}
 function validarCodigoSector(){return redeem('sectorCodeInput');}
 function validarCodigoGimnasio(){return redeem('gymCodeInput');}
-function canCaptureEvolution(b){return !b.evolucionaDe||progreso.capturadas.includes(b.evolucionaDe);}
+function canCaptureEvolution(b){return serverFeatures.captureMode==='code-only'||!b.evolucionaDe||progreso.capturadas.includes(b.evolucionaDe);}
 async function toggleCRT(){
   if(busy)return;
   const crt=!progreso.configuracion.crt;
   busy=true;try{applyCloud(await api('settings',{crt}));render();}catch(e){toast(e.message,'warn');}finally{busy=false;}
 }
 function reiniciarProgreso(){toast('Tu colección está protegida. Solicita cualquier reinicio a tu docente.','warn');}
-function renderAyuda(){return `<section class="rpg-window"><span class="rpg-title">Guía del explorador</span><h2>Aprender abre caminos.</h2><div class="grid two"><article class="card"><h3>01 / Completa una actividad</h3><p>Tu docente propone el desafío, en la asignatura que corresponda. BioDex no evalúa respuestas.</p></article><article class="card"><h3>02 / Recibe tu código</h3><p>Ingresa el código de captura, sector o gimnasio. Conservamos los códigos de la edición original.</p></article><article class="card"><h3>03 / Descubre y evoluciona</h3><p>La captura se guarda antes de reproducir la animación. Las etapas dos y tres requieren la bioforma anterior; un intento bloqueado no consume el código.</p></article><article class="card"><h3>04 / Recupera tu expedición</h3><p>Usa el mismo nombre y clave de seis dígitos. Pulsa Actualizar si avanzaste desde otro dispositivo. Si pierdes la clave, tu docente puede restablecerla sin perder tu colección.</p></article><article class="card"><h3>Conexión y guardado</h3><p>Sin conexión no se confirman capturas. Si una solicitud tarda, vuelve a intentarlo: los códigos son idempotentes y no duplican recompensas.</p></article><article class="card"><h3>Efecto retro opcional</h3><p>Las animaciones de captura se mantienen. Puedes alternar la textura de pantalla clásica.</p><button onclick="toggleCRT()">Alternar textura CRT</button></article></div></section>`;}
+function renderAyuda(){return `<section class="rpg-window"><span class="rpg-title">Guía del explorador</span><h2>Aprender abre caminos.</h2><div class="grid two"><article class="card"><h3>01 / Completa una actividad</h3><p>Tu docente propone el desafío, en la asignatura que corresponda. BioDex no evalúa respuestas.</p></article><article class="card"><h3>02 / Recibe tu código</h3><p>Ingresa el código de captura, sector o gimnasio. Conservamos los códigos de la edición original.</p></article><article class="card"><h3>03 / Descubre y evoluciona</h3><p>La captura se guarda antes de reproducir la animación. ${captureRuleText()}</p></article><article class="card"><h3>04 / Recupera tu expedición</h3><p>Usa el mismo nombre y clave de seis dígitos. Pulsa Actualizar si avanzaste desde otro dispositivo. Si pierdes la clave, tu docente puede restablecerla sin perder tu colección.</p></article><article class="card"><h3>Conexión y guardado</h3><p>Sin conexión no se confirman capturas. Si una solicitud tarda, vuelve a intentarlo: los códigos son idempotentes y no duplican recompensas.</p></article><article class="card"><h3>Efecto retro opcional</h3><p>Las animaciones de captura se mantienen. Puedes alternar la textura de pantalla clásica.</p><button onclick="toggleCRT()">Alternar textura CRT</button></article></div></section>`;}
 
 // Accesibilidad: foco al abrir/cerrar una ficha y Escape para salir del diálogo.
 let returnFocus=null;

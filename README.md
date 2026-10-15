@@ -1,6 +1,6 @@
-# BioDex 2.3 · FIELD-02
+# BioDex 2.4 · FIELD-02
 
-Remaster de la colección original: 30 bioformas, mismos códigos CAP, SEC y GYM,
+Remaster de la colección original: 30 bioformas y tres mega legendarias adicionales, mismos códigos CAP, SEC y GYM,
 capturas animadas, sectores, gimnasios, inventario, medallas y evoluciones.
 Sin banco de preguntas ni reflexión obligatoria. El docente decide las actividades
 de cualquier asignatura y entrega los códigos existentes.
@@ -15,14 +15,16 @@ retro muestra la consulta mientras se recupera la colección. El acceso a la col
 Sitio principal: https://nespinozagonzalez-hub.github.io/biodex/
 La URL anterior de vista previa continúa disponible con la misma versión conectada.
 Las cuentas se crean dentro de la app; no se introducen PINs manualmente en Sheets.
-Instrucciones del backend: [INSTALACION_SHEETS.md](backend/INSTALACION_SHEETS.md).
+Para activar las reglas 2.4 en la implementación existente: [ACTUALIZAR_2_4.md](backend/ACTUALIZAR_2_4.md). Instalación desde cero: [INSTALACION_SHEETS.md](backend/INSTALACION_SHEETS.md).
+
+La web detecta las capacidades del servidor. Hasta que el docente actualice su Apps Script, conserva las reglas antiguas de evolución y oculta los premios. El código del repositorio no demuestra que la nueva API esté desplegada.
 
 ## Edición retro FIELD-02
 
 Carcasa de dispositivo de campo, pantalla de exploración, controles A/B y
 tarjeta de explorador presente en toda la interfaz. Cuatro avatares y cuatro
-paisajes seleccionables al entrar o desde el perfil. Los 30 recortes PNG
-transparentes se usan durante la captura y el escáner; la BioDex y las fichas
+paisajes seleccionables al entrar o desde el perfil. Los 33 recortes PNG
+transparentes se usan durante la captura; la BioDex y las fichas
 conservan las ilustraciones completas. La animación original permanece.
 
 La bienvenida y el refugio muestran exclusivamente al entrenador ampliado sobre
@@ -43,15 +45,18 @@ La mochila usa el mismo lenguaje de emblemas y describe el pasaporte de cuenta.
 - `remaster.js`: acceso, validación remota, guardado confirmado e interfaz transversal.
 - `remaster.css`: dirección visual bosque/pergamino/dorado, adaptación móvil.
 - `retro.js` / `retro.css`: dispositivo FIELD-02, perfil, rutas de gimnasio y medallas.
+- `megas.js`: galería y fichas de las tres distinciones únicas. Sin códigos privados.
 - `assets/bioformas/`: ilustraciones optimizadas por bioforma.
-- `assets/cutouts/`, `assets/avatars/`, `assets/landscapes/`: 38 recursos nuevos.
+- `assets/cutouts/`, `assets/avatars/`, `assets/landscapes/`: recortes, entrenadores y paisajes.
 - `assets/FIELD_ART.md`: usos, direcciones de arte y prompts finales.
 - `backend/Code.gs`: backend Apps Script vinculado a la hoja del docente.
 - `tests/`: pruebas de reglas, backend con servicios simulados y navegador.
 
 ## Garantías del flujo
 
-- La evolución requiere la etapa anterior en el servidor, no solo en la interfaz.
+- El backend 2.4 permite capturar cada bioforma con su código en cualquier orden, sin requisitos de etapas o gimnasios.
+- Los tres premios privados se generan en `PremiosMega`: un ganador por premio y una mega por cuenta, bajo bloqueo del servidor. No suman a las 30 capturas principales.
+- Si el guardado de un premio se interrumpe, una reserva permite reparar el progreso desde la misma cuenta.
 - Las activaciones se aplican sobre el progreso actual del servidor bajo bloqueo.
 - Un navegador no puede sobrescribir la colección enviando un snapshot arbitrario.
 - Cada captura se guarda **antes** de reproducir la animación.
@@ -78,15 +83,15 @@ preservarlos no equivale a convertirlos en secretos antifraude. El docente contr
 su distribución, pero no se ofrece protección de evaluación de alto impacto.
 
 El backend valida los códigos originales; no incorpora un calendario nuevo de
-liberación ni crea códigos nuevos. Conservar la URL existente permite que los
+liberación. Solo los tres premios mega reciben códigos nuevos generados dentro de la hoja privada. Conservar la URL existente permite que los
 iframes sigan apuntando al mismo sitio.
 
 ## Pruebas locales
 
 Ejecutar `node --test tests/*.test.cjs`. Las pruebas
 simulan servicios de Apps Script y un DOM mínimo. El resultado de la prueba
-contra el despliegue real se registra sin claves ni tokens en
-[tests/LIVE_SHEETS_QA.json](tests/LIVE_SHEETS_QA.json).
+contra el despliegue real anterior se registra sin claves ni tokens en
+[tests/LIVE_SHEETS_QA.json](tests/LIVE_SHEETS_QA.json). Ese archivo corresponde al backend anterior 2.0, no certifica el despliegue de 2.4. Ver [QA_2_4.md](tests/QA_2_4.md).
 
 La verificación visual usa instantáneas de los renderizadores reales, sin sesión
 ni solicitudes de cuenta, dentro de marcos de 320, 390, 768 y 1280 px. No equivale

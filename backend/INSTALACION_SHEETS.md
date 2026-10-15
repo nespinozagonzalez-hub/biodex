@@ -1,6 +1,6 @@
 # Activar cuentas y guardado de BioDex
 
-Este paquete corresponde a BioDex FIELD-02. Contiene `Code.gs`, una copia idéntica
+Este paquete corresponde a BioDex 2.4 FIELD-02. Si tu hoja ya está conectada, sigue [ACTUALIZAR_2_4.md](ACTUALIZAR_2_4.md) para conservarla. Contiene `Code.gs`, una copia idéntica
 en `Code_para_copiar.txt` y esta guía. Utiliza solo uno de los dos archivos de
 código: no pegues ambos, ya que duplicarías las funciones.
 
@@ -25,7 +25,7 @@ y guardado se hará después de recibir tu URL `/exec` y conectar la web.
    pulsa **Ejecutar**. Usa tu cuenta de docente y autoriza el proyecto que acabas
    de crear cuando Google te lo solicite.
 6. Espera a que indique **Ejecución completada**. Vuelve a la hoja: aparecerán las
-   cuatro pestañas descritas abajo. La pestaña inicial `Hoja 1` puede permanecer;
+   cinco pestañas descritas abajo. La pestaña inicial `Hoja 1` puede permanecer;
    no se utiliza. No hace falta crear un activador o desencadenador.
 
 **La función que ejecutas manualmente es `instalarBioDex`; no `doPost` ni `doGet`.**
@@ -36,13 +36,14 @@ y guardado se hará después de recibir tu URL `/exec` y conectar la web.
 | Sesiones | Sesiones temporales, almacenadas como hashes. |
 | Bitacora | Registro de capturas, activaciones y cambios de preferencias. |
 | Migraciones | Solicitudes de incorporación de colecciones anteriores. |
+| PremiosMega | Tres códigos privados, ganador opcional y registro de entrega única. |
 
 No añadas usuarios ni claves a mano en la hoja. Una vez conectada la web, cada
 estudiante utiliza **Crear personaje** dentro de BioDex. Las cuentas reales
-comienzan vacías; la demo no se incorpora automáticamente como progreso docente.
+comienzan vacías.
 
 La instalación es idempotente: no borra datos. Crea las pestañas **Usuarios**,
-**Sesiones**, **Bitacora** y **Migraciones** y guarda el ID de la hoja y un secreto
+**Sesiones**, **Bitacora**, **Migraciones** y **PremiosMega** y guarda el ID de la hoja y un secreto
 privado en las propiedades del script. Si detecta cabeceras incompatibles, se
 detiene. No cambies las cabeceras ni el secreto después de registrar cuentas.
 
@@ -63,7 +64,7 @@ detiene. No cambies las cabeceras ni el secreto después de registrar cuentas.
 Puedes abrir la URL `/exec` en una ventana privada para comprobar que responde:
 
 ```json
-{"ok":true,"service":"BioDex","version":"2.0.0"}
+{"ok":true,"service":"BioDex","version":"2.4.0","features":{"version":"2.4.0","captureMode":"code-only","megaPrizes":3,"oneMegaPerAccount":true}}
 ```
 
 Ese número corresponde a la versión de la API del backend, no al tema visual.
@@ -83,8 +84,8 @@ como docente y solo admite las acciones definidas en `doPost`.
 ## 3. Comprobar con dos dispositivos antes de usar en clase
 
 - Crear una cuenta de prueba con nombre único y PIN de seis dígitos.
-- Intentar una evolución sin su etapa anterior: debe bloquearse sin consumir código.
-- Capturar la etapa inicial y luego su evolución: ambas deben quedar registradas.
+- Capturar una etapa avanzada con su código, sin tener etapas anteriores ni gimnasios: debe guardarse.
+- Capturar las otras etapas en cualquier orden: todas deben quedar registradas.
 - Activar un sector SEC y un gimnasio GYM; alternar CRT y comprobar las tres cosas.
 - Cambiar avatar y paisaje desde Perfil; comprobar que ambos quedan guardados.
 - Cerrar sesión. Ingresar desde otro navegador con las mismas credenciales.
@@ -118,11 +119,18 @@ sin impedir el acceso a las cuentas existentes.
 
 ## Migración de colecciones antiguas
 
-El archivo local original no se borra. En **Archivo**, el estudiante puede recuperar
-su respaldo anterior y enviarlo para revisión. El docente revisa la fila de
-**Migraciones** y, si corresponde, ejecuta `aprobarMigracionDocente(numeroDeFila)`
-desde una función privada temporal. La aprobación une colecciones, no reemplaza
-avances existentes, y respeta la cadena evolutiva: no inventa etapas faltantes.
+El archivo local original no se borra. La interfaz definitiva usa cuentas y ya no
+expone importación ni recuperación manual. Se conserva la revisión docente de
+solicitudes antiguas en **Migraciones** mediante `aprobarMigracionDocente(numeroDeFila)`
+desde una función privada temporal. Une capturas originales, no reemplaza el avance
+y nunca concede mega legendarias. Las etapas pueden incorporarse en cualquier orden.
+
+## Premios mega
+
+Consulta [ACTUALIZAR_2_4.md](ACTUALIZAR_2_4.md) para entregar los tres códigos privados
+de **PremiosMega**. Un ganador por premio y una mega por cuenta. Puedes reservar
+cada código al nombre de cuenta del ganador en la columna D. No uses premios de
+producción para probar; utiliza una copia de la hoja y un proyecto separados.
 
 ## Actualizaciones y mantenimiento
 

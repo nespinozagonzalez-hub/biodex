@@ -1,5 +1,5 @@
 /**
- * BioDex 2.0 · Backend vinculado a una hoja de Google Sheets.
+ * BioDex 2.4 · Backend vinculado a una hoja de Google Sheets.
  * Ejecuta instalarBioDex() una vez. Despliega como app web, ejecutada por ti.
  * La hoja y el editor del script NO deben compartirse con estudiantes.
  */
@@ -394,11 +394,18 @@ const GIMNASIOS_BIODEX = [
     "codigo": "GYM-TERRA-010"
   }
 ];
+const MEGAS_BIODEX = Object.freeze([
+  {id:'B031',nombre:'Astrael',titulo:'Guardián del alba'},
+  {id:'B032',nombre:'Thalúmor',titulo:'Custodio del abismo'},
+  {id:'B033',nombre:'Ignivar',titulo:'Corazón primordial'}
+]);
+const BD_FEATURES = Object.freeze({version:'2.4.0',captureMode:'code-only',megaPrizes:3,oneMegaPerAccount:true});
 const BD_HEADERS = {
   Usuarios:['nombre_clave','nombre','sal','pin_hmac','creado','actualizado','progreso_json','fallos','bloqueo_hasta'],
   Sesiones:['token_hash','nombre_clave','vence'],
   Bitacora:['fecha','nombre_clave','accion','detalle'],
-  Migraciones:['fecha','nombre_clave','estado','respaldo_json']
+  Migraciones:['fecha','nombre_clave','estado','respaldo_json'],
+  PremiosMega:['id','bioforma','codigo_privado','ganador_opcional','cuenta_canjeo','fecha_canjeo']
 };
 
 function instalarBioDex() {
@@ -419,7 +426,8 @@ function instalarBioDex() {
       if(JSON.stringify(current)!==JSON.stringify(BD_HEADERS[name]))throw new Error('Cabeceras incompatibles en '+name+'. No se borró ningún dato.');
     }
   });
-  return 'BioDex instalado. Despliega una aplicación web y copia su URL /exec.';
+  prepararPremiosMega_();
+  return 'BioDex 2.4 instalado. Conserva tu implementación /exec; los tres códigos privados están en PremiosMega.';
 }
 function db_(){const id=PropertiesService.getScriptProperties().getProperty('BIODEX_SHEET_ID');if(!id)throw new Error('El docente debe ejecutar instalarBioDex antes de comenzar.');return SpreadsheetApp.openById(id);}
 function sheet_(name){return db_().getSheetByName(name);}
@@ -461,7 +469,7 @@ function session_(token) {
   const user=user_(found[1]);if(!user)throw new Error('Cuenta no disponible.');return user;
 }
 function createSession_(key){const token=Utilities.getUuid()+Utilities.getUuid();sheet_('Sesiones').appendRow([hash_(token),key,Date.now()+8*60*60*1000]);return token;}
-function result_(u,extra){return Object.assign({ok:true,progreso:JSON.parse(u.data[6])},extra||{});}
+function result_(u,extra){return Object.assign({ok:true,features:BD_FEATURES,progreso:JSON.parse(u.data[6])},extra||{});}
 function write_(u,p,action,detail) {
   achievements_(p);
   u.data[5]=new Date().toISOString();u.data[6]=JSON.stringify(p);
@@ -485,7 +493,7 @@ function auth_(data) {
     p.configuracion=Object.assign(p.configuracion,profile);
     const row=[f.key,f.name,salt,pinHash_(f.pin,salt),new Date().toISOString(),new Date().toISOString(),JSON.stringify(p),0,0];
     sheet_('Usuarios').appendRow(row);
-    return {ok:true,token:createSession_(f.key),progreso:p};
+    return {ok:true,features:BD_FEATURES,token:createSession_(f.key),progreso:p};
   }
   if(u&&Number(u.data[8])>now)throw new Error('Demasiados intentos. Espera 15 minutos o consulta a tu docente.');
   if(!u||!same_(u.data[3],pinHash_(f.pin,u.data[2]))) {
@@ -501,19 +509,47 @@ function redeem_(u,code) {
   const p=JSON.parse(u.data[6]),b=CATALOGO_BIODEX.find(x=>norm_(x.codigo)===normalized),now=new Date().toISOString();
   if(b){
     if(p.capturadas.includes(b.id))return result_(u,{kind:'capture',bioforma:b.id,duplicate:true,message:b.nombre+' ya forma parte de tu colección.'});
-    if(b.prev&&!p.capturadas.includes(b.prev))throw new Error('Primero necesitas capturar a '+CATALOGO_BIODEX.find(x=>x.id===b.prev).nombre+'. El código no se ha consumido.');
     p.capturadas.push(b.id);p.codigosUsados.push(normalized);p.ultimaBioforma=b.id;
     p.intentos.push({accion:'captura',bioforma:b.id,fecha:now});
     return Object.assign(write_(u,p,'captura',b.id),{kind:'capture',bioforma:b.id,duplicate:false});
   }
   const sector=SECTORES_BIODEX.find(x=>norm_(x.codigo)===normalized),gym=GIMNASIOS_BIODEX.find(x=>norm_(x.codigo)===normalized),entity=sector||gym;
-  if(!entity)throw new Error('Código no reconocido. Revisa el código entregado por tu docente.');
+  if(!entity){const mega=canjearMega_(u,p,normalized,now);if(mega)return mega;throw new Error('Código no reconocido. Revisa el código entregado por tu docente.');}
   const kind=sector?'sector':'gimnasio',target=sector?p.sectores.abiertos:p.gimnasios.abiertos;
   if(target[entity.id])return result_(u,{kind,duplicate:true,message:entity.nombre+' ya estaba activado.'});
   target[entity.id]={abierto:true,fecha:now,codigo:entity.codigo};
   p.intentos.push({accion:kind,id:entity.id,fecha:now});
   if(!p.codigosUsados.includes(normalized))p.codigosUsados.push(normalized);
   return Object.assign(write_(u,p,kind,entity.id),{kind,duplicate:false,message:entity.nombre+' activado y guardado.'});
+}
+/** Códigos generados en la hoja privada, nunca incluidos en el catálogo público. */
+function prepararPremiosMega_(){
+  const table=sheet_('PremiosMega'),existing=rows_('PremiosMega');
+  MEGAS_BIODEX.forEach(mega=>{
+    if(existing.some(row=>row[0]===mega.id))return;
+    const secret=Utilities.getUuid().replace(/-/g,'').slice(0,20).toUpperCase();
+    const label=norm_(mega.nombre);
+    table.appendRow([mega.id,mega.nombre,'MEGA-'+label+'-'+secret,'','','']);
+  });
+}
+function canjearMega_(u,p,normalized,now){
+  const table=sheet_('PremiosMega');if(!table)return null;
+  const prizes=rows_('PremiosMega'),index=prizes.findIndex(row=>String(row[2]||'').trim()&&norm_(row[2])===normalized);
+  if(index<0)return null;
+  const row=prizes[index],mega=MEGAS_BIODEX.find(m=>m.id===row[0]);if(!mega)return null;
+  const owner=String(row[4]||''),account=u.data[0],designated=String(row[3]||'').trim();
+  if(owner&&owner!==account)throw new Error('Esta mega legendaria ya fue entregada a otro explorador.');
+  if(designated&&nameKey_(designated)!==account)throw new Error('Este premio está reservado para otro explorador.');
+  if(prizes.some(r=>r[0]!==mega.id&&String(r[4]||'')===account)||MEGAS_BIODEX.some(m=>m.id!==mega.id&&p.capturadas.includes(m.id)))throw new Error('Cada explorador puede recibir una sola mega legendaria del curso.');
+  // Reservar primero permite reparar un guardado interrumpido al reintentar.
+  // doPost mantiene el bloqueo de script durante la reserva y la escritura.
+  if(!owner)table.getRange(index+2,5,1,2).setValues([[account,now]]);
+  if(p.capturadas.includes(mega.id))return result_(u,{kind:'capture',mega:true,bioforma:mega.id,duplicate:true,message:mega.nombre+' ya forma parte de tu colección.'});
+  p.capturadas.push(mega.id);p.ultimaBioforma=mega.id;
+  if(!p.codigosUsados.includes('PREMIO:'+mega.id))p.codigosUsados.push('PREMIO:'+mega.id);
+  p.premios=p.premios||{};p.premios[mega.id]={titulo:mega.titulo,fecha:now};
+  p.intentos.push({accion:'premio_mega',bioforma:mega.id,fecha:now});
+  return Object.assign(write_(u,p,'premio_mega',mega.id),{kind:'capture',mega:true,bioforma:mega.id,duplicate:false});
 }
 function handle_(data){
   if(!data||typeof data!=='object')throw new Error('Solicitud no válida.');
@@ -551,7 +587,7 @@ function doPost(e){
   finally{if(lock.hasLock())lock.releaseLock();}
   return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
 }
-function doGet(){return ContentService.createTextOutput(JSON.stringify({ok:true,service:'BioDex',version:'2.0.0'})).setMimeType(ContentService.MimeType.JSON);}
+function doGet(){return ContentService.createTextOutput(JSON.stringify({ok:true,service:'BioDex',version:'2.4.0',features:BD_FEATURES})).setMimeType(ContentService.MimeType.JSON);}
 
 /** Solo desde el editor del docente. Nunca se expone mediante doPost. */
 function restablecerClaveDocente(nombre,nuevaClave) {
@@ -575,18 +611,15 @@ function aprobarMigracionDocente(fila) {
     if(r[2]!=='PENDIENTE')throw new Error('La solicitud no está pendiente.');
     const u=user_(r[1]);if(!u)throw new Error('Cuenta no encontrada.');
     const p=JSON.parse(u.data[6]),legacy=JSON.parse(r[3]);
-    let remaining=[...new Set(legacy.capturadas)];
-    for(let pass=0;pass<3;pass++)remaining=remaining.filter(id=>{
-      const b=CATALOGO_BIODEX.find(x=>x.id===id);if(!b)return false;
-      if(b.prev&&!p.capturadas.includes(b.prev))return true;
-      if(!p.capturadas.includes(id))p.capturadas.push(id);return false;
+    [...new Set(legacy.capturadas)].forEach(id=>{
+      if(CATALOGO_BIODEX.some(b=>b.id===id)&&!p.capturadas.includes(id))p.capturadas.push(id);
     });
     for(const pair of [['sectores',SECTORES_BIODEX],['gimnasios',GIMNASIOS_BIODEX]])pair[1].forEach(x=>{
       if(legacy[pair[0]]&&legacy[pair[0]].abiertos&&legacy[pair[0]].abiertos[x.id])p[pair[0]].abiertos[x.id]={abierto:true,fecha:new Date().toISOString(),origen:'migracion_revisada'};
     });
     p.ultimaBioforma=p.ultimaBioforma||p.capturadas[p.capturadas.length-1]||null;
     p.intentos.push({accion:'migracion_docente',fecha:new Date().toISOString(),fila});
-    write_(u,p,'migracion',String(fila));s.getRange(fila,3).setValue(remaining.length?'APROBADA; etapas previas faltantes: '+remaining.join(','):'APROBADA');
+    write_(u,p,'migracion',String(fila));s.getRange(fila,3).setValue('APROBADA');
   }finally{lock.releaseLock();}
 }
 

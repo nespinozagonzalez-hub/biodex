@@ -10,9 +10,32 @@ test('el remaster visual se carga después de todos los estilos heredados',()=>{
  assert.equal(html.split(marker).length-1,1);
  assert.ok(html.indexOf(marker)>html.lastIndexOf('</style>'),'Los estilos antiguos no deben sobrescribir el remaster');
  assert.ok(html.indexOf('src="config.js?')<html.indexOf('src="remaster.js?'));
- for(const file of ['config.js','remaster.js','retro.js','remaster.css','retro.css'])assert.ok(html.includes(file+'?v=2.3.1'),'El runtime necesita versión anticaché: '+file);
+ for(const file of ['config.js','remaster.js','retro.js','megas.js','remaster.css','retro.css'])assert.ok(html.includes(file+'?v=2.4.0'),'El runtime necesita versión anticaché: '+file);
 });
 const {frontend,account}=require('./frontend-harness.cjs');
+function enableMegas(f){f.evaluate("applyCloud({features:{captureMode:'code-only',megaPrizes:3,oneMegaPerAccount:true},progreso:progreso})");return f;}
+test('backend antiguo conserva reglas anteriores; backend 2.4 activa captura libre y premios',()=>{
+ const f=account(frontend());assert.equal(f.evaluate("canCaptureEvolution(getBioforma('B003'))"),false);assert.ok(!f.evaluate('renderBioformaCards()').includes('mega-gallery'));
+ enableMegas(f);assert.equal(f.evaluate("canCaptureEvolution(getBioforma('B003'))"),true);assert.match(f.evaluate('renderCodigo()'),/sin etapas previas ni gimnasios abiertos/);
+ const html=f.evaluate('renderBiodex()');assert.ok(!html.includes('Evolución bloqueada'));assert.equal((html.match(/data-mega=/g)||[]).length,3);assert.match(html,/value="Abisal"/);assert.match(html,/value="Distinción del curso"/);
+ f.evaluate("applyCloud({progreso:progreso})");assert.ok(!f.evaluate('renderBioformaCards()').includes('mega-gallery'));assert.equal(f.evaluate("canCaptureEvolution(getBioforma('B003'))"),false);
+});
+test('premios visibles por búsqueda y filtros; silueta antes de captura y arte completo después',()=>{
+ const f=enableMegas(account(frontend()));f.evaluate("searchTerm='Thalúmor'");let html=f.evaluate('renderBioformaCards()');assert.equal((html.match(/data-mega=/g)||[]).length,1);assert.match(html,/cutouts\/B032.png/);assert.ok(!html.includes('No hay resultados'));
+ f.evaluate("searchTerm='';filterTipo='Abisal';progreso.capturadas=['B032']");html=f.evaluate('renderBioformaCards()');assert.match(html,/bioformas\/B032.webp/);assert.ok(!html.includes('data-mega="B031"'));
+ f.evaluate("renderFicha('B032')");assert.match(f.element('modalContent').innerHTML,/Memoria de las mareas/);assert.match(f.element('modalContent').innerHTML,/bioformas\/B032.webp/);
+});
+test('premio no altera medallas ni porcentaje de la colección principal',()=>{
+ const f=enableMegas(account(frontend()));f.evaluate("progreso.capturadas=BIOFORMAS.slice(0,29).map(b=>b.id).concat('B031');actualizarLogros(false)");assert.equal(f.evaluate('baseCaptureCount()'),29);assert.equal(f.evaluate("progreso.logros.includes('L07')"),false);
+ let html=f.evaluate('renderPanel()');assert.match(html,/29/);assert.ok(!html.includes('31 / 30'));assert.match(html,/mega-owned/);
+ f.evaluate("progreso.capturadas.push('B030');actualizarLogros(false)");assert.equal(f.evaluate('baseCaptureCount()'),30);assert.equal(f.evaluate("progreso.logros.includes('L07')"),true);assert.equal(f.evaluate('achievementProgress(6).value'),30);
+});
+test('captura mega confirmada conserva animación con su recorte PNG',async()=>{
+ const f=enableMegas(account(frontend()));f.element('codigoInput').value='premio-privado';
+ f.c.fetch=async()=>({ok:true,json:async()=>({ok:true,features:{captureMode:'code-only',megaPrizes:3},kind:'capture',mega:true,bioforma:'B033',progreso:{jugador:'Ada',capturadas:['B033'],logros:[],intentos:[],sectores:{abiertos:{}},gimnasios:{abiertos:{}},codigosUsados:['PREMIO:B033'],configuracion:{crt:false},ultimaBioforma:'B033'}})});
+ await f.evaluate('validarCodigo()');assert.equal(f.element('captureOverlay').style.display,'flex');assert.match(f.element('captureOverlay').children.find(c=>c.className==='cap-stage').innerHTML,/cutouts\/B033.png/);
+ f.evaluate("openModal(renderBioformaSVG(getBioforma('B033'),true,190))");assert.match(f.element('modalContent').innerHTML,/bioformas\/B033.webp/);
+});
 test('fallo de red no acredita captura ni dispara animación',async()=>{const f=frontend();f.evaluate('sesion={token:"test"};progreso=defaultProgress();progreso.jugador="Prueba"');f.element('codigoInput').value='CAP-NIMBEL-104';f.c.fetch=async()=>{throw vm.runInContext('new TypeError("network")',f.c);};await f.evaluate('validarCodigo()');assert.equal(f.evaluate('progreso.capturadas.length'),0);assert.notEqual(f.element('captureOverlay').style.display,'flex');assert.match(f.element('toast').textContent,/conexión/);});
 
 test('captura remota aplica respuesta antes de animar, sin cuestionario',async()=>{const f=frontend();f.evaluate('sesion={token:"test"};progreso=defaultProgress();progreso.jugador="Prueba"');f.element('codigoInput').value='CAP-NIMBEL-104';f.c.fetch=async()=>({ok:true,json:async()=>({ok:true,kind:'capture',bioforma:'B001',progreso:{jugador:'Prueba',capturadas:['B001'],logros:['L01'],intentos:[],sectores:{abiertos:{}},gimnasios:{abiertos:{}},codigosUsados:[],configuracion:{crt:false},ultimaBioforma:'B001'}})});await f.evaluate('validarCodigo()');assert.equal(f.evaluate('progreso.capturadas[0]'),'B001');assert.equal(f.element('captureOverlay').style.display,'flex');assert.equal(f.evaluate('cloudStatus'),'Guardado en BioNova');});

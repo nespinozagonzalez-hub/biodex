@@ -92,3 +92,34 @@ stone terraces, ivy, brass lanterns, waterfalls and blue mountains. Architectura
 hero on the right, darker foliage on the left for HTML headings. Golden afternoon
 light, emerald / parchment gold / turquoise. No people, creatures, text, logos,
 interface, frames or collage. Master: 1536 × 1024.
+## Tres mega legendarias (2.4)
+
+Generadas mediante image_gen como activos originales para BioDex. Arte completo
+optimizado a WebP de 640 px; PNG con alpha real para la animación de captura.
+Solo conversión de formato, reducción de tamaño y compresión después de generar.
+
+### B031 · Astrael
+
+- Arte: `assets/bioformas/B031.webp`.
+- Recorte: `assets/cutouts/B031.png`.
+- Prompt de ilustración:
+
+> Use case: stylized-concept. Asset type: square full-art portrait for an original mega legendary creature in BioDex fantasy collectible game. Astrael, guardian of dawn: majestic white-and-navy celestial gryphon with six broad luminous feathered wings in a royal fan, elegant leonine body, elegant avian face, golden crystal crest shaped like an eclipse, flowing comet-like tail and small star freckles, brass-gold and pearlescent blue accents. Entire creature clearly visible with wings and feet inside canvas, three-quarter hero pose on an ancient floating stone platform above luminous clouds and astronomical ruins at sunrise. Premium highly detailed painterly fantasy creature art, natural coherent anatomy, epic cinematic lighting, jewel-like textures, magical elegance, polished collectible-card illustration. Original design, not based on any existing game character. No humans, no text, numbers, logos, card frame or UI. Square 1024x1024.
+
+### B032 · Thalúmor
+
+- Arte: `assets/bioformas/B032.webp`.
+- Recorte: `assets/cutouts/B032.png`.
+- Prompt de ilustración:
+
+> Use case: stylized-concept. Asset type: square full-art portrait for an original mega legendary creature in BioDex fantasy collectible game. Thalumor, guardian of the deep: enormous elegant manta-and-sea-dragon hybrid with one coherent body, broad sweeping ray fins, long curled serpentine tail, crown of coral-like sapphire crystal horns, calm intelligent eyes, dark teal skin with glowing cyan constellations, polished pearl and amethyst armor ridges, three pairs of luminous ribbon whiskers. Entire creature fully visible, gracefully floating above an ancient submerged stone sanctuary in a bioluminescent abyss, underwater sunbeams, tiny glowing plankton, no other animals. Premium highly detailed painterly fantasy creature art, coherent anatomy, majestic not frightening, epic deep turquoise and violet cinematic lighting, polished collectible-card illustration. Original design not based on existing characters. No humans, text, numbers, logos, card frames or UI. Square 1024x1024.
+
+### B033 · Ignivar
+
+- Arte: `assets/bioformas/B033.webp`.
+- Recorte: `assets/cutouts/B033.png`.
+- Prompt de ilustración:
+
+> Use case: stylized-concept. Asset type: square full-art portrait for an original mega legendary creature in BioDex fantasy collectible game. Ignivar, guardian of the primordial forge: majestic armored volcanic lion-dragon with strong quadruped anatomy, dark obsidian crystal plates, a regal flowing mane of amber molten light, two curved bronze horns, translucent ruby wing membranes held high, long tail ending in a luminous geode, intense golden eyes. Entire powerful creature clearly visible including all four feet, horns, wings and tail, three-quarter royal pose on an ancient black stone volcanic arch, distant lava waterfall and sunrise through ash clouds. Premium highly detailed painterly fantasy creature art, coherent anatomy, noble guardian rather than horror, warm gold, ruby and black palette, cinematic epic lighting, polished collectible-card illustration. Original design not based on any existing game character. No humans, text, numbers, logos, card frames or UI. Square 1024x1024.
+
+Prompt de edición para los tres recortes: Create a clean transparent PNG cutout of exactly the single central fantasy creature in the provided reference. Preserve the exact character design, colors, intricate painterly rendering, pose and facial expression. Include the whole creature with all wings, fins, horns, whiskers, tail and feet. Remove scenery, ground, platform and particles outside the body. Genuine transparent alpha background; no background color, checkerboard, white outline or ground shadow.

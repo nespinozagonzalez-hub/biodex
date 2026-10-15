@@ -27,3 +27,13 @@ test('hay cuatro avatares PNG transparentes y cuatro paisajes WebP',()=>{
  for(const id of ['aurora','nexo','prisma','terra'])transparentPNG(path.join(__dirname,'../assets/avatars',id+'.png'));
  for(const id of ['bosque','prisma','bruma','arcana']){const b=fs.readFileSync(path.join(__dirname,'../assets/landscapes',id+'.webp'));assert.equal(b.toString('ascii',0,4),'RIFF');assert.equal(b.toString('ascii',8,12),'WEBP');assert.ok(b.length>10000&&b.length<500000);}
 });
+test('las tres mega legendarias tienen arte completo y recorte transparente propios',()=>{
+ const hashes=new Set(),crypto=require('node:crypto');
+ for(const id of ['B031','B032','B033']){
+  const webp=fs.readFileSync(path.join(__dirname,'../assets/bioformas',id+'.webp'));
+  assert.equal(webp.toString('ascii',0,4),'RIFF');assert.equal(webp.toString('ascii',8,12),'WEBP');assert.ok(webp.length>10000&&webp.length<300000);
+  const png=transparentPNG(path.join(__dirname,'../assets/cutouts',id+'.png'));assert.ok(png.length>10000&&png.length<250000);
+  hashes.add(crypto.createHash('sha256').update(webp).digest('hex'));hashes.add(crypto.createHash('sha256').update(png).digest('hex'));
+ }
+ assert.equal(hashes.size,6);
+});

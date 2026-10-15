@@ -1,0 +1,173 @@
+{
+  "method": "Instantáneas HTML de los renderizadores reales; sin sesión ni llamadas al backend.",
+  "checks": [
+    {
+      "scene": "siluetas",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "siluetas",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "siluetas",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "siluetas",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "B031",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "B031",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "B031",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "B031",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "B032",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "B032",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "B032",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "B032",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "B033",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "B033",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "B033",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "B033",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "escaner",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "escaner",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "escaner",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "escaner",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1280,
+      "width": 1280
+    },
+    {
+      "scene": "premio",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "premio",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "premio",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "premio",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    }
+  ]
+}
