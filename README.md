@@ -48,7 +48,7 @@ iframes sigan apuntando al mismo sitio.
 
 ## Pruebas locales
 
-Ejecutar `node --test tests/backend.test.cjs tests/frontend.test.cjs`. Las pruebas
+Ejecutar `node --test tests/*.test.cjs`. Las pruebas
 simulan servicios de Apps Script y un DOM mínimo; **no sustituyen** una prueba
 real del despliegue de Google ni la revisión visual en un navegador.
 

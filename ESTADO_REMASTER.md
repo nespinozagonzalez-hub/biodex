@@ -18,7 +18,8 @@
 - [x] Estilos adaptables, foco de formularios y movimiento reducido.
 - [x] Respaldo antiguo local intacto; migración con revisión docente.
 - [x] Instrucciones de instalación y recuperación de acceso.
-- [x] 17 pruebas automatizadas de lógica y flujo pasan con servicios simulados.
+- [x] 18 pruebas automatizadas de lógica, flujo y recursos pasan con servicios simulados.
+- [x] Colección completa de 30 ilustraciones propias, optimizadas en WebP.
 
 ## Pendiente antes de reemplazar la versión pública
 

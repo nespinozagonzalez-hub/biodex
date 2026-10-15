@@ -76,7 +76,7 @@ async function init(){
   sesion=null;render();
 }
 function renderLoading(){document.getElementById('app').innerHTML='<section class="hero"><div class="rpg-window"><span class="rpg-title">Archivo BioNova</span><h2>Recuperando tu expedición…</h2><p>Consultando la colección guardada.</p></div></section>';}
-function changeAccess(mode){accessMode=mode;render();}
+function changeAccess(mode){if(busy)return;accessMode=mode;render();}
 function renderRegistro(){
   const create=accessMode==='register';
   return `<section class="access-layout"><div class="access-art"><span class="eyebrow">CRÓNICAS DE BIONOVA · VOL. II</span><h1>Todo gran hallazgo<br>comienza con<br><em>tu curiosidad.</em></h1><p>Un mundo por descubrir. Treinta bioformas por encontrar.<br>Tu próxima aventura comienza en el aula.</p><div class="access-creature">${renderBioformaSVG(BIOFORMAS[0],true,260)}</div><span class="art-caption">NIMBEL · EL PRIMER DESTELLO</span></div>
@@ -101,6 +101,7 @@ async function registrarJugador(){
   }catch(e){err.textContent=e.message;}finally{busy=false;if(submit.isConnected){submit.disabled=false;submit.textContent=accessMode==='register'?'Crear mi pasaporte →':'Continuar mi aventura →';}}
 }
 function startPreview(){
+  if(busy)return;
   sesion={preview:true};progreso=defaultProgress();
   try{const saved=JSON.parse(sessionStorage.getItem('biodex_preview_v2'));if(saved)progreso={...progreso,...saved};}catch(e){}
   progreso.jugador='Explorador de muestra';setStatus('Vista previa · sin guardado en nube');view='panel';render();

@@ -172,22 +172,15 @@ input,select,textarea{width:100%;font-family:var(--font);background:#050816;colo
 .cap-cta button:hover{filter:brightness(1.2);transform:translate(-1px,-1px)}
 .cap-cta button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #000}
 
-/* Reflexión metacognitiva */
-.metacog-card{border:3px solid var(--cyan);background:rgba(5,8,22,.92);
-  padding:18px;margin-top:14px}
-.metacog-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.metacog-options button{text-align:left;font-size:.85rem;line-height:1.35;
-  padding:12px 14px;white-space:normal;height:auto;min-height:54px}
-@media(max-width:600px){.metacog-options{grid-template-columns:1fr}}
 </style>
 </head>
-<body class="crt">
+<body>
 <div class="particles"></div>
-<div id="bootScreen" class="boot-screen"><div class="boot-panel"><div class="boot-title">BIODEX // BIOFORMAS v1.8</div><div id="bootLines"></div><div class="boot-bar"><div id="bootBarInner"></div></div></div></div>
+<div id="bootScreen" class="boot-screen"><div class="boot-panel"><div class="boot-title">BioDex · Crónicas de BioNova</div><div id="bootLines"></div><div class="boot-bar"><div id="bootBarInner"></div></div></div></div>
 <div id="app" class="app"></div>
 <div id="modalBack" class="modal-back" onclick="closeModal(event)"><div id="modalContent" class="modal rpg-window" onclick="event.stopPropagation()"></div></div>
 <div id="dialogue" class="dialogue"><div class="name" id="dialogueName">Dra. Lira</div><div class="box"><div id="dialogueText"></div><div class="controls"><button class="ghost" onclick="skipDialogue()">Saltar</button><button onclick="closeDialogue()">Continuar</button></div></div></div>
-<div id="toast" class="toast"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 <div id="captureOverlay"></div>
 <script>
 
