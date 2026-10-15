@@ -29,7 +29,7 @@ async function run(){
  }
  assert.deepEqual(errors,[]);
  const page=await browser.newPage({viewport:{width:390,height:844}});page.on('pageerror',e=>errors.push(e.message));
- await page.route('**/config.js',route=>route.fulfill({contentType:'text/javascript',body:'window.BIODEX_CONFIG={endpoint:"https://script.google.com/macros/s/TEST/exec",version:"2.0.0"}'}));
+ await page.route('**/config.js*',route=>route.fulfill({contentType:'text/javascript',body:'window.BIODEX_CONFIG={endpoint:"https://script.google.com/macros/s/TEST/exec",version:"2.0.0"}'}));
  let saved={jugador:'Cuenta Prueba',capturadas:[],codigosUsados:[],intentos:[],logros:[],sectores:{abiertos:{}},gimnasios:{abiertos:{}},configuracion:{crt:false}},fail=false;
  await page.route('https://script.google.com/**',async route=>{
   const data=route.request().postDataJSON();if(fail){await route.abort();return;}

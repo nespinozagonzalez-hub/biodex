@@ -76,7 +76,7 @@ startPreview=function(){
   progreso.jugador=entered||progreso.jugador||'Explorador de muestra';
   progreso.fechaRegistro=progreso.fechaRegistro||new Date().toISOString();
   progreso.capturadas=Array.isArray(progreso.capturadas)?[...new Set(progreso.capturadas.filter(id=>BIOFORMAS.some(b=>b.id===id)))]:[];
-  view='panel';guardarProgreso();document.body.classList.toggle('crt',progreso.configuracion.crt===true);render();
+  view='panel';guardarProgreso();document.body.classList.toggle('crt',progreso.configuracion.crt===true);render();window.scrollTo?.(0,0);
 };
 const baseApplyCloud=applyCloud;
 applyCloud=function(data){baseApplyCloud(data);progreso.configuracion={...progreso.configuracion,...cleanProfile(progreso.configuracion)};applyLandscape(progreso.configuracion.landscapeId);};
@@ -90,6 +90,8 @@ renderShell=function(){
 };
 const fieldRenderView=renderView;
 renderView=function(){if(view==='perfil')document.getElementById('view').innerHTML=renderProfile();else fieldRenderView();};
+const fieldGo=go;
+go=function(target){fieldGo(target);window.scrollTo?.(0,0);};
 function renderProfile(){
   const p=currentProfile();return `<section class="rpg-window profile-page"><span class="rpg-title">PERSONALIZA TU EXPEDICIÓN</span><h2>Tu identidad de campo.</h2><p class="muted">El avatar te acompaña en toda la BioDex. El paisaje cambia el inicio, el refugio y el entorno del dispositivo. Son elecciones estéticas: no modifican códigos ni recompensas.</p><div class="profile-preview">${avatarImage(p.avatarId)}<div><h3>${escapeHtml(progreso.jugador)}</h3><p>${escapeHtml(getRango(progreso.capturadas.length))}</p><span class="pill">${sesion?.preview?'DEMO · LOCAL':'CUENTA DE EXPLORADOR'}</span></div></div>${renderProfileChoices('profile')}<button class="ghost" onclick="toggleCRT()" aria-pressed="${progreso.configuracion.crt===true}">Textura CRT: ${progreso.configuracion.crt?'activada':'desactivada'}</button><p class="small muted">${sesion?.preview?'Se guarda automáticamente en este navegador. Borrar sus datos elimina la demo; no afecta a la edición anterior.':'Tus preferencias se guardan junto a tu colección.'}</p></section>`;
 }

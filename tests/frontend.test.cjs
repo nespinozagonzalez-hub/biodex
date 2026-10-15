@@ -6,10 +6,11 @@ const path=require('node:path');
 const root=path.join(__dirname,'..');
 test('el remaster visual se carga después de todos los estilos heredados',()=>{
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
- const marker='href="remaster.css"';
+ const marker='href="remaster.css';
  assert.equal(html.split(marker).length-1,1);
  assert.ok(html.indexOf(marker)>html.lastIndexOf('</style>'),'Los estilos antiguos no deben sobrescribir el remaster');
- assert.ok(html.indexOf('src="config.js"')<html.indexOf('src="remaster.js"'));
+ assert.ok(html.indexOf('src="config.js?')<html.indexOf('src="remaster.js?'));
+ for(const file of ['config.js','remaster.js','retro.js','remaster.css','retro.css'])assert.ok(html.includes(file+'?v=2.1.1'),'El runtime necesita versión anticaché: '+file);
 });
 function frontend(){
  const elements=new Map(),local=new Map(),session=new Map();
@@ -44,8 +45,8 @@ test('vista previa sigue operativa sin almacenamiento y sin modificar el respald
 });
 test('la capa FIELD-02 se carga al final, con cuatro avatares y cuatro paisajes',()=>{
  const f=frontend(),html=fs.readFileSync(path.join(root,'index.html'),'utf8');
- assert.ok(html.indexOf('href="retro.css"')>html.indexOf('href="remaster.css"'));
- assert.ok(html.indexOf('src="retro.js"')>html.indexOf('src="remaster.js"'));
+ assert.ok(html.indexOf('href="retro.css?')>html.indexOf('href="remaster.css?'));
+ assert.ok(html.indexOf('src="retro.js?')>html.indexOf('src="remaster.js?'));
  assert.equal(f.evaluate('AVATARS.length'),4);assert.equal(f.evaluate('LANDSCAPES.length'),4);
  const welcome=f.evaluate('renderRegistro()');assert.match(welcome,/Crear personaje/);assert.match(welcome,/data-avatar="terra"/);assert.match(welcome,/data-landscape="bruma"/);
  f.evaluate('startPreview();go("perfil")');assert.match(f.element('view').innerHTML,/PERSONALIZA TU EXPEDICIÓN/);assert.match(f.element('app').innerHTML,/explorer-sidebar/);
