@@ -36,10 +36,36 @@ function setStatus(message) {
   const el=document.getElementById('cloudStatus');
   if(el)el.textContent=message;
 }
+let cloudLoadingTimer=null, cloudLoadingFocus=null;
+function showCloudLoading(action){
+  let box=document.getElementById('cloudLoading');
+  if(!box){
+    box=document.createElement('dialog');box.id='cloudLoading';box.className='cloud-loading';
+    box.setAttribute('aria-labelledby','cloudLoadingTitle');box.setAttribute('aria-describedby','cloudLoadingMessage');
+    box.addEventListener('cancel',event=>event.preventDefault());
+    box.innerHTML='<div class="loading-topline"><span class="power-led"></span> BIONOVA / ENLACE DE CAMPO <span>●</span></div><div class="loading-radar" aria-hidden="true"><i></i><b>✦</b></div><span class="eyebrow">ARCHIVO DE EXPLORADORES</span><h2 id="cloudLoadingTitle"></h2><p id="cloudLoadingMessage" role="status" aria-live="polite"></p><div class="loading-track" aria-hidden="true"><span></span></div><p class="loading-footnote">COLECCIÓN · IDENTIDAD · TERRITORIOS</p>';
+    document.body.appendChild(box);
+  }
+  cloudLoadingFocus=document.activeElement;
+  document.getElementById('cloudLoadingTitle').textContent=action==='register'?'Preparando tu expedición…':'Recuperando tu expedición…';
+  document.getElementById('cloudLoadingMessage').textContent=action==='register'?'Creando tu pasaporte y guardando tu identidad de explorador.':'Verificando tu acceso y buscando tu colección, avatar y paisaje.';
+  if(!box.open){if(box.showModal)box.showModal();else box.setAttribute('open','');}
+  clearTimeout(cloudLoadingTimer);
+  cloudLoadingTimer=setTimeout(()=>{document.getElementById('cloudLoadingMessage').textContent='El archivo sigue respondiendo. Mantén esta ventana abierta unos instantes más.';},8000);
+}
+function hideCloudLoading(){
+  clearTimeout(cloudLoadingTimer);
+  const box=document.getElementById('cloudLoading');
+  if(box?.close)box.close();else box?.removeAttribute('open');
+  if(cloudLoadingFocus?.isConnected)cloudLoadingFocus.focus?.();
+  cloudLoadingFocus=null;
+}
 async function api(action, fields={}) {
   if(!CONFIG.endpoint)throw new Error('Falta conectar Google Sheets. Puedes explorar la vista previa.');
   if(!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(CONFIG.endpoint))throw new Error('La URL de conexión no es una implementación /exec válida.');
-  const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),25000);
+  const loading=['login','register','load'].includes(action);
+  if(loading)showCloudLoading(action);
+  const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),45000);
   try {
     const response=await fetch(CONFIG.endpoint, {
       method:'POST', redirect:'follow', signal:controller.signal,
@@ -54,7 +80,7 @@ async function api(action, fields={}) {
     if(error.name==='AbortError')throw new Error('La conexión tardó demasiado. Reintenta: los códigos no se duplican.');
     if(error instanceof TypeError)throw new Error('Sin conexión con BioDex. No se confirmó ningún cambio; vuelve a intentar.');
     throw error;
-  } finally {clearTimeout(timer);}
+  } finally {clearTimeout(timer);if(loading)hideCloudLoading();}
 }
 function applyCloud(data) {
   progreso={...defaultProgress(),...data.progreso};
@@ -80,7 +106,7 @@ async function init(){
   }
   sesion=null;render();
 }
-function renderLoading(){document.getElementById('app').innerHTML='<section class="hero"><div class="rpg-window"><span class="rpg-title">Archivo BioNova</span><h2>Recuperando tu expedición…</h2><p>Consultando la colección guardada.</p></div></section>';}
+function renderLoading(){document.getElementById('app').innerHTML='<section class="hero"><div class="rpg-window"><span class="rpg-title">BIONOVA / FIELD-02</span><h2>Conectando tu dispositivo…</h2><p>Tu expedición está a un paso de continuar.</p></div></section>';}
 function changeAccess(mode){if(busy)return;accessMode=mode;render();}
 function renderRegistro(){
   const create=accessMode==='register';
@@ -99,11 +125,13 @@ async function registrarJugador(){
   const err=document.getElementById('authError');err.textContent='';
   if(name.length<2||!/^\d{6}$/.test(pin)){err.textContent='Escribe un nombre y una clave de exactamente seis dígitos.';return;}
   if(accessMode==='register'&&pin!==document.getElementById('regConfirmar').value){err.textContent='Las claves no coinciden.';return;}
-  busy=true;const submit=document.querySelector('.access-submit');submit.disabled=true;submit.textContent='Consultando el archivo…';
+  document.getElementById('regClave').value='';
+  const confirmPin=document.getElementById('regConfirmar');if(confirmPin)confirmPin.value='';
+  busy=true;const submit=document.querySelector('.access-submit');if(submit){submit.disabled=true;submit.textContent='Consultando el archivo…';}
   try{
     const data=await api(accessMode,{name,pin,...(accessMode==='register'?profileDraft:{})});
     sesion={token:data.token,name:data.progreso.jugador};applyCloud(data);view='panel';render();
-  }catch(e){err.textContent=e.message;}finally{busy=false;if(submit.isConnected){submit.disabled=false;submit.textContent=accessMode==='register'?'Crear mi pasaporte →':'Continuar mi aventura →';}}
+  }catch(e){err.textContent=e.message;}finally{busy=false;if(submit?.isConnected){submit.disabled=false;submit.textContent=accessMode==='register'?'Crear mi pasaporte →':'Continuar mi aventura →';}}
 }
 function startPreview(){
   if(busy)return;
