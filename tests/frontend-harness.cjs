@@ -9,7 +9,7 @@ function frontend(){
  const document={getElementById:element,createElement:()=>element('created-'+Math.random()),querySelectorAll:()=>[],querySelector:()=>null,addEventListener(){},activeElement:null,body:element('body'),head:element('head')};
  const storage=map=>({getItem:k=>map.get(k)||null,setItem:(k,v)=>map.set(k,String(v)),removeItem:k=>map.delete(k)});
  const c={console,document,window:{BIODEX_CONFIG:{endpoint:'https://script.google.com/macros/s/TEST/exec',version:'2.0'},addEventListener(){}},localStorage:storage(local),sessionStorage:storage(session),setTimeout:()=>1,clearTimeout(){},setInterval:()=>1,clearInterval(){},AbortController,URL,Blob,confirm:()=>true,navigator:{},btoa:v=>Buffer.from(v,'binary').toString('base64'),atob:v=>Buffer.from(v,'base64').toString('binary'),fetch:async()=>({ok:true,json:async()=>({ok:true,progreso:JSON.parse(vm.runInContext('JSON.stringify(progreso)',c))})})};
- vm.createContext(c);const html=fs.readFileSync(path.join(root,'index.html'),'utf8');for(const m of html.matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(m[1],c);for(const file of ['remaster.js','retro.js','megas.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),c);
+ vm.createContext(c);const html=fs.readFileSync(path.join(root,'index.html'),'utf8');for(const m of html.matchAll(/<script>([\s\S]*?)<\/script>/g))vm.runInContext(m[1],c);for(const file of ['remaster.js','retro.js','megas.js','territorios.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),c);
  const evaluate=s=>vm.runInContext(s,c);return {c,evaluate,elements,element,local,session};
 }
 

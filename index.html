@@ -174,6 +174,7 @@ input,select,textarea{width:100%;font-family:var(--font);background:#050816;colo
 </style>
 <link rel="stylesheet" href="remaster.css?v=2.4.0">
 <link rel="stylesheet" href="retro.css?v=2.4.0">
+<link rel="stylesheet" href="territorios.css?v=2.4.1">
 </head>
 <body>
 <div class="particles"></div>
@@ -492,12 +493,12 @@ function slugCss(s){return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"")
 function capitalize(s){return String(s).charAt(0).toUpperCase()+String(s).slice(1);}
 
 /* === Gimnasios BioNova integrados === */
-const GIMNASIOS_BIONOVA = [{"id": "GYM01", "nombre": "Gimnasio Aurora", "zona": "Sector Aurora", "codigoInicio": "GYM-AURORA-001", "bioformas": ["B001", "B002", "B003"], "dificultad": "Inicial", "theme": "aurora", "narrativa": "Las primeras señales de Ciudad BioNova despiertan en el horizonte. Este gimnasio abre una ruta de exploración inicial.", "objetivo": "Completar una actividad de observación, registro y explicación simple."}, {"id": "GYM02", "nombre": "Gimnasio Prisma", "zona": "Santuario Prisma", "codigoInicio": "GYM-PRISMA-002", "bioformas": ["B004", "B005", "B006"], "dificultad": "Inicial", "theme": "prisma", "narrativa": "Una estructura cristalina divide la luz en rutas de análisis. Cada decisión abre una nueva posibilidad.", "objetivo": "Analizar patrones, comparar información y construir una explicación ordenada."}, {"id": "GYM03", "nombre": "Gimnasio Nexo", "zona": "Distrito Nexo", "codigoInicio": "GYM-NEXO-003", "bioformas": ["B007", "B008", "B009"], "dificultad": "Intermedia", "theme": "nexo", "narrativa": "En este distrito todo se conecta: datos, decisiones, evidencias y consecuencias.", "objetivo": "Relacionar evidencias con decisiones responsables y comunicar una conclusión clara."}, {"id": "GYM04", "nombre": "Gimnasio Nova", "zona": "Muralla Nova", "codigoInicio": "GYM-NOVA-004", "bioformas": ["B010", "B011", "B012"], "dificultad": "Intermedia", "theme": "nova", "narrativa": "La muralla central protege los archivos de BioNova. Solo se abre con argumentos bien defendidos.", "objetivo": "Usar modelos, evidencias y explicaciones para defender una idea científica."}, {"id": "GYM05", "nombre": "Gimnasio Bruma", "zona": "Laboratorio Bruma", "codigoInicio": "GYM-BRUMA-005", "bioformas": ["B013", "B014", "B015"], "dificultad": "Intermedia", "theme": "bruma", "narrativa": "Entre niebla y microscopios aparecen señales difíciles de interpretar. No todo se ve a simple vista.", "objetivo": "Distinguir observación, inferencia y evidencia al investigar fenómenos pequeños o invisibles."}, {"id": "GYM06", "nombre": "Gimnasio Lumen", "zona": "Fábrica Lumen", "codigoInicio": "GYM-LUMEN-006", "bioformas": ["B016", "B017", "B018"], "dificultad": "Intermedia", "theme": "lumen", "narrativa": "La fábrica transforma ideas en soluciones. Cada mecanismo exige creatividad y pensamiento crítico.", "objetivo": "Proponer soluciones usando ciencia, tecnología, evidencia y evaluación de impacto."}, {"id": "GYM07", "nombre": "Gimnasio Vector", "zona": "Campo Vector", "codigoInicio": "GYM-VECTOR-007", "bioformas": ["B019", "B020", "B021"], "dificultad": "Avanzada", "theme": "vector", "narrativa": "Flechas de energía cruzan el campo. Para avanzar hay que identificar interacciones y variables.", "objetivo": "Reconocer variables, controlar condiciones y explicar cambios a partir de relaciones observables."}, {"id": "GYM08", "nombre": "Gimnasio Umbral", "zona": "Cámara Umbral", "codigoInicio": "GYM-UMBRAL-008", "bioformas": ["B022", "B023", "B024"], "dificultad": "Avanzada", "theme": "umbral", "narrativa": "La cámara cambia con cada decisión. Entrar al umbral implica medir, comparar y justificar.", "objetivo": "Interpretar resultados, reconocer límites de un modelo y justificar conclusiones con datos."}, {"id": "GYM09", "nombre": "Gimnasio Arcana", "zona": "Cordillera Arcana", "codigoInicio": "GYM-ARCANA-009", "bioformas": ["B025", "B026", "B027"], "dificultad": "Avanzada", "theme": "arcana", "narrativa": "La cordillera guarda procesos lentos y poderosos. Sus señales requieren mirar más allá de lo inmediato.", "objetivo": "Usar escalas, modelos y evidencias para explicar fenómenos complejos."}, {"id": "GYM10", "nombre": "Gimnasio Terra", "zona": "Archivo Terra", "codigoInicio": "GYM-TERRA-010", "bioformas": ["B028", "B029", "B030"], "dificultad": "Final", "theme": "terra", "narrativa": "El archivo final reúne memoria, ambiente y futuro. Aquí la ciencia se conecta con la sociedad.", "objetivo": "Argumentar cómo la ciencia ayuda a tomar decisiones informadas para cuidar la vida y el entorno."}];
+const GIMNASIOS_BIONOVA = [{"id": "GYM01", "nombre": "Gimnasio Aurora", "zona": "Sector Aurora", "codigoInicio": "", "bioformas": ["B001", "B002", "B003"], "dificultad": "Inicial", "theme": "aurora", "narrativa": "Las primeras señales de Ciudad BioNova despiertan en el horizonte. Este gimnasio abre una ruta de exploración inicial.", "objetivo": "Completar una actividad de observación, registro y explicación simple."}, {"id": "GYM02", "nombre": "Gimnasio Prisma", "zona": "Santuario Prisma", "codigoInicio": "", "bioformas": ["B004", "B005", "B006"], "dificultad": "Inicial", "theme": "prisma", "narrativa": "Una estructura cristalina divide la luz en rutas de análisis. Cada decisión abre una nueva posibilidad.", "objetivo": "Analizar patrones, comparar información y construir una explicación ordenada."}, {"id": "GYM03", "nombre": "Gimnasio Nexo", "zona": "Distrito Nexo", "codigoInicio": "", "bioformas": ["B007", "B008", "B009"], "dificultad": "Intermedia", "theme": "nexo", "narrativa": "En este distrito todo se conecta: datos, decisiones, evidencias y consecuencias.", "objetivo": "Relacionar evidencias con decisiones responsables y comunicar una conclusión clara."}, {"id": "GYM04", "nombre": "Gimnasio Nova", "zona": "Muralla Nova", "codigoInicio": "", "bioformas": ["B010", "B011", "B012"], "dificultad": "Intermedia", "theme": "nova", "narrativa": "La muralla central protege los archivos de BioNova. Solo se abre con argumentos bien defendidos.", "objetivo": "Usar modelos, evidencias y explicaciones para defender una idea científica."}, {"id": "GYM05", "nombre": "Gimnasio Bruma", "zona": "Laboratorio Bruma", "codigoInicio": "", "bioformas": ["B013", "B014", "B015"], "dificultad": "Intermedia", "theme": "bruma", "narrativa": "Entre niebla y microscopios aparecen señales difíciles de interpretar. No todo se ve a simple vista.", "objetivo": "Distinguir observación, inferencia y evidencia al investigar fenómenos pequeños o invisibles."}, {"id": "GYM06", "nombre": "Gimnasio Lumen", "zona": "Fábrica Lumen", "codigoInicio": "", "bioformas": ["B016", "B017", "B018"], "dificultad": "Intermedia", "theme": "lumen", "narrativa": "La fábrica transforma ideas en soluciones. Cada mecanismo exige creatividad y pensamiento crítico.", "objetivo": "Proponer soluciones usando ciencia, tecnología, evidencia y evaluación de impacto."}, {"id": "GYM07", "nombre": "Gimnasio Vector", "zona": "Campo Vector", "codigoInicio": "", "bioformas": ["B019", "B020", "B021"], "dificultad": "Avanzada", "theme": "vector", "narrativa": "Flechas de energía cruzan el campo. Para avanzar hay que identificar interacciones y variables.", "objetivo": "Reconocer variables, controlar condiciones y explicar cambios a partir de relaciones observables."}, {"id": "GYM08", "nombre": "Gimnasio Umbral", "zona": "Cámara Umbral", "codigoInicio": "", "bioformas": ["B022", "B023", "B024"], "dificultad": "Avanzada", "theme": "umbral", "narrativa": "La cámara cambia con cada decisión. Entrar al umbral implica medir, comparar y justificar.", "objetivo": "Interpretar resultados, reconocer límites de un modelo y justificar conclusiones con datos."}, {"id": "GYM09", "nombre": "Gimnasio Arcana", "zona": "Cordillera Arcana", "codigoInicio": "", "bioformas": ["B025", "B026", "B027"], "dificultad": "Avanzada", "theme": "arcana", "narrativa": "La cordillera guarda procesos lentos y poderosos. Sus señales requieren mirar más allá de lo inmediato.", "objetivo": "Usar escalas, modelos y evidencias para explicar fenómenos complejos."}, {"id": "GYM10", "nombre": "Gimnasio Terra", "zona": "Archivo Terra", "codigoInicio": "", "bioformas": ["B028", "B029", "B030"], "dificultad": "Final", "theme": "terra", "narrativa": "El archivo final reúne memoria, ambiente y futuro. Aquí la ciencia se conecta con la sociedad.", "objetivo": "Argumentar cómo la ciencia ayuda a tomar decisiones informadas para cuidar la vida y el entorno."}];
 /* === SECTORES CIUDAD BIONOVA: 7 sectores × 3 gimnasios de misión === */
 const SECTORES_CIUDAD = [
   {
     id:"S01", nombre:"Sector Aurora", icono:"AU", theme:"aurora",
-    codigoActivacion:"SEC-AURORA-001",
+    codigoActivacion:"",
     desc:"Zona inicial de exploración. Aquí despiertan las primeras señales de BioNova.",
     gimnasios:[
       {id:"GYM-S01-A", nombre:"Laboratorio Nimbel", dificultad:"Inicial",
@@ -513,7 +514,7 @@ const SECTORES_CIUDAD = [
   },
   {
     id:"S02", nombre:"Santuario Prisma", icono:"PR", theme:"prisma",
-    codigoActivacion:"SEC-PRISMA-002",
+    codigoActivacion:"",
     desc:"Sector de observación, ciclos y análisis de patrones del mundo vivo.",
     gimnasios:[
       {id:"GYM-S02-A", nombre:"Cámara Solvian", dificultad:"Inicial",
@@ -529,7 +530,7 @@ const SECTORES_CIUDAD = [
   },
   {
     id:"S03", nombre:"Distrito Nexo", icono:"NX", theme:"nexo",
-    codigoActivacion:"SEC-NEXO-003",
+    codigoActivacion:"",
     desc:"Zona de conexión, análisis de evidencias y toma de decisiones responsables.",
     gimnasios:[
       {id:"GYM-S03-A", nombre:"Fuerte Clyrion", dificultad:"Intermedia",
@@ -545,7 +546,7 @@ const SECTORES_CIUDAD = [
   },
   {
     id:"S04", nombre:"Muralla Nova", icono:"NV", theme:"nova",
-    codigoActivacion:"SEC-NOVA-004",
+    codigoActivacion:"",
     desc:"Sector de defensa, estrategia y argumentación científica rigurosa.",
     gimnasios:[
       {id:"GYM-S04-A", nombre:"Mazmorra Zephor", dificultad:"Intermedia",
@@ -561,7 +562,7 @@ const SECTORES_CIUDAD = [
   },
   {
     id:"S05", nombre:"Laboratorio Bruma", icono:"BR", theme:"bruma",
-    codigoActivacion:"SEC-BRUMA-005",
+    codigoActivacion:"",
     desc:"Espacio de fenómenos pequeños, hallazgos inesperados y análisis de variables.",
     gimnasios:[
       {id:"GYM-S05-A", nombre:"Nebulosa Altor", dificultad:"Avanzada",
@@ -577,7 +578,7 @@ const SECTORES_CIUDAD = [
   },
   {
     id:"S06", nombre:"Campo Vector", icono:"VC", theme:"vector",
-    codigoActivacion:"SEC-VECTOR-006",
+    codigoActivacion:"",
     desc:"Terreno de fuerzas, movimiento, presión y pruebas experimentales.",
     gimnasios:[
       {id:"GYM-S06-A", nombre:"Abismo Caelix", dificultad:"Avanzada",
@@ -593,7 +594,7 @@ const SECTORES_CIUDAD = [
   },
   {
     id:"S07", nombre:"Archivo Terra", icono:"TR", theme:"terra",
-    codigoActivacion:"SEC-TERRA-007",
+    codigoActivacion:"",
     desc:"El archivo final: memoria, ambiente, riesgo geológico y visión global.",
     gimnasios:[
       {id:"GYM-S07-A", nombre:"Cráter Pyronix", dificultad:"Final",
@@ -805,5 +806,6 @@ window.addEventListener("load",bootSequence);
 <script src="remaster.js?v=2.4.0"></script>
 <script src="retro.js?v=2.4.0"></script>
 <script src="megas.js?v=2.4.0"></script>
+<script src="territorios.js?v=2.4.1"></script>
 </body>
 </html>

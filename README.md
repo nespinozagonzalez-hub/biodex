@@ -1,4 +1,4 @@
-# BioDex 2.4 · FIELD-02
+# BioDex 2.4.1 · FIELD-02
 
 Remaster de la colección original: 30 bioformas y tres mega legendarias adicionales, mismos códigos CAP, SEC y GYM,
 capturas animadas, sectores, gimnasios, inventario, medallas y evoluciones.
@@ -101,3 +101,16 @@ Ver [QA_FIELD.md](tests/QA_FIELD.md).
 ![Dispositivo FIELD-02](docs/field02-preview-20261015-01.jpg)
 
 Para revisar el sitio: `python -m http.server 8000`, abrir `http://localhost:8000`.
+
+## Atlas de territorios · 2.4.1
+
+Siete paisajes pixel art propios, índice navegable, filtros de estado y fichas con
+los tres parajes de cada territorio. Se conservan los códigos SEC y el progreso
+existente. Los diez gimnasios GYM mantienen su sección y códigos independientes.
+El atlas se actualiza solo en la web; no requiere otro cambio en Apps Script.
+
+- `territorios.js` / `territorios.css`: atlas, filtros, parajes y adaptación móvil.
+- [Dirección de arte y prompts de los siete paisajes](assets/TERRITORY_ART.md).
+
+El HTML del atlas no incluye valores funcionales de códigos. Las acciones de
+captura y apertura siguen siendo validadas por el backend existente.

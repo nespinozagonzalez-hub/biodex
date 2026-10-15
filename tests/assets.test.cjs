@@ -37,3 +37,12 @@ test('las tres mega legendarias tienen arte completo y recorte transparente prop
  }
  assert.equal(hashes.size,6);
 });
+test('los siete territorios tienen paisajes propios optimizados',()=>{
+ const hashes=new Set(),crypto=require('node:crypto');let total=0;
+ for(let n=1;n<=7;n++){
+  const id='S'+String(n).padStart(2,'0'),b=fs.readFileSync(path.join(__dirname,'../assets/territories',id+'.webp'));
+  assert.equal(b.toString('ascii',0,4),'RIFF');assert.equal(b.toString('ascii',8,12),'WEBP');assert.ok(b.length>10000&&b.length<300000);total+=b.length;
+  hashes.add(crypto.createHash('sha256').update(b).digest('hex'));
+ }
+ assert.equal(hashes.size,7);assert.ok(total<1400000);
+});
