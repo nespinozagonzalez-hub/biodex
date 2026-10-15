@@ -65,7 +65,7 @@ async function api(action, fields={}) {
   if(!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(CONFIG.endpoint))throw new Error('La URL de conexión no es una implementación /exec válida.');
   const loading=['login','register','load'].includes(action);
   if(loading)showCloudLoading(action);
-  const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),45000);
+  const controller=new AbortController(), timer=setTimeout(()=>controller.abort(),60000);
   try {
     const response=await fetch(CONFIG.endpoint, {
       method:'POST', redirect:'follow', signal:controller.signal,
@@ -77,8 +77,8 @@ async function api(action, fields={}) {
     if(!data.ok)throw new Error(data.error||'No se pudo completar la operación.');
     return data;
   } catch(error) {
-    if(error.name==='AbortError')throw new Error('La conexión tardó demasiado. Reintenta: los códigos no se duplican.');
-    if(error instanceof TypeError)throw new Error('Sin conexión con BioDex. No se confirmó ningún cambio; vuelve a intentar.');
+    if(error.name==='AbortError')throw new Error(action==='register'?'La confirmación tardó demasiado. Prueba Ingresar con el mismo nombre y clave: tu cuenta puede haberse creado.':'La conexión tardó demasiado. Vuelve a intentar; tu progreso confirmado se conserva y los códigos no se duplican.');
+    if(error instanceof TypeError)throw new Error(action==='register'?'Se interrumpió la conexión. Prueba Ingresar con el nombre y la clave que acabas de crear antes de registrar otra cuenta.':'Sin conexión con BioDex. No se confirmó ningún cambio; vuelve a intentar.');
     throw error;
   } finally {clearTimeout(timer);if(loading)hideCloudLoading();}
 }
