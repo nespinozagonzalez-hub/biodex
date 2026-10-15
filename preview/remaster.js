@@ -18,10 +18,10 @@ GIMNASIOS_BIONOVA.forEach(gym=>{gym.objetivo='Desafío definido por tu docente. 
 
 // Las ilustraciones mantienen el SVG original como respaldo de carga.
 renderBioformaSVG = function(input, captured=false, size='card', opts={}) {
-  const b = getBioformaSVGData(input), px = typeof size === 'number' ? size : 160;
-  return `<div class="portrait ${captured?'revealed':'silhouette'}" style="--portrait-size:${px}px" data-bioforma="${b.id}">
+  const b = getBioformaSVGData(input), px = typeof size === 'number' ? size : 160, art=opts.art===true&&captured;
+  return `<div class="portrait ${captured?'revealed':'silhouette'} ${art?'full-art':'cutout'}" style="--portrait-size:${px}px" data-bioforma="${b.id}">
     <div class="portrait-fallback">${originalBioformaSVG(input,captured,size,opts)}</div>
-    <img src="assets/bioformas/${b.id}.webp" alt="${captured?escapeHtml(b.nombre):'Silueta de '+escapeHtml(b.nombre)}" loading="lazy" onload="this.parentElement.classList.add('image-ready')" onerror="this.remove()">
+    <img src="assets/${art?'bioformas/'+b.id+'.webp':'cutouts/'+b.id+'.png'}" alt="${captured?escapeHtml(b.nombre):'Silueta de '+escapeHtml(b.nombre)}" loading="lazy" onload="this.parentElement.classList.add('image-ready')" onerror="this.remove()">
   </div>`;
 };
 
@@ -101,7 +101,7 @@ async function registrarJugador(){
   if(accessMode==='register'&&pin!==document.getElementById('regConfirmar').value){err.textContent='Las claves no coinciden.';return;}
   busy=true;const submit=document.querySelector('.access-submit');submit.disabled=true;submit.textContent='Consultando el archivo…';
   try{
-    const data=await api(accessMode,{name,pin});
+    const data=await api(accessMode,{name,pin,...(accessMode==='register'?profileDraft:{})});
     sesion={token:data.token,name:data.progreso.jugador};applyCloud(data);view='panel';render();
   }catch(e){err.textContent=e.message;}finally{busy=false;if(submit.isConnected){submit.disabled=false;submit.textContent=accessMode==='register'?'Crear mi pasaporte →':'Continuar mi aventura →';}}
 }
