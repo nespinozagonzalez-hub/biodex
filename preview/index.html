@@ -172,8 +172,8 @@ input,select,textarea{width:100%;font-family:var(--font);background:#050816;colo
 .cap-cta button:active{transform:translate(2px,2px);box-shadow:2px 2px 0 #000}
 
 </style>
-<link rel="stylesheet" href="remaster.css?v=2.3.1">
-<link rel="stylesheet" href="retro.css?v=2.3.1">
+<link rel="stylesheet" href="remaster.css?v=2.4.0">
+<link rel="stylesheet" href="retro.css?v=2.4.0">
 </head>
 <body>
 <div class="particles"></div>
@@ -352,7 +352,7 @@ function normalizarCodigo(c){return String(c||"").normalize("NFD").replace(/[̀-
 function secuenciaCaptura(b){
   const RARITY_COLORS = {
     'Común':'#8ca3c7','Poco común':'#4dff91','Rara':'#48e7ff',
-    'Épica':'#ff4fd8','Legendaria':'#ffe66d'
+    'Épica':'#ff4fd8','Legendaria':'#ffe66d','Mega legendaria':'#f2cf7c'
   };
   const col = RARITY_COLORS[b.rareza] || '#48e7ff';
   // Buscar el glow del SVG data
@@ -447,10 +447,11 @@ function cerrarCapturaOverlay(bioId){
 
 function mensajeCaptura(b){
   const msgs = {
+    'Mega legendaria':`¡Distinción única! ${b.nombre} reconoce tu trayectoria en el curso.`,
     Legendaria:`¡Registro legendario! ${b.nombre} marca un hito en tu trayectoria.`,
     Épica:`¡Hallazgo épico! ${b.nombre} es una captura extraordinaria.`,
   };
-  const msg = msgs[b.rareza] || (b.etapa===3
+  const msg = msgs[b.rareza] || (b.etapa===3&&lineaBioformas(b.linea).every(x=>progreso.capturadas.includes(x.id))
     ? `¡Línea completa! ${b.nombre} cierra una ruta entera de misiones.`
     : `${b.nombre} ya forma parte de tu BioDex. ¡Sigue explorando!`);
   setTimeout(()=>showNPC("Dra. Lira", msg), 200);
@@ -478,7 +479,7 @@ function lineaCard(linea){const arr=lineaBioformas(linea),pct=Math.round(arr.fil
 function lineaBioformas(linea){return BIOFORMAS.filter(b=>b.linea===linea).sort((a,b)=>a.etapa-b.etapa);}
 function renderInventario(){return `<section class="rpg-window"><span class="rpg-title">Inventario</span><h2>Objetos de expedición</h2><div class="inventory">${INVENTARIO.map(it=>`<div class="card slot"><div style="font-size:2rem">${it.icon}</div><b>${it.nombre}</b><p class="small muted">${it.desc}</p></div>`).join("")}</div></section>`;}
 function renderLogros(){actualizarLogros(false);return `<section class="rpg-window"><span class="rpg-title">Logros</span><h2>Medallas de BioNova</h2><div class="grid three">${LOGROS.map(l=>`<div class="card achievement ${progreso.logros.includes(l.id)?'unlocked':'locked'}"><div class="card-title">${progreso.logros.includes(l.id)?'✓':'?'} ${l.nombre}</div><p class="small muted">${l.desc}</p></div>`).join("")}</div></section>`;}
-function actualizarLogros(notify){const before=progreso.logros.length,add=id=>{if(!progreso.logros.includes(id))progreso.logros.push(id);},c=progreso.capturadas.length,caps=BIOFORMAS.filter(b=>progreso.capturadas.includes(b.id));if(c>=1)add("L01");if(c>=5)add("L02");if(c>=10)add("L03");if(c>=15)add("L04");if(c>=20)add("L05");if(c>=25)add("L06");if(c>=30)add("L07");if(caps.some(b=>b.etapa===2))add("L08");const lineas=[...new Set(BIOFORMAS.map(b=>b.linea))];if(lineas.some(l=>lineaBioformas(l).every(b=>progreso.capturadas.includes(b.id))))add("L09");if(caps.some(b=>b.rareza==="Épica"))add("L10");if(caps.some(b=>b.rareza==="Legendaria"))add("L11");if(caps.some(b=>["Aurora","Prisma","Nexo","Nova","Bruma","Lumen"].includes(b.tipo))&&caps.some(b=>["Vector","Umbral","Arcana","Terra"].includes(b.tipo)))add("L12");if(progreso.logros.length!==before){guardarProgreso();if(notify)toast("Nuevo logro desbloqueado.");}}
+function actualizarLogros(notify){const before=progreso.logros.length,add=id=>{if(!progreso.logros.includes(id))progreso.logros.push(id);},c=BIOFORMAS.filter(b=>progreso.capturadas.includes(b.id)).length,caps=BIOFORMAS.filter(b=>progreso.capturadas.includes(b.id));if(c>=1)add("L01");if(c>=5)add("L02");if(c>=10)add("L03");if(c>=15)add("L04");if(c>=20)add("L05");if(c>=25)add("L06");if(c>=30)add("L07");if(caps.some(b=>b.etapa===2))add("L08");const lineas=[...new Set(BIOFORMAS.map(b=>b.linea))];if(lineas.some(l=>lineaBioformas(l).every(b=>progreso.capturadas.includes(b.id))))add("L09");if(caps.some(b=>b.rareza==="Épica"))add("L10");if(caps.some(b=>b.rareza==="Legendaria"))add("L11");if(caps.some(b=>["Aurora","Prisma","Nexo","Nova","Bruma","Lumen"].includes(b.tipo))&&caps.some(b=>["Vector","Umbral","Arcana","Terra"].includes(b.tipo)))add("L12");if(progreso.logros.length!==before){guardarProgreso();if(notify)toast("Nuevo logro desbloqueado.");}}
 function getBioforma(id){return BIOFORMAS.find(b=>b.id===id);}
 function openModal(html){document.getElementById("modalContent").innerHTML=html;document.getElementById("modalBack").classList.add("show");}
 function closeModal(e){if(e&&e.target.id!=="modalBack")return;document.getElementById("modalBack").classList.remove("show");preguntaActual=null;}
@@ -800,8 +801,9 @@ function renderZonaSVG(theme, estado){
 
 window.addEventListener("load",bootSequence);
 </script>
-<script src="config.js?v=2.3.1"></script>
-<script src="remaster.js?v=2.3.1"></script>
-<script src="retro.js?v=2.3.1"></script>
+<script src="config.js?v=2.4.0"></script>
+<script src="remaster.js?v=2.4.0"></script>
+<script src="retro.js?v=2.4.0"></script>
+<script src="megas.js?v=2.4.0"></script>
 </body>
 </html>
