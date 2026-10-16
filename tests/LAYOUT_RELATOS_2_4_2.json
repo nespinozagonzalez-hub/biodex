@@ -1,0 +1,257 @@
+{
+  "method": "Instantáneas de nueve renderizadores reales, sin sesión ni solicitudes de cuenta.",
+  "checks": [
+    {
+      "scene": "refugio",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "refugio",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "refugio",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "refugio",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "Spirel",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "Spirel",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "Spirel",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "Spirel",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "NimbelPendiente",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "NimbelPendiente",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "NimbelPendiente",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "NimbelPendiente",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "Astrael",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "Astrael",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "Astrael",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "Astrael",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "codigo",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "codigo",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "codigo",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "codigo",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "mapa",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "mapa",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "mapa",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "mapa",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "gimnasios",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "gimnasios",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "gimnasios",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "gimnasios",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "lineas",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "lineas",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "lineas",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "lineas",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    },
+    {
+      "scene": "ayuda",
+      "requested": 320,
+      "overflow": [],
+      "scroll": 305,
+      "width": 305
+    },
+    {
+      "scene": "ayuda",
+      "requested": 390,
+      "overflow": [],
+      "scroll": 375,
+      "width": 375
+    },
+    {
+      "scene": "ayuda",
+      "requested": 768,
+      "overflow": [],
+      "scroll": 753,
+      "width": 753
+    },
+    {
+      "scene": "ayuda",
+      "requested": 1280,
+      "overflow": [],
+      "scroll": 1265,
+      "width": 1265
+    }
+  ]
+}

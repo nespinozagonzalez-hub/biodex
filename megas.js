@@ -32,7 +32,7 @@ renderBioformaCards=function(){
   });
   if(!list.length)return html;
   if(html.includes('No hay resultados con esos filtros.'))html='';
-  return html+`<section class="mega-gallery"><div class="mega-gallery-heading"><span class="eyebrow">LAS TRES LEYENDAS DE BIONOVA</span><h2>Más allá de la expedición.</h2><p>Tres bioformas únicas para tres distinciones del curso. El docente entrega sus códigos privados: una mega legendaria por cuenta.</p><small>Son premios adicionales. La colección principal se completa con sus 30 bioformas.</small></div><div class="mega-grid">${list.map(megaCard).join('')}</div></section>`;
+  return html+`<section class="mega-gallery"><div class="mega-gallery-heading"><span class="eyebrow">LAS TRES LEYENDAS DE BIONOVA</span><h2>Más allá de la expedición.</h2><p>Tres leyendas, tres vínculos irrepetibles. Un código especial puede unir una de ellas a tu expedición: solo una mega legendaria por explorador.</p><small>Son premios adicionales. La colección principal se completa con sus 30 bioformas.</small></div><div class="mega-grid">${list.map(megaCard).join('')}</div></section>`;
 };
 const commonBiodex=renderBiodex;
 renderBiodex=function(){
@@ -49,7 +49,7 @@ renderFicha=function(id){
   const b=getBioforma(id);if(!b?.mega)return commonFicha(id);
   if(!megasEnabled()&&!progreso.capturadas.includes(id))return;
   const captured=progreso.capturadas.includes(id);
-  openModal(`<section class="mega-ficha"><span class="eyebrow">DISTINCIÓN ÚNICA DEL CURSO</span><h2>${escapeHtml(b.nombre)}</h2><p class="mega-ficha-title">${escapeHtml(b.titulo)}</p><div class="bio-svg-wrap">${renderBioformaSVG(b,captured,290,{art:captured})}</div><p><span class="pill">${b.tipo}</span><span class="pill">Mega legendaria</span></p><p>${escapeHtml(b.descN)}</p>${captured?`<p>${escapeHtml(b.descE)}</p><p><b>Habilidad:</b> ${escapeHtml(b.habilidad)}</p>${renderStats(b.stats)}`:'<p class="muted">Una única persona podrá recibir esta bioforma. El código lo entrega el docente como distinción del curso.</p>'}<div class="modal-actions"><button class="primary" onclick="closeModal();go('codigo')">Ir al escáner →</button><button class="ghost" onclick="closeModal()">Cerrar</button></div></section>`);
+  openModal(`<section class="mega-ficha"><span class="eyebrow">LEYENDA ÚNICA DE BIONOVA</span><h2>${escapeHtml(b.nombre)}</h2><p class="mega-ficha-title">${escapeHtml(b.titulo)}</p><div class="bio-svg-wrap">${renderBioformaSVG(b,captured,290,{art:captured})}</div><p><span class="pill">${b.tipo}</span><span class="pill">Mega legendaria</span></p><p>${escapeHtml(b.descN)}</p>${captured?`<p>${escapeHtml(b.descE)}</p><p><b>Habilidad:</b> ${escapeHtml(b.habilidad)}</p>${renderStats(b.stats)}`:'<p class="muted">Esta leyenda solo puede acompañar a un explorador. Sigue tu travesía hasta encontrar su código especial.</p>'}<div class="modal-actions"><button class="primary" onclick="closeModal();go('codigo')">Ir al escáner →</button><button class="ghost" onclick="closeModal()">Cerrar</button></div></section>`);
 };
 const ordinaryPanel=renderPanel;
-renderPanel=function(){const b=ownsMega();return ordinaryPanel()+(b?`<aside class="mega-owned"><span>✦</span><div><small>DISTINCIÓN DEL CURSO</small><strong>${escapeHtml(b.nombre)} · ${escapeHtml(b.titulo)}</strong></div><button class="ghost" onclick="renderFicha('${b.id}')">Ver premio ↗</button></aside>`:'');};
+renderPanel=function(){const b=ownsMega();return ordinaryPanel()+(b?`<aside class="mega-owned"><span>✦</span><div><small>VÍNCULO LEGENDARIO</small><strong>${escapeHtml(b.nombre)} · ${escapeHtml(b.titulo)}</strong></div><button class="ghost" onclick="renderFicha('${b.id}')">Ver premio ↗</button></aside>`:'');};

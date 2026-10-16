@@ -1,4 +1,4 @@
-# BioDex 2.4.1 · FIELD-02
+# BioDex 2.4.2 · FIELD-02
 
 Remaster de la colección original: 30 bioformas y tres mega legendarias adicionales, mismos códigos CAP, SEC y GYM,
 capturas animadas, sectores, gimnasios, inventario, medallas y evoluciones.
@@ -114,3 +114,18 @@ El atlas se actualiza solo en la web; no requiere otro cambio en Apps Script.
 
 El HTML del atlas no incluye valores funcionales de códigos. Las acciones de
 captura y apertura siguen siendo validadas por el backend existente.
+
+## Relatos de BioNova · 2.4.2
+
+Las 33 bioformas reciben historias, rasgos y habilidades de fantasía propios.
+Las fichas invitan a continuar la travesía, sin explicaciones curriculares ni
+notas sobre la asignatura o el docente. La guía, el refugio, el atlas, la Liga
+y la mochila usan el mismo lenguaje de aventura. La ayuda para restablecer una
+clave conserva instrucciones reales y claras.
+
+`narrativa.js` aplica únicamente una capa de presentación: los identificadores,
+las claves de datos, los valores de atributos, los códigos, las reglas, las
+imágenes y el progreso no cambian. Vitalidad, Ingenio, Percepción, Vínculo y
+Energía son rótulos visuales; no añaden nuevas mecánicas.
+Los scripts modificados usan `rev=2.4.2` para renovar la caché sin cambiar su
+versión base. No requiere modificar Apps Script.
