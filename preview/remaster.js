@@ -14,9 +14,9 @@ secuenciaCaptura=function(b){
 cerrarCapturaOverlay=function(id){document.getElementById('app').removeAttribute('inert');originalCaptureClose(id);};
 // Los territorios conservan su identidad, pero no imponen un programa de Ciencias.
 SECTORES_CIUDAD.forEach(sector=>sector.gimnasios.forEach(gym=>{
-  gym.objetivo='Completa el desafío acordado con tu docente. La actividad puede pertenecer a cualquier asignatura; su código reconoce tu avance.';
+  gym.objetivo='Sigue el sendero de este paraje y reúne los códigos de sus bioformas.';
 }));
-GIMNASIOS_BIONOVA.forEach(gym=>{gym.objetivo='Desafío definido por tu docente. Completa la actividad y recibe los códigos de las bioformas correspondientes.';});
+GIMNASIOS_BIONOVA.forEach(gym=>{gym.objetivo='Continúa la expedición, reúne códigos y registra los hallazgos de esta ruta.';});
 
 // Las ilustraciones mantienen el SVG original como respaldo de carga.
 renderBioformaSVG = function(input, captured=false, size='card', opts={}) {
@@ -134,7 +134,7 @@ function renderShell(){return "";} // Carcasa FIELD-02 en retro.js.
 const legacyRenderView=renderView;
 renderView=function(){if(view==='gimnasios')document.getElementById('view').innerHTML=renderGimnasiosBioNova();else legacyRenderView();};
 function renderScanSymbol(){return `<div class="capture-signal" role="img" aria-label="Señal de bioforma desconocida"><div class="signal-ring"></div><div class="signal-orb"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 16 76 32 84 60 64 83 35 83 16 60 24 32Z"/><path d="M50 16v67M24 32l40 51M76 32 35 83M16 60h68"/></svg><span>?</span></div><span class="signal-coordinate">SEÑAL SIN IDENTIFICAR</span></div>`;}
-function renderCodigo(){return `<section class="rpg-window capture-terminal"><span class="rpg-title">ESCÁNER DE CAMPO</span><h2>Un código.<br>Un nuevo hallazgo.</h2><p class="muted">Completa el desafío de tu docente e ingresa su código para descubrir qué espera al otro lado.</p>${renderScanSymbol()}<form onsubmit="event.preventDefault();validarCodigo()"><label for="codigoInput">Código entregado por tu docente</label><input id="codigoInput" autocomplete="off" placeholder="CAP-… / SEC-… / GYM-…" maxlength="80" required><div class="modal-actions"><button type="submit" class="primary" ${busy?'disabled':''}>Activar escáner →</button><button type="reset" class="ghost">Limpiar</button></div></form><div class="capture-rules"><span>01 / Ingresa tu código</span><span>02 / Confirma tu hallazgo</span><span>03 / Amplía tu colección</span></div><p class="small muted">Cada hallazgo se guarda en tu cuenta antes de la animación. ${captureRuleText()}</p></section>`;}
+function renderCodigo(){return `<section class="rpg-window capture-terminal"><span class="rpg-title">ESCÁNER DE CAMPO</span><h2>Un código.<br>Un nuevo hallazgo.</h2><p class="muted">Cada código guarda una nueva posibilidad. Activa el escáner y descubre qué espera al otro lado.</p>${renderScanSymbol()}<form onsubmit="event.preventDefault();validarCodigo()"><label for="codigoInput">Código de expedición</label><input id="codigoInput" autocomplete="off" placeholder="CAP-… / SEC-… / GYM-…" maxlength="80" required><div class="modal-actions"><button type="submit" class="primary" ${busy?'disabled':''}>Activar escáner →</button><button type="reset" class="ghost">Limpiar</button></div></form><div class="capture-rules"><span>01 / Ingresa tu código</span><span>02 / Confirma tu hallazgo</span><span>03 / Amplía tu colección</span></div><p class="small muted">Cada hallazgo se guarda en tu cuenta antes de la animación. ${captureRuleText()}</p></section>`;}
 async function refreshCloud(){
   if(busy)return;busy=true;setStatus('Consultando…');
   try{applyCloud(await api('load'));render();}catch(e){setStatus('Sin confirmar · reintenta');toast(e.message,'warn');}finally{busy=false;}
@@ -142,7 +142,7 @@ async function refreshCloud(){
 async function redeem(inputId){
   if(busy)return;
   const input=document.getElementById(inputId), code=input?.value.trim();
-  if(!code){toast('Ingresa el código de tu docente.','warn');return;}
+  if(!code){toast('Ingresa un código para activar el escáner.','warn');return;}
   busy=true;setStatus('Validando y guardando…');
   document.querySelectorAll('button[type="submit"]').forEach(b=>b.disabled=true);
   try{
@@ -161,8 +161,8 @@ async function toggleCRT(){
   const crt=!progreso.configuracion.crt;
   busy=true;try{applyCloud(await api('settings',{crt}));render();}catch(e){toast(e.message,'warn');}finally{busy=false;}
 }
-function reiniciarProgreso(){toast('Tu colección está protegida. Solicita cualquier reinicio a tu docente.','warn');}
-function renderAyuda(){return `<section class="rpg-window"><span class="rpg-title">Guía del explorador</span><h2>Aprender abre caminos.</h2><div class="grid two"><article class="card"><h3>01 / Completa una actividad</h3><p>Tu docente propone el desafío, en la asignatura que corresponda. BioDex no evalúa respuestas.</p></article><article class="card"><h3>02 / Recibe tu código</h3><p>Ingresa el código de captura, sector o gimnasio. Conservamos los códigos de la edición original.</p></article><article class="card"><h3>03 / Descubre y evoluciona</h3><p>La captura se guarda antes de reproducir la animación. ${captureRuleText()}</p></article><article class="card"><h3>04 / Recupera tu expedición</h3><p>Usa el mismo nombre y clave de seis dígitos. Pulsa Actualizar si avanzaste desde otro dispositivo. Si pierdes la clave, tu docente puede restablecerla sin perder tu colección.</p></article><article class="card"><h3>Conexión y guardado</h3><p>Sin conexión no se confirman capturas. Si una solicitud tarda, vuelve a intentarlo: los códigos son idempotentes y no duplican recompensas.</p></article><article class="card"><h3>Efecto retro opcional</h3><p>Las animaciones de captura se mantienen. Puedes alternar la textura de pantalla clásica.</p><button onclick="toggleCRT()">Alternar textura CRT</button></article></div></section>`;}
+function reiniciarProgreso(){toast('Tu colección está protegida. No se puede reiniciar desde el dispositivo.','warn');}
+function renderAyuda(){return `<section class="rpg-window"><span class="rpg-title">Guía del explorador</span><h2>Tu próximo horizonte te espera.</h2><div class="grid two"><article class="card"><h3>01 / Sigue la travesía</h3><p>Explora los territorios de BioNova. Cada nuevo desafío puede acercarte a un código y a un hallazgo inesperado.</p></article><article class="card"><h3>02 / Reúne códigos</h3><p>Los códigos CAP revelan bioformas; los SEC abren territorios y los GYM activan gimnasios de la Liga.</p></article><article class="card"><h3>03 / Amplía tu colección</h3><p>Cada bioforma queda registrada antes de su aparición. ${captureRuleText()}</p></article><article class="card"><h3>04 / Recupera tu expedición</h3><p>Usa el mismo nombre y clave de seis dígitos. Pulsa Actualizar si avanzaste desde otro dispositivo. Si pierdes la clave, tu docente puede restablecerla sin perder tu colección.</p></article><article class="card"><h3>Conexión y guardado</h3><p>Sin conexión no se pueden registrar nuevos hallazgos. Si una solicitud tarda, vuelve a intentarlo: un mismo código nunca duplica tus hallazgos.</p></article><article class="card"><h3>Efecto retro opcional</h3><p>Elige cómo se ve tu dispositivo. La textura CRT le da el acabado de una pantalla clásica.</p><button onclick="toggleCRT()">Alternar textura CRT</button></article></div></section>`;}
 
 // Accesibilidad: foco al abrir/cerrar una ficha y Escape para salir del diálogo.
 let returnFocus=null;
