@@ -1,4 +1,4 @@
-# BioDex 2.4.2 · FIELD-02
+# BioDex 2.5 · FIELD-02
 
 Remaster de la colección original: 30 bioformas y tres mega legendarias adicionales, mismos códigos CAP, SEC y GYM,
 capturas animadas, sectores, gimnasios, inventario, medallas y evoluciones.
@@ -129,3 +129,27 @@ imágenes y el progreso no cambian. Vitalidad, Ingenio, Percepción, Vínculo y
 Energía son rótulos visuales; no añaden nuevas mecánicas.
 Los scripts modificados usan `rev=2.4.2` para renovar la caché sin cambiar su
 versión base. No requiere modificar Apps Script.
+
+## Ambiente y presentación · 2.5
+
+El botón **Sonido** abre música y efectos independientes, volúmenes y movimiento
+reducido. El sonido empieza desactivado y se activa con un gesto del jugador. Las
+preferencias se guardan solo en el dispositivo, sin modificar la cuenta o Sheets.
+La música se sintetiza en el navegador: tres composiciones originales (refugio,
+exploración y leyendas), sin pistas externas ni descargas de audio. Al ocultar la
+pestaña se suspende; un navegador puede pedir otro gesto para reanudarla.
+
+**Historia** presenta un prólogo de tres escenas ilustradas con los paisajes de
+BioNova. Puede omitirse y consultarse en cualquier momento. Las fichas capturadas
+permiten ampliar el arte. Los linajes completos reciben un sello, y los nuevos
+territorios, gimnasios, medallas y linajes confirmados tienen una celebración.
+Las capturas distinguen hallazgos comunes, extraordinarios y mega, con un botón
+para continuar sin esperar la animación. Escape también permite continuar.
+
+`experiencia.js` / `experiencia.css` constituyen una capa independiente. No llaman
+al servidor, no reemplazan funciones centrales y no escriben progreso. El HTML
+solo carga ambos archivos después de las capas existentes. No se modificó
+`backend/`, `config.js` ni los scripts originales. La versión `/preview/` es igual.
+
+Checklist: [EXPERIENCIA_CHECKLIST.md](EXPERIENCIA_CHECKLIST.md).
+Validación: [tests/QA_EXPERIENCIA_2_5.md](tests/QA_EXPERIENCIA_2_5.md).

@@ -1,0 +1,249 @@
+{
+  "checks": [
+    "Sin reproducción ni contexto de audio antes de un gesto",
+    "Ingreso conserva colección y no vuelve a celebrar logros antiguos",
+    "Música sintetizada produce señal de audio real y efectos habilitados",
+    "Audio, volúmenes, movimiento, prólogo y visor no escriben progreso ni hacen solicitudes",
+    "Un solo reproductor persiste al navegar",
+    "Música se suspende en segundo plano y continúa al volver",
+    "Escáner, captura rápida, medalla y linaje aparecen tras confirmación",
+    "Capturas raras y mega tienen presentación propia",
+    "Código repetido no repite captura ni recompensas",
+    "Error y corte de red no conceden ni celebran capturas",
+    "Territorios y gimnasios celebran aperturas confirmadas",
+    "Diez linajes mantienen miembros y progreso, con sello de colección completa",
+    "40 pantallas sin desbordamiento a 320, 390, 768 y 1280 px",
+    "Se respeta la preferencia de movimiento reducido",
+    "Preferencias locales sobreviven a recarga sin reproducir audio automáticamente",
+    "Cero errores de JavaScript y cero escrituras remotas desde la capa estética",
+    "Sin audio o almacenamiento, la interfaz continúa funcionando"
+  ],
+  "layout": [
+    {
+      "width": 320,
+      "view": "panel",
+      "overflow": 0
+    },
+    {
+      "width": 320,
+      "view": "biodex",
+      "overflow": 0
+    },
+    {
+      "width": 320,
+      "view": "codigo",
+      "overflow": 0
+    },
+    {
+      "width": 320,
+      "view": "mapa",
+      "overflow": 0
+    },
+    {
+      "width": 320,
+      "view": "gimnasios",
+      "overflow": 0
+    },
+    {
+      "width": 320,
+      "view": "lineas",
+      "overflow": 0
+    },
+    {
+      "width": 320,
+      "view": "inventario",
+      "overflow": 0
+    },
+    {
+      "width": 320,
+      "view": "logros",
+      "overflow": 0
+    },
+    {
+      "width": 320,
+      "view": "ayuda",
+      "overflow": 0
+    },
+    {
+      "width": 320,
+      "view": "perfil",
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "view": "panel",
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "view": "biodex",
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "view": "codigo",
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "view": "mapa",
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "view": "gimnasios",
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "view": "lineas",
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "view": "inventario",
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "view": "logros",
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "view": "ayuda",
+      "overflow": 0
+    },
+    {
+      "width": 390,
+      "view": "perfil",
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "view": "panel",
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "view": "biodex",
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "view": "codigo",
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "view": "mapa",
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "view": "gimnasios",
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "view": "lineas",
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "view": "inventario",
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "view": "logros",
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "view": "ayuda",
+      "overflow": 0
+    },
+    {
+      "width": 768,
+      "view": "perfil",
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "view": "panel",
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "view": "biodex",
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "view": "codigo",
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "view": "mapa",
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "view": "gimnasios",
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "view": "lineas",
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "view": "inventario",
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "view": "logros",
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "view": "ayuda",
+      "overflow": 0
+    },
+    {
+      "width": 1280,
+      "view": "perfil",
+      "overflow": 0
+    }
+  ],
+  "errors": [],
+  "rms": 0.004902803060945433,
+  "requests": [
+    "login",
+    "redeem",
+    "redeem",
+    "redeem",
+    "redeem",
+    "redeem",
+    "redeem",
+    "redeem",
+    "redeem",
+    "load"
+  ],
+  "base": "1a83318c322f7d0167a2396bc5fabd9c13495843",
+  "unchanged": {
+    "config.js": "3b2810010f2fac2633568828bb25a4b168f6307065a08a4d38930b98edff9d9c",
+    "remaster.js": "05c21d600e1b0c3a697c3141395717acd1cc3037dc1a94912b3db8ea62258dd7",
+    "retro.js": "3f11c426c7c4ac5073206c49f52f242db1c545a72a13bb97d2fd250ba9518976",
+    "megas.js": "c105bc4674171c3412bdc222a75ce21e4409a0225b3ceb7b6e753895e0645bd6",
+    "territorios.js": "ba9e643c50b09ec6fb41f278332d282f4437a10ffdb6feec55a1bf980e167c0f",
+    "narrativa.js": "ab4705806f8639af620d387e79252c6edba8f58b714374a5a33fb447fed717f2",
+    "backend/Code.gs": "27069e5c5cc81c386146d47f8345b6d671e0787d4b7f9a17e1b418bed1e10252"
+  },
+  "inlineScripts": "identical",
+  "preview": "identical"
+}
