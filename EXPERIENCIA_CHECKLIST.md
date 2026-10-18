@@ -30,7 +30,8 @@ Capa exclusivamente audiovisual. Base: `1a83318` (2.4.2).
 - Las celebraciones no conceden recompensas. Solo presentan cambios ya confirmados.
 - La música permanece fuera de `#app`, y continúa al cambiar de pantalla.
 - El sonido empieza desactivado. La activación requiere un gesto del jugador.
-- Sin solicitudes a servicios de música, librerías externas ni archivos pesados.
+- Sin servicios externos de música. Once MP3 propios, menos de 1 MB, cargados al
+  reproducir; la página no descarga audio antes de la activación.
 - Sitio principal y `/preview/` reciben los mismos archivos.
 
 ## Verificación
@@ -42,3 +43,10 @@ Capa exclusivamente audiovisual. Base: `1a83318` (2.4.2).
 - [x] Comprobar captura, duplicados, errores y celebraciones tras confirmación.
 - [x] Revisar 320, 390, 768 y 1280 px, visor y prólogo.
 - [x] Verificar respeto a movimiento reducido y fallos de audio/almacenamiento.
+
+## Corrección de audio 2.5.2
+
+- [x] Reproducción MP3 mediante HTMLAudio, independiente de Web Audio.
+- [x] Activación directa, prueba audible y recuperación de bloqueos.
+- [x] Sesión de reproducción multimedia cuando el navegador la ofrece.
+- [x] 18 comprobaciones de navegador; 56 pruebas originales conservadas.

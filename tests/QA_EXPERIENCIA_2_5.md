@@ -6,8 +6,10 @@ Fecha: 18 de octubre de 2026 UTC / 17 de octubre en Chile.
 ## Alcance y aislamiento
 
 - 56 pruebas existentes aprobadas (`node --test tests/*.test.cjs`).
-- 17 comprobaciones de navegador aprobadas, incluyendo 40 pantallas adaptables.
-- Chromium 153 en Linux, con audio Web Audio real y medición de señal no nula.
+- 18 comprobaciones de navegador aprobadas, incluyendo 40 pantallas adaptables.
+- Chromium 153 en Linux: MP3 decodificado, reproducción HTMLAudio confirmada
+  y avance de su reloj; sin crear AudioContext. Los once MP3 también se
+  decodificaron con FFmpeg y se verificó que contienen señal no nula.
 - Todas las llamadas a Apps Script fueron interceptadas y respondidas por un
   servidor simulado. No se crearon cuentas ni capturas en la hoja real.
 - Audio, volúmenes, movimiento, prólogo y visor mantienen exactamente iguales el
@@ -16,7 +18,8 @@ Fecha: 18 de octubre de 2026 UTC / 17 de octubre en Chile.
 - Código repetido, error de validación y fallo de red no celebran capturas nuevas.
 - Se verifica pausa/reanudación mediante el evento de visibilidad simulado.
 - Preferencias locales sobreviven a recarga; el audio espera un nuevo gesto.
-- Sin Web Audio o con almacenamiento bloqueado, la interfaz sigue disponible.
+- Sin Web Audio y con almacenamiento bloqueado, la música reproduce igualmente.
+- Un rechazo NotAllowedError muestra reactivación y se recupera con otro gesto.
 
 ## Presentación
 
@@ -51,3 +54,12 @@ El test inicia su servidor HTTP local. Opcionalmente se pueden definir
 una URL externa, usar exclusivamente una copia de prueba: las llamadas a Apps
 Script siguen interceptadas, pero otras fuentes externas del sitio podrían cargarse.
 Los resultados no contienen claves de usuario ni tokens.
+
+## Corrección 2.5.2
+
+Se sustituyó el sintetizador en vivo por MP3 originales y HTMLAudio. La activación
+y la prueba llaman play() dentro del gesto, antes de esperar promesas. Se solicita
+Audio Session playback cuando está disponible. La reproducción del navegador se
+comprueba con paused, readyState y currentTime; no se deduce de un AudioContext
+marcado running. Sigue pendiente la confirmación audible en el teléfono físico
+del usuario: esta prueba automatizada no mide sus altavoces ni volumen multimedia.

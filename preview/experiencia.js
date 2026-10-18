@@ -16,75 +16,74 @@
   function button(label,fn,cls='ghost') {const b=make('button',cls,label);b.type='button';b.addEventListener('click',fn);return b;}
   function savePrefs(){try{localStorage.setItem(KEY,JSON.stringify(prefs));}catch(_){}applyPrefs();}
   function reduced(){return prefs.motion==='reduce'||media.matches;}
-  const scores = Object.freeze({
-    refuge:{notes:[60,64,67,71,67,64,62,67,60,64,69,67,64,62,59,62],chords:[[48,55,64],[45,52,60],[41,48,57],[43,50,59]],step:0.52},
-    journey:{notes:[62,69,74,77,74,69,65,72,62,65,69,72,67,65,60,65],chords:[[50,57,65],[46,53,62],[48,55,64],[45,52,60]],step:0.46},
-    legend:{notes:[57,64,69,71,76,71,69,64,53,60,65,69,72,69,65,60],chords:[[45,52,60],[41,48,57],[48,55,64],[43,50,59]],step:0.65}
-  });
-  let ctx=null, musicGain=null, effectsGain=null, musicTimer=null, nextNote=0, beat=0, theme='refuge',unlocked=false;
-  let audioUnavailable=false, hiddenPaused=false, lastEffect=0, duckTimer=null;
-  const musicNodes = new Set();
+  // HTMLAudio usa el canal de reproducción multimedia en iPhone. No depende de
+  // AudioContext, cuyo estado "running" no garantiza salida audible en iOS.
+  let theme='refuge',unlocked=false,audioUnavailable=false,hiddenPaused=false,lastEffect=0;
+  let playbackBlocked=false,activationId=0,duckTimer=null;
   function statusAudio(message){const el=$('#fxAudioStatus');if(el)el.textContent=message;}
-  async function unlockAudio(){
-    const Audio=window.AudioContext||window.webkitAudioContext;
-    if(!Audio){audioUnavailable=true;statusAudio('Este navegador no ofrece audio. La aventura continúa con sus señales visuales.');return false;}
-    try {
-      if(!ctx){
-        ctx=new Audio();
-        const limiter=ctx.createDynamicsCompressor();limiter.threshold.value=-14;limiter.ratio.value=5;limiter.connect(ctx.destination);
-        musicGain=ctx.createGain();effectsGain=ctx.createGain();musicGain.gain.value=0;effectsGain.gain.value=prefs.effectsVolume*0.36;
-        musicGain.connect(limiter);effectsGain.connect(limiter);
-        ctx.addEventListener('statechange',()=>{if(ctx.state!=='running')stopMusic();else if(unlocked&&!document.hidden)startMusic();});
-      }
-      await ctx.resume();unlocked=ctx.state==='running';
-      if(!unlocked){statusAudio('Pulsa Activar sonido para iniciar la reproducción.');return false;}
-      statusAudio('Audio listo. Estas opciones se guardan solo en este dispositivo.');
-      startMusic();return true;
-    } catch(_){statusAudio('No se pudo iniciar el audio. Puedes volver a activarlo cuando quieras.');return false;}
+  function createPlayer(id,loop=false){
+    const player=document.createElement('audio');player.id=id;player.preload='none';player.loop=loop;
+    player.setAttribute('playsinline','');player.setAttribute('aria-hidden','true');player.hidden=true;document.body.append(player);return player;
   }
-  function tone(note,when,duration,gain,type='sine',bus='music'){
-    if(!ctx||ctx.state!=='running')return;
-    const osc=ctx.createOscillator(),env=ctx.createGain();
-    osc.type=type;osc.frequency.value=440*Math.pow(2,(note-69)/12);
-    env.gain.setValueAtTime(0,when);env.gain.linearRampToValueAtTime(gain,when+Math.min(0.12,duration/5));
-    env.gain.exponentialRampToValueAtTime(0.0001,when+duration);
-    osc.connect(env);env.connect(bus==='music'?musicGain:effectsGain);
-    if(bus==='music')musicNodes.add(osc);
-    osc.onended=()=>{musicNodes.delete(osc);osc.disconnect();env.disconnect();};osc.start(when);osc.stop(when+duration+0.04);
+  const musicPlayer=createPlayer('fxMusic',true),effectPlayer=createPlayer('fxEffects');
+  musicPlayer.src='assets/audio/refuge.mp3';effectPlayer.src='assets/audio/test.mp3';
+  musicPlayer.volume=prefs.musicVolume;effectPlayer.volume=prefs.effectsVolume;
+  function playbackSession(){try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(_){} }
+  function refreshAudioUI(){
+    const playing=!musicPlayer.paused&&!musicPlayer.ended;
+    audioButton.textContent=playing?'Sonido · reproduciendo':playbackBlocked?'Reactivar sonido':unlocked&&(prefs.music||prefs.effects)?'Sonido · listo':'Activar sonido';
+    audioButton.setAttribute('aria-label','Ajustar sonido y movimiento. '+(playing?'Música en reproducción':playbackBlocked?'Pulsa para reactivar':'Pulsa para activar o ajustar'));
+    syncSoundControls();
   }
-  function scheduleMusic(){
-    if(!ctx||!unlocked||!prefs.music||document.hidden||ctx.state!=='running')return;
-    const score=scores[theme];
-    while(nextNote<ctx.currentTime+0.65){
-      const n=beat%score.notes.length;
-      tone(score.notes[n],nextNote,1.15,0.11,'sine');
-      if(beat%8===0)score.chords[Math.floor(beat/8)%4].forEach(note=>tone(note,nextNote,score.step*7.8,0.055,'triangle'));
-      nextNote+=score.step;beat++;
-    }
+  function reportPlayError(error){
+    if(error?.name==='AbortError')return;
+    playbackBlocked=true;refreshAudioUI();
+    statusAudio(error?.name==='NotAllowedError'?'El navegador pausó el audio. Pulsa Activar sonido o Probar sonido.':'No se pudo cargar el audio. Pulsa Probar sonido para reintentar.');
+  }
+  function playEffectFile(kind){
+    const name=['tap','scan','success','medal','capture','rare','error','test'].includes(kind)?kind:'success';
+    const src='assets/audio/'+name+'.mp3';if(effectPlayer.getAttribute('src')!==src)effectPlayer.src=src;
+    try{effectPlayer.currentTime=0;}catch(_){}effectPlayer.volume=kind==='test'?Math.max(.65,prefs.effectsVolume):prefs.effectsVolume;
+    return effectPlayer.play();
+  }
+  function unlockAudio(probe=true){
+    playbackSession();const id=++activationId;const pending=[];
+    // play() se llama directamente dentro del gesto, antes de cualquier await.
+    try{
+      if(prefs.music){musicPlayer.volume=prefs.musicVolume;pending.push(musicPlayer.play());}
+      if(probe)pending.push(playEffectFile('test'));
+      if(!pending.length)return Promise.resolve(true);
+    }catch(error){reportPlayError(error);return Promise.resolve(false);}
+    statusAudio('Iniciando reproducción…');
+    return Promise.all(pending).then(()=>{
+      if(id!==activationId)return false;
+      unlocked=true;playbackBlocked=false;audioUnavailable=false;refreshAudioUI();
+      statusAudio(probe?'Prueba de sonido en reproducción. El volumen multimedia del dispositivo también controla la salida.':'Música en reproducción. Las opciones se guardan solo en este dispositivo.');return true;
+    }).catch(error=>{if(id===activationId)reportPlayError(error);return false;});
   }
   function startMusic(){
-    if(!ctx||!unlocked||!prefs.music||document.hidden||ctx.state!=='running')return;
-    musicGain.gain.setTargetAtTime(prefs.musicVolume*0.48,ctx.currentTime,0.5);
-    if(musicTimer)return;
-    nextNote=ctx.currentTime+0.08;scheduleMusic();musicTimer=setInterval(scheduleMusic,180);
+    if(!unlocked||!prefs.music||document.hidden)return;
+    musicPlayer.volume=prefs.musicVolume;
+    if(musicPlayer.paused)musicPlayer.play().then(()=>{playbackBlocked=false;refreshAudioUI();}).catch(reportPlayError);
   }
-  function stopMusic(){
-    clearInterval(musicTimer);musicTimer=null;
-    if(!ctx)return;
-    musicGain.gain.setTargetAtTime(0,ctx.currentTime,0.15);
-    for(const osc of musicNodes){try{osc.stop(ctx.currentTime+0.65);}catch(_){}}
+  function stopMusic(){musicPlayer.pause();}
+  function setTheme(value){
+    if(theme===value)return;theme=value;
+    const wasPlaying=!musicPlayer.paused;musicPlayer.src='assets/audio/'+theme+'.mp3';
+    if(wasPlaying&&prefs.music&&!document.hidden)musicPlayer.play().catch(reportPlayError);
   }
-  function setTheme(value){if(theme===value)return;theme=value;beat=0;stopMusic();startMusic();}
   function sound(kind='tap',rare=false){
-    if(!ctx||!unlocked||!prefs.effects||document.hidden||ctx.state!=='running')return;
-    const now=ctx.currentTime;if(kind==='tap'&&now-lastEffect<0.07)return;lastEffect=now;
-    const melodies={tap:[76],scan:[48,55,60],success:[60,64,67,72],medal:[67,72,76,79],capture:rare?[48,60,67,72,76,79,84]:[60,64,67,72],error:[52,48]};
-    const notes=melodies[kind]||melodies.success,step=kind==='tap'?0.04:0.095;
-    notes.forEach((n,i)=>tone(n,now+i*step,kind==='tap'?0.09:0.4,kind==='tap'?0.22:0.28,'sine','effects'));
-    if(notes.length>2&&prefs.music){musicGain.gain.setTargetAtTime(prefs.musicVolume*0.14,now,0.06);clearTimeout(duckTimer);duckTimer=setTimeout(()=>{if(prefs.music&&!document.hidden)musicGain.gain.setTargetAtTime(prefs.musicVolume*0.48,ctx.currentTime,0.4);},1100);}
+    if(!unlocked||!prefs.effects||document.hidden)return;
+    const now=performance.now();if(kind==='tap'&&now-lastEffect<90)return;lastEffect=now;
+    playEffectFile(kind==='capture'&&rare?'rare':kind)?.catch(error=>{if(error?.name!=='AbortError')reportPlayError(error);});
+    if(kind!=='tap'&&prefs.music){musicPlayer.volume=prefs.musicVolume*.45;clearTimeout(duckTimer);duckTimer=setTimeout(()=>{musicPlayer.volume=prefs.musicVolume;},1100);}
   }
+  musicPlayer.addEventListener('playing',()=>{playbackBlocked=false;refreshAudioUI();});
+  musicPlayer.addEventListener('pause',()=>refreshAudioUI());
+  musicPlayer.addEventListener('error',()=>reportPlayError(musicPlayer.error));
+  effectPlayer.addEventListener('error',()=>reportPlayError(effectPlayer.error));
   const dock=make('nav','fx-dock');dock.setAttribute('aria-label','Ambiente de BioNova');
-  const audioButton=button('Sonido',()=>openSound(),'fx-dock-button');audioButton.setAttribute('aria-haspopup','dialog');
+  const audioButton=button('Activar sonido',()=>{openSound();if(!unlocked||playbackBlocked){prefs.music=true;prefs.effects=true;savePrefs();void unlockAudio();}},'fx-dock-button');audioButton.setAttribute('aria-haspopup','dialog');
   const storyButton=button('Historia',()=>openStory(),'fx-dock-button');storyButton.setAttribute('aria-haspopup','dialog');
   dock.append(audioButton,storyButton);document.body.append(dock);
   const ambient=make('div','fx-ambient');ambient.setAttribute('aria-hidden','true');
@@ -100,10 +99,10 @@
   function openSound(){
     const d=newDialog('Sonido y movimiento','fx-sound');
     d.innerHTML='<span class="eyebrow">AJUSTES DEL DISPOSITIVO</span><h2>El ambiente de tu aventura.</h2><p>Música suave y señales de campo. Tú eliges cómo acompañar tu expedición.</p>';
-    const activate=button('Activar sonido',async()=>{if(await unlockAudio()){prefs.music=true;prefs.effects=true;savePrefs();syncSoundControls();sound('success');}},'primary');activate.id='fxActivateAudio';d.append(activate);
+    const activate=button('Activar sonido',()=>{prefs.music=true;prefs.effects=true;savePrefs();void unlockAudio();},'primary');activate.id='fxActivateAudio';d.append(activate);
     for(const [key,label]of [['music','Música ambiental'],['effects','Efectos de sonido']]){
       const row=make('div','fx-setting'),lbl=make('label','',label),toggle=make('input');toggle.type='checkbox';toggle.checked=prefs[key];toggle.id='fx-'+key;lbl.htmlFor=toggle.id;
-      toggle.addEventListener('change',async()=>{if(toggle.checked&&!(await unlockAudio())){toggle.checked=false;return;}prefs[key]=toggle.checked;savePrefs();syncSoundControls();if(key==='effects')sound('tap');});row.append(lbl,toggle);d.append(row);
+      toggle.addEventListener('change',()=>{prefs[key]=toggle.checked;savePrefs();if(toggle.checked)void unlockAudio(key==='effects');else if(key==='effects')effectPlayer.pause();syncSoundControls();});row.append(lbl,toggle);d.append(row);
       const vr=make('div','fx-volume'),vl=make('label','','Volumen de '+label.toLowerCase()),range=make('input');range.type='range';range.min='0';range.max='100';range.value=String(Math.round(prefs[key+'Volume']*100));range.id='fx-'+key+'-volume';vl.htmlFor=range.id;
       const output=make('output','',range.value+' %');output.htmlFor=range.id;
       range.addEventListener('input',()=>{prefs[key+'Volume']=Number(range.value)/100;output.textContent=range.value+' %';savePrefs();});vr.append(vl,range,output);d.append(vr);
@@ -112,10 +111,10 @@
     for(const [v,t]of [['system','Seguir mi dispositivo'],['reduce','Reducir movimiento']]){const o=make('option','',t);o.value=v;select.append(o);}select.value=prefs.motion;
     select.addEventListener('change',()=>{prefs.motion=select.value;savePrefs();});row.append(label,select);d.append(row);
     const status=make('p','fx-local-note',audioUnavailable?'Este navegador no ofrece audio.':'Preferencias locales. El sonido empieza al activarlo; puedes silenciarlo cuando quieras.');status.id='fxAudioStatus';status.setAttribute('role','status');d.append(status);
-    const actions=make('div','fx-dialog-actions');actions.append(button('Silenciar todo',()=>{prefs.music=false;prefs.effects=false;savePrefs();syncSoundControls();}),button('Listo',closeFxDialog,'primary'));d.append(actions);d.showModal();
+    const actions=make('div','fx-dialog-actions');actions.append(button('Probar sonido',()=>void unlockAudio()),button('Silenciar todo',()=>{activationId++;prefs.music=false;prefs.effects=false;effectPlayer.pause();savePrefs();syncSoundControls();statusAudio('Sonido desactivado.');}),button('Listo',closeFxDialog,'primary'));d.append(actions);d.showModal();
     syncSoundControls();
   }
-  function syncSoundControls(){for(const key of ['music','effects']){const el=$('#fx-'+key);if(el)el.checked=prefs[key];}const b=$('#fxActivateAudio');if(b)b.hidden=unlocked&&(prefs.music||prefs.effects);}
+  function syncSoundControls(){for(const key of ['music','effects']){const el=$('#fx-'+key);if(el)el.checked=prefs[key];}const b=$('#fxActivateAudio');if(b)b.hidden=unlocked&&!playbackBlocked&&(prefs.music||prefs.effects);}
   const scenes=Object.freeze([
     {tag:'01 / LA SEÑAL',title:'Un mundo que todavía guarda secretos.',image:'assets/territories/S01.webp',text:'Al amanecer, una señal cruza los bosques de BioNova. Entre senderos, ruinas y lagos de cristal viven bioformas que pocos han llegado a conocer. Cada una guarda una historia distinta.'},
     {tag:'02 / EL DISPOSITIVO',title:'Tu FIELD-02 está listo.',image:'assets/landscapes/bruma.webp',text:'En tus manos, el dispositivo de campo despierta. Sus archivos están llenos de siluetas y caminos por descubrir. Los códigos que encuentres durante tu travesía revelarán nuevas bioformas y abrirán otros horizontes.'},
@@ -141,19 +140,18 @@
   }
   function applyPrefs(){
     document.body.classList.toggle('fx-reduced',reduced());
-    audioButton.textContent=prefs.music||prefs.effects?'Sonido · activo':'Sonido · apagado';
-    audioButton.setAttribute('aria-label','Ajustar sonido y movimiento. '+(prefs.music||prefs.effects?'Sonido activado':'Sonido desactivado'));
-    if(ctx){effectsGain.gain.setTargetAtTime(prefs.effectsVolume*0.36,ctx.currentTime,0.05);if(!prefs.music)stopMusic();else startMusic();}
+    musicPlayer.volume=prefs.musicVolume;effectPlayer.volume=prefs.effectsVolume;
+    if(!prefs.music)stopMusic();else startMusic();refreshAudioUI();
   }
   media.addEventListener?.('change',applyPrefs);applyPrefs();
   document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){hiddenPaused=unlocked;stopMusic();if(ctx?.state==='running')ctx.suspend().catch(()=>{});}
-    else if(hiddenPaused&&ctx){hiddenPaused=false;ctx.resume().then(startMusic).catch(()=>statusAudio('Pulsa Activar sonido para continuar.'));}
+    if(document.hidden){hiddenPaused=!musicPlayer.paused;musicPlayer.pause();effectPlayer.pause();}
+    else if(hiddenPaused){hiddenPaused=false;startMusic();}
   });
   // Interacciones de presentación; nunca interceptan los manejadores del juego.
-  function resumeFromGesture(){if((prefs.music||prefs.effects)&&!unlocked&&!audioUnavailable)void unlockAudio();}
+  function resumeFromGesture(event){if(event?.target?.closest('.fx-dock,.fx-dialog'))return;if((prefs.music||prefs.effects)&&(!unlocked||playbackBlocked)&&!audioUnavailable)void unlockAudio(false);}
   document.addEventListener('pointerdown',resumeFromGesture,{passive:true});
-  document.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' ')resumeFromGesture();});
+  document.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' ')resumeFromGesture(event);});
   document.addEventListener('click',event=>{
     const target=event.target.closest('button');if(!target)return;
     if(target.closest('.fx-dialog'))return;

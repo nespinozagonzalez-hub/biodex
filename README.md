@@ -135,9 +135,19 @@ versión base. No requiere modificar Apps Script.
 El botón **Sonido** abre música y efectos independientes, volúmenes y movimiento
 reducido. El sonido empieza desactivado y se activa con un gesto del jugador. Las
 preferencias se guardan solo en el dispositivo, sin modificar la cuenta o Sheets.
-La música se sintetiza en el navegador: tres composiciones originales (refugio,
-exploración y leyendas), sin pistas externas ni descargas de audio. Al ocultar la
-pestaña se suspende; un navegador puede pedir otro gesto para reanudarla.
+La música y los efectos se reproducen con elementos de audio HTML y archivos MP3
+propios: tres composiciones originales (refugio, exploración y leyendas) y ocho
+efectos, sin servicios externos. La descarga ocurre al reproducir. Al ocultar la
+pestaña se pausa; un navegador puede pedir otro gesto para reanudarla.
+
+Corrección 2.5.2: **Activar sonido** inicia la reproducción directamente.
+**Probar sonido** reproduce una señal de prueba. Un bloqueo del navegador muestra
+**Reactivar sonido**, sin afirmar que está reproduciendo. Si existe Audio Session,
+se solicita el modo `playback`. No se necesita AudioContext. Las preferencias
+locales de volumen y la lógica de cuentas se conservan.
+
+Las pistas originales se pueden regenerar con `tools/render-audio.py` (NumPy y
+FFmpeg). Los once archivos suman menos de 1 MB por copia del sitio.
 
 **Historia** presenta un prólogo de tres escenas ilustradas con los paisajes de
 BioNova. Puede omitirse y consultarse en cualquier momento. Las fichas capturadas
