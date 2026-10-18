@@ -31,3 +31,9 @@ body.fx-reduced *,body.fx-reduced *:before,body.fx-reduced *:after{animation-dur
 @media(max-width:520px){.register label{font:14px/1.6 'Trebuchet MS',sans-serif!important}.register input,.guild-code-entry input,.capture-terminal input{font-size:16px!important;min-height:46px}.access-tabs button,.access-submit{font-size:12px!important;min-height:44px}.avatar-option>span:not(.sr-only),.landscape-option>span{font:11px/1.5 'Trebuchet MS',sans-serif!important}.profile-choices legend{font-size:11px!important}.atlas-state,.atlas-route{font-size:9px!important}.atlas-waypoints small{font-size:11px!important}}
 /* El respaldo no debe asomarse bajo el recorte cuando la imagen ya cargó. */
 .portrait.image-ready>.portrait-fallback{opacity:0!important;pointer-events:none}
+/* Cada grado conserva una firma visual, además del color original de rareza. */
+#captureOverlay[data-fx-grade=uncommon] .cap-ring{border-style:dashed;animation-duration:1.9s}
+#captureOverlay[data-fx-grade=rare] .cap-ring{border-width:3px}
+#captureOverlay[data-fx-grade=epic] .cap-stage:before{background:repeating-conic-gradient(transparent 0deg 16deg,#d9b9f322 16deg 20deg)}
+#captureOverlay[data-fx-grade=legendary] .cap-rarity{border-color:#f1d58a;box-shadow:0 0 35px #e0be6577}
+#captureOverlay[data-fx-grade=legendary] .cap-stage:before{background:repeating-conic-gradient(transparent 0deg 12deg,#f5e2b12b 12deg 15deg)}

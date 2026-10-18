@@ -7,7 +7,7 @@
     "Un solo reproductor persiste al navegar",
     "Música se suspende en segundo plano y continúa al volver",
     "Escáner, captura rápida, medalla y linaje aparecen tras confirmación",
-    "Capturas raras y mega tienen presentación propia",
+    "Los seis grados de rareza tienen presentación propia",
     "Código repetido no repite captura ni recompensas",
     "Error y corte de red no conceden ni celebran capturas",
     "Territorios y gimnasios celebran aperturas confirmadas",
@@ -221,9 +221,12 @@
     }
   ],
   "errors": [],
-  "rms": 0.004902803060945433,
+  "rms": 0.004902803065485557,
   "requests": [
     "login",
+    "redeem",
+    "redeem",
+    "redeem",
     "redeem",
     "redeem",
     "redeem",

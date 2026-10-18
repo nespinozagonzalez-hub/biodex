@@ -203,7 +203,8 @@
     if(!open||!stage||captureStages.has(stage))return;
     captureStages.add(stage);
     const id=stage.querySelector('[data-bioforma]')?.dataset.bioforma,b=id?getBioforma(id):null;if(!b)return;
-    const rare=['Épica','Legendaria','Mega legendaria'].includes(b.rareza);overlay.dataset.fxRarity=b.mega?'mega':rare?'rare':'common';
+    const rare=['Rara','Épica','Legendaria','Mega legendaria'].includes(b.rareza);overlay.dataset.fxRarity=b.mega?'mega':rare?'rare':'common';
+    overlay.dataset.fxGrade=({'Común':'common','Poco común':'uncommon','Rara':'rare','Épica':'epic','Legendaria':'legendary','Mega legendaria':'mega'})[b.rareza]||'common';
     const subtitle=make('span','fx-capture-subtitle',b.mega?'UN VÍNCULO IRREPETIBLE':rare?'UNA SEÑAL EXTRAORDINARIA':'NUEVO HALLAZGO REGISTRADO');stage.prepend(subtitle);
     const skip=button('Continuar sin animación',()=>{skip.disabled=true;cerrarCapturaOverlay(id);},'fx-skip-capture');overlay.append(skip);
     skip.focus({preventScroll:true});

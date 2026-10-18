@@ -23,7 +23,7 @@ Fecha: 18 de octubre de 2026 UTC / 17 de octubre en Chile.
 Refugio, BioDex, Capturar, Territorios, Gimnasios, Linajes, Mochila, Logros,
 Guía y Perfil: sin desbordamientos horizontales ni controles fuera del ancho a
 320, 390, 768 y 1280 px. Se revisaron capturas de refugio, ajustes, prólogo,
-colección, linajes, ficha y revelación de rarezas. Movimiento reducido respeta
+colección, linajes, ficha y revelación de los seis grados de rareza. Movimiento reducido respeta
 la preferencia del sistema y el control local.
 
 Son pruebas de navegador y distribución adaptable; no certifican dispositivos
