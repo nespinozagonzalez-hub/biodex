@@ -1,6 +1,8 @@
-# BioDex 2.7 · Consola adaptable
+# BioDex 2.7.1 · Consola adaptable
 
 Marco fijo, desplazamiento interior, vista de colección de 1/2/3 columnas y captura a pantalla visible completa. [Checklist y límites](CONSOLE_CHECKLIST.md). [Demo sin cuenta](console-preview/).
+
+Corrección móvil: el formulario toma el espacio disponible al escribir y restaura la consola al terminar. Las miniaturas mantienen su proporción con Ajustar.
 
 # BioDex 2.6 · FIELD-02
 

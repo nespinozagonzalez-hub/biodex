@@ -1,4 +1,4 @@
-# BioDex 2.7 · Consola adaptable
+# BioDex 2.7.1 · Consola adaptable
 
 - [x] Marco, menú y controles A/B permanentes; desplazamiento vertical interior.
 - [x] Altura de la consola ajustada al viewport visible y a sus cambios al girar el dispositivo.
@@ -12,6 +12,10 @@
 - [x] Perfil accesible aunque el menú compacto oculte la tarjeta de entrenador.
 - [x] Demo independiente actualizada y botón para probar la animación sin usar códigos reales.
 - [x] Acceso original preservado: la capa de consola solo se activa después de mostrar el dispositivo.
+- [x] Edición en teléfono/tablet: el formulario usa el espacio disponible y aparta temporalmente el menú. El botón Listo restaura el marco sin borrar el texto ni la preferencia de escala.
+- [x] Rotación y desplazamiento del viewport con teclado: el campo activo permanece visible y con texto de 16 px, sin escalar.
+- [x] El envío cierra el modo de edición después de que se dispara el formulario original.
+- [x] Miniaturas acotadas por el alto real del panel, incluida la consola reducida; la vista de una columna aprovecha el ancho para poner la ficha junto a la imagen.
 
 ## Alcance
 
@@ -24,3 +28,4 @@ La captura ocupa el espacio del sitio que deja disponible el navegador; las barr
 - `node --test tests/*.test.cjs`: 56 pruebas existentes aprobadas.
 - `tests/experiencia.browser.cjs`: 18 comprobaciones aprobadas, incluidos sonido MP3, capturas tras confirmación, duplicados, fallos de red, seis rarezas, ajustes y ausencia de escrituras desde las mejoras estéticas.
 - `tests/console.browser.cjs`: 150 combinaciones de sección/tamaño en 15 tamaños; selector de columnas a cuatro tamaños; 20 capturas en cuatro tamaños; miniaturas dentro de sus tarjetas; modo ajustado, captura fuera de la escala, alternativa sin Fullscreen API y acceso normal de producción. Sin peticiones reales a Apps Script.
+- `tests/console-input.browser.cjs`: 8 casos de teclado con alturas y desplazamientos simulados en vertical/horizontal y ambas escalas; giro mientras se escribe; filtros originales; envío del código; 12 combinaciones de tarjetas/escala; acceso y captura con el frontend de producción y respuestas del servidor simuladas. No usa cuentas reales. Estas pruebas emulan el viewport del teclado; no son una certificación en un iPhone físico.
