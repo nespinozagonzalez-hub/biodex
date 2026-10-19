@@ -1,0 +1,1962 @@
+{
+  "results": [
+    {
+      "label": "access-login",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-0",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-1",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-2",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "audio",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 27,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "bioform-modal",
+      "width": 320,
+      "height": 568,
+      "scroll": 320,
+      "controls": 22,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 360,
+      "height": 640,
+      "scroll": 360,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-0",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-1",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-2",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "audio",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 27,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "bioform-modal",
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "controls": 22,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 430,
+      "height": 932,
+      "scroll": 430,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 600,
+      "height": 800,
+      "scroll": 600,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-0",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-1",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-2",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "audio",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 27,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "bioform-modal",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 22,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 820,
+      "height": 1180,
+      "scroll": 820,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 1024,
+      "height": 768,
+      "scroll": 1024,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-0",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-1",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "story-2",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 21,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "audio",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 27,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "bioform-modal",
+      "width": 1280,
+      "height": 800,
+      "scroll": 1280,
+      "controls": 22,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 1920,
+      "height": 1080,
+      "scroll": 1920,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 2560,
+      "height": 1440,
+      "scroll": 2560,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 568,
+      "height": 320,
+      "scroll": 568,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 667,
+      "height": 375,
+      "scroll": 667,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-login",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "access-register",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "panel",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "biodex",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 53,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "codigo",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 19,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "mapa",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 37,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "gimnasios",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 32,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "lineas",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "inventario",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "logros",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 16,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "ayuda",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "perfil",
+      "width": 1024,
+      "height": 600,
+      "scroll": 1024,
+      "controls": 26,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "text-140-percent",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 18,
+      "off": [],
+      "internal": []
+    },
+    {
+      "label": "preview-login",
+      "width": 768,
+      "height": 1024,
+      "scroll": 768,
+      "controls": 7,
+      "off": [],
+      "internal": []
+    }
+  ],
+  "apiCalls": 0,
+  "errors": [],
+  "checks": [
+    "local-font",
+    "navigation-handlers",
+    "state-unchanged",
+    "four-landscapes",
+    "text-140-percent",
+    "favicon",
+    "preview",
+    "parallax",
+    "reduced-motion",
+    "touch-form"
+  ],
+  "base": "0839b11c073cb683345b1ac55c9559f832c9725f",
+  "protectedSha256": {
+    "config.js": "3b2810010f2fac2633568828bb25a4b168f6307065a08a4d38930b98edff9d9c",
+    "remaster.js": "05c21d600e1b0c3a697c3141395717acd1cc3037dc1a94912b3db8ea62258dd7",
+    "retro.js": "3f11c426c7c4ac5073206c49f52f242db1c545a72a13bb97d2fd250ba9518976",
+    "megas.js": "c105bc4674171c3412bdc222a75ce21e4409a0225b3ceb7b6e753895e0645bd6",
+    "territorios.js": "ba9e643c50b09ec6fb41f278332d282f4437a10ffdb6feec55a1bf980e167c0f",
+    "narrativa.js": "ab4705806f8639af620d387e79252c6edba8f58b714374a5a33fb447fed717f2",
+    "experiencia.js": "9cfc1e29bdbfa58dd5bb08e5196dba3fdfa3f18d766579be9ac085e7105c3286",
+    "remaster.css": "bf32a6a43547829e0a22b39f946779098fe6957c006aba73eaa7b52230ba335e",
+    "retro.css": "603d43aef8bcbd218fb8f42a1cdb89723669983ee931eb2a81518f52c7d9d056",
+    "territorios.css": "58af1b09703af7c2d3e52e401c82c00936fa4ae42039bd9851a34a2c9874b917",
+    "narrativa.css": "f40258144908f2de3a80addb82ec5884dace6656fc9ff87440639f53ce4b617f",
+    "experiencia.css": "bbae76dd56c0a24c27f013371b2b499c7ce2946d88a8171bb1f77ea1722d9bcd",
+    "backend/Code.gs": "27069e5c5cc81c386146d47f8345b6d671e0787d4b7f9a17e1b418bed1e10252"
+  },
+  "inlineScripts": "identical",
+  "preview": "identical"
+}

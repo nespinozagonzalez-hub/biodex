@@ -1,4 +1,4 @@
-# BioDex 2.5 · FIELD-02
+# BioDex 2.6 · FIELD-02
 
 Remaster de la colección original: 30 bioformas y tres mega legendarias adicionales, mismos códigos CAP, SEC y GYM,
 capturas animadas, sectores, gimnasios, inventario, medallas y evoluciones.
@@ -163,3 +163,25 @@ solo carga ambos archivos después de las capas existentes. No se modificó
 
 Checklist: [EXPERIENCIA_CHECKLIST.md](EXPERIENCIA_CHECKLIST.md).
 Validación: [tests/QA_EXPERIENCIA_2_5.md](tests/QA_EXPERIENCIA_2_5.md).
+
+
+## Identidad pixel art y ajuste de pantalla · 2.6
+
+Favicon del lente FIELD-02, cuatro paisajes panorámicos exteriores, tipografía
+pixel local, iconos propios y marcos coherentes de RPG. Se conserva el arte
+original de criaturas, avatares y territorios. El fondo exterior responde al
+paisaje que el jugador ya eligió, sin guardar preferencias nuevas.
+
+La interfaz se distribuye según el ancho de la pantalla y conserva desplazamiento
+vertical natural. No se reduce toda la aplicación como una imagen ni se impone
+una altura que recorte los formularios. Los controles, los relatos y las fichas
+tienen ajustes para móvil, tablet, escritorio y orientación horizontal.
+
+`pixel.css` / `pixel.js` son capas independientes: no reemplazan funciones, no
+llaman a la API y no escriben datos. Los scripts existentes, el backend y el
+sistema de usuarios permanecen idénticos a la base 2.5.2. La capa de audio también
+permanece intacta. Principal y preview reciben la misma presentación.
+
+[Checklist completo](PIXEL_CHECKLIST.md) ·
+[Recursos y prompts](assets/pixel/ART_DIRECTION.md) ·
+[Verificación de 214 casos de distribución](tests/QA_PIXEL_2_6.md).
