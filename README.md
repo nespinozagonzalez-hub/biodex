@@ -1,3 +1,7 @@
+# BioDex 2.7 · Consola adaptable
+
+Marco fijo, desplazamiento interior, vista de colección de 1/2/3 columnas y captura a pantalla visible completa. [Checklist y límites](CONSOLE_CHECKLIST.md). [Demo sin cuenta](console-preview/).
+
 # BioDex 2.6 · FIELD-02
 
 Remaster de la colección original: 30 bioformas y tres mega legendarias adicionales, mismos códigos CAP, SEC y GYM,
