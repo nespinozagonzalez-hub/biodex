@@ -11,6 +11,7 @@ Base: `0839b11c073cb683345b1ac55c9559f832c9725f`.
   controles fuera de la pantalla ni paneles con desbordamiento interno.
 - 16 tamaños, con anchos de 320 a 2560 px y teléfonos en horizontal.
 - Cero errores JavaScript y cero solicitudes a Sheets desde la prueba de diseño.
+- Título y entrenador de bienvenida sin superposición en los 16 tamaños.
 - Nombres largos, acceso, registro, diez secciones del juego, fichas, ajustes y
   las tres escenas de historia revisados con los renderizadores reales.
 - Iconos nuevos conservan los nueve manejadores originales de navegación.

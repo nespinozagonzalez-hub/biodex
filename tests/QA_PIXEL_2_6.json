@@ -1958,5 +1958,6 @@
     "backend/Code.gs": "27069e5c5cc81c386146d47f8345b6d671e0787d4b7f9a17e1b418bed1e10252"
   },
   "inlineScripts": "identical",
-  "preview": "identical"
+  "preview": "identical",
+  "welcomeTitleAvatarOverlap": false
 }

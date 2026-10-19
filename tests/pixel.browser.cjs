@@ -21,7 +21,7 @@ const results=[],errors=[],apiCalls=[];
    const controls=[...document.querySelectorAll('button,input,select,textarea')].filter(visible);
    return {width:innerWidth,height:innerHeight,scroll:root.scrollWidth,controls:controls.length,off:controls.filter(e=>{const r=e.getBoundingClientRect();return r.left< -1||r.right>innerWidth+1;}).map(e=>(e.id||e.textContent).slice(0,60)),internal:[...document.querySelectorAll('#view>.rpg-window,.device-screen,.register,.modal,.fx-dialog')].filter(visible).filter(e=>e.scrollWidth>e.clientWidth+2).map(e=>e.className)};
   });
-  results.push({label,...data});if(data.scroll>data.width+1||data.off.length||data.internal.length){await page.screenshot({path:path.join(OUT,'failure.png'),fullPage:true});throw new Error(label+' '+JSON.stringify(data));}
+  results.push({label,...data});if(label.startsWith('access-')){const boxes=await page.evaluate(()=>{const a=document.querySelector('.welcome-title').getBoundingClientRect(),b=document.querySelector('.welcome-trainer').getBoundingClientRect();return {titleBottom:a.bottom,avatarTop:b.top};});assert(boxes.titleBottom<=boxes.avatarTop+1,label+' title/avatar overlap '+JSON.stringify(boxes));}if(data.scroll>data.width+1||data.off.length||data.internal.length){await page.screenshot({path:path.join(OUT,'failure.png'),fullPage:true});throw new Error(label+' '+JSON.stringify(data));}
  }
  for(const [width,height]of sizes){
   await page.setViewportSize({width,height});
@@ -50,7 +50,7 @@ const results=[],errors=[],apiCalls=[];
  await page.setViewportSize({width:768,height:1024});await page.evaluate(()=>go('ayuda'));
  await page.addStyleTag({content:'#view p,#view li{font-size:21px!important;line-height:1.75!important}'});await inspect('text-140-percent');
  assert.equal(apiCalls.length,0,'La presentación no envía peticiones a Sheets');assert.deepEqual(errors,[]);
- const favicon=await page.evaluate(()=>[...document.querySelectorAll('link[rel=icon]')].map(e=>e.href));assert(favicon.some(s=>s.endsWith('favicon.svg?v=2.6.0')));
+ const favicon=await page.evaluate(()=>[...document.querySelectorAll('link[rel=icon]')].map(e=>e.href));assert(favicon.some(s=>s.endsWith('favicon.svg?v=2.6.1')));
  await page.goto('http://127.0.0.1:'+server.address().port+'/preview/index.html');await page.locator('#regNombre').waitFor();assert.equal(await page.locator('#pxScenery').count(),1);await inspect('preview-login');
  const touchContext=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:3,reducedMotion:'reduce'});await touchContext.route('https://script.google.com/**',r=>{apiCalls.push('unexpected-touch-request');return r.abort();});const touch=await touchContext.newPage();await touch.goto('http://127.0.0.1:'+server.address().port+'/');await touch.locator('#regNombre').waitFor();await touch.getByRole('button',{name:'Crear personaje',exact:true}).tap();await touch.locator('#regNombre').fill('Prueba táctil');assert.equal(await touch.locator('#regNombre').evaluate(e=>getComputedStyle(e).fontSize),'16px');await touch.screenshot({path:path.join(OUT,'touch-register-390.png'),fullPage:true});assert.equal(await touch.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await touchContext.close();assert.equal(apiCalls.length,0);
  fs.writeFileSync(path.join(OUT,'layout.json'),JSON.stringify({results,apiCalls:apiCalls.length,errors,checks:['local-font','navigation-handlers','state-unchanged','four-landscapes','text-140-percent','favicon','preview','parallax','reduced-motion','touch-form']},null,2));
