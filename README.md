@@ -1,8 +1,8 @@
-# BioDex 2.7.1 · Consola adaptable
+# BioDex 2.6.2 · Diseño estable restaurado
 
-Marco fijo, desplazamiento interior, vista de colección de 1/2/3 columnas y captura a pantalla visible completa. [Checklist y límites](CONSOLE_CHECKLIST.md). [Demo sin cuenta](console-preview/).
+La aplicación principal y `/preview/` recuperan el diseño de 2.6.1 y el desplazamiento normal de la página. La consola de alto fijo, su escala y sus ajustes de teclado están desactivados. Solo se añade un botón independiente para la pantalla completa nativa; si el navegador no la admite, muestra instrucciones para abrir BioDex como app o en una pestaña independiente.
 
-Corrección móvil: el formulario toma el espacio disponible al escribir y restaura la consola al terminar. Las miniaturas mantienen su proporción con Ajustar.
+Las cuentas, códigos, progreso, sonido y Apps Script conservan su implementación. Los archivos de la consola experimental quedan disponibles para revisión posterior y no se cargan en la aplicación principal. [Restauración y validación](RESTABLECIMIENTO_2_6_2.md).
 
 # BioDex 2.6 · FIELD-02
 

@@ -1,0 +1,12 @@
+/* Control independiente. El contenido conserva el desplazamiento normal de 2.6.1. */
+.screen-tools{position:relative;z-index:2;display:flex;justify-content:flex-end;width:calc(100% - 32px);max-width:1180px;margin:14px auto 0;padding:0}
+.screen-full-button{min-height:48px;padding:10px 16px;border:2px solid #f0d393;background:#edc477;color:#173e2d;font:22px/1.1 var(--px-font);box-shadow:inset 2px 2px #fff2be,0 3px #7a713d}
+.screen-full-button[aria-pressed=true]{background:#cbd8ad;border-color:#edf1cb}
+.screen-full-help{width:min(540px,calc(100vw - 28px));max-height:calc(100dvh - 28px);overflow:auto;overscroll-behavior:contain;padding:22px;background:#12382e;color:#e6eed6;border:3px solid #99b783;box-shadow:6px 6px #06281e}
+.screen-full-help::backdrop{background:#031b18c9}
+.screen-full-help h2{font-size:34px;margin:0 0 12px}
+.screen-full-help p{font:16px/1.6 'Trebuchet MS',Arial,sans-serif;margin:10px 0 20px}
+.screen-full-help button{min-height:44px;font:22px/1.2 var(--px-font);padding:8px 18px}
+:root:fullscreen{overflow-y:auto;background:#163e33}
+:root:-webkit-full-screen{overflow-y:auto;background:#163e33}
+@media(max-width:600px){.screen-tools{width:calc(100% - 20px);margin-top:10px}.screen-full-button{width:100%;font-size:23px}}

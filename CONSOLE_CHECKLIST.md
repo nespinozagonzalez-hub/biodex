@@ -1,5 +1,7 @@
 # BioDex 2.7.1 · Consola adaptable
 
+Estado: retirada de la aplicación principal en 2.6.2 por el fallo de teclado observado en iPhone. Este documento describe el prototipo, conservado para una revisión futura. La aplicación principal vuelve al diseño 2.6.1 y al desplazamiento normal.
+
 - [x] Marco, menú y controles A/B permanentes; desplazamiento vertical interior.
 - [x] Altura de la consola ajustada al viewport visible y a sus cambios al girar el dispositivo.
 - [x] Márgenes seguros para pantallas con recorte.
