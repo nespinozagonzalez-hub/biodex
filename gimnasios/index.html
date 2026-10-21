@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="style.css?v=2">
   <link rel="stylesheet" href="rpg.css?v=2">
   <link rel="stylesheet" href="tactics.css?v=1">
+  <link rel="stylesheet" href="ux.css?v=2">
   <script defer src="../config.js"></script>
   <script defer src="misiones/umbral.js?v=1"></script>
   <script defer src="bancos/umbral.js?v=1"></script>
@@ -18,9 +19,9 @@
   <script defer src="motor/questions.js?v=1"></script>
   <script defer src="assets/bioformas/manifest.js?v=1"></script>
   <script defer src="motor/renderer.js?v=1"></script>
-  <script defer src="app.js?v=1"></script>
+  <script defer src="app.js?v=2"></script>
 </head>
-<body>
+<body data-view="access">
   <a class="skip" href="#main">Ir a la misión</a>
   <div class="world-grid" aria-hidden="true"></div>
   <header class="masthead">
@@ -80,11 +81,12 @@
         </div>
         <aside class="preparation-panel">
           <div class="mission-map"><span>DESTINO / UMBRAL</span><div class="map-pin">◆</div></div>
-          <div class="prep-body"><div class="eyebrow gold">TU EQUIPO DE EXPEDICIÓN</div><h3>Un vínculo. Tres caminos.</h3><div id="teamSlots" class="team-slots"></div>
+          <div class="prep-body"><div class="prep-team"><div class="eyebrow gold">TU EQUIPO DE EXPEDICIÓN</div><h3>Un vínculo. Tres caminos.</h3><div id="teamSlots" class="team-slots"></div></div><div class="prep-actions"><button id="startButton" class="button primary" disabled>Entrar al gimnasio <span>→</span></button><p id="startHint" class="trial-note">Elige de 1 a 3 bioformas para comenzar.</p></div><div class="prep-details">
           <div class="enemy-intel"><span class="tiny-label">INFORME DEL GUARDIÁN</span><h4>Decide. Responde. Actúa.</h4><p>Elige tu estrategia y responde una pregunta para ejecutarla. El rival anuncia su próximo movimiento.</p><div class="intel-facts"><span>2 fases</span><span>Lectura crítica y evidencias</span></div><p class="bank-note">Banco de ensayo transversal. El contenido definitivo se elegirá al crear la misión.</p></div>
-          <p id="teamAdvice" class="team-advice"></p><button id="startButton" class="button primary" disabled>Entrar al gimnasio <span>→</span></button><p id="startHint" class="trial-note">Elige de 1 a 3 bioformas para comenzar.</p></div>
+          <p id="teamAdvice" class="team-advice"></p></div></div>
         </aside>
       </div>
+      <div class="team-dock"><span id="dockCount">0 / 3 elegidas</span><button id="quickStartButton" class="button primary" disabled>Entrar al gimnasio <span>→</span></button></div>
     </section>
 
     <section id="storyView" class="view" hidden aria-labelledby="storyHeading">
@@ -110,7 +112,11 @@
           <div class="matchup-strip"><b id="matchupBadge"></b><span id="battleEffects"></span></div><div class="intent"><span class="intent-icon">◈</span><div><small>PRÓXIMO MOVIMIENTO DEL RIVAL</small><b id="intentTitle"></b><span id="intentHint"></span></div><span id="intentPower"></span></div>
           <div class="battle-dialogue"><span class="leader-portrait" id="battlePortrait" role="img" aria-label="Iria"></span><div><div class="dialogue-meta"><b>IRIA</b><span id="leaderCaption">GUARDIANA DEL UMBRAL</span></div><p id="leaderLine" aria-live="polite">Elige tu estrategia. Tu respuesta dará energía al movimiento.</p></div><span class="dialogue-corner" aria-hidden="true">▾</span></div>
           <div class="command-deck"><div class="command-title"><span id="commandPrompt">Elige una acción y responde para ejecutarla.</span><small id="commandState">TU TURNO</small></div><div class="commands"><button data-action="attack" class="command"><span class="command-icon">↗</span><b>Atacar</b><small>Acierta → golpe y energía</small></button><button data-action="skill" class="command skill-command"><span class="command-icon">✦</span><b>Habilidad</b><small id="skillCost">Acierta · 2 de energía</small></button><button data-action="guard" class="command"><span class="command-icon">⬡</span><b>Defender</b><small>Acierta → escudo del 75 %</small></button><button id="switchButton" class="command"><span class="command-icon">⇄</span><b>Cambiar</b><small>Relevo táctico · usa turno</small></button></div></div>
-          <section id="questionPanel" class="question-panel" aria-labelledby="questionStem" hidden><div class="question-top"><span class="eyebrow" id="questionTopic"></span><span id="questionNumber"></span></div><div class="question-action" id="questionAction"></div><h3 id="questionStem" tabindex="-1"></h3><div id="questionFigure" hidden></div><div id="questionOptions" class="question-options" role="group" aria-label="Opciones de respuesta"></div><button id="confirmAnswer" class="button primary" disabled>Confirmar mi decisión <span>→</span></button><div id="answerFeedback" class="answer-feedback" hidden><b id="feedbackTitle"></b><p id="feedbackExplanation"></p><p id="feedbackAnswer"></p><button id="resolveAnswer" class="button primary">Continuar el encuentro <span>→</span></button></div></section>
+          <dialog id="questionPanel" class="question-panel battle-question-modal" aria-labelledby="questionStem" aria-describedby="questionAction">
+            <div class="question-header"><div><div class="question-top"><span class="eyebrow" id="questionTopic"></span><span id="questionNumber"></span></div><div class="question-action" id="questionAction"></div><p id="questionMatchup" class="question-matchup"></p></div><button id="cancelQuestion" class="text-button">← Cambiar estrategia</button></div>
+            <div class="question-content"><h3 id="questionStem" tabindex="-1"></h3><div id="questionFigure" hidden></div><div id="questionOptions" class="question-options" role="group" aria-label="Opciones de respuesta"></div><p id="questionSelection" class="question-selection" hidden></p><div id="answerFeedback" class="answer-feedback" hidden><b id="feedbackTitle"></b><p id="feedbackExplanation"></p><p id="feedbackAnswer"></p></div></div>
+            <div class="question-actions"><button id="confirmAnswer" class="button primary" disabled>Confirmar mi decisión <span>→</span></button><button id="resolveAnswer" class="button primary" hidden>Continuar el encuentro <span>→</span></button></div>
+          </dialog>
         </div>
         <aside class="battle-aside"><div class="learning-counter"><span class="tiny-label">DECISIONES CON EVIDENCIA</span><b id="learningCount">0 / 0</b><small>aciertos / preguntas</small><span>Sin límite de tiempo</span></div><div class="party-panel"><span class="tiny-label">TU EQUIPO</span><div id="partyList"></div></div><div class="skill-panel"><span class="tiny-label">HABILIDAD ACTIVA</span><h3 id="skillName"></h3><p id="skillDescription"></p><div id="skillEnergy" class="energy-pips"></div></div><div class="passive-panel"><span class="tiny-label">VENTAJA PASIVA</span><h3 id="passiveName"></h3><p id="passiveDescription"></p></div><div class="battle-log-panel"><div class="log-heading"><span class="tiny-label">CRÓNICA DEL ENCUENTRO</span><span class="live-dot"></span></div><ol id="battleLog" aria-live="polite" aria-relevant="additions"></ol></div></aside>
       </div>

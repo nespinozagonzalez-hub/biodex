@@ -47,3 +47,7 @@ El emblema solo existe en la partida actual. Las victorias se calculan en el nav
 Desde la raíz del repositorio: `node --test gimnasios/tests/*.test.cjs`.
 
 No contiene dependencias ni una etapa de compilación. GitHub Pages sirve esta carpeta junto al sitio actual.
+
+## Interfaz 1.1
+
+Las preguntas y explicaciones se presentan en una ventana sobre la arena, con acciones siempre visibles. Antes de confirmar se puede volver a elegir estrategia; esto conserva la misma pregunta pendiente y no avanza el turno. El panel de preparación acompaña al desplazamiento y presenta el acceso al gimnasio justo debajo del equipo; en pantallas estrechas existe un acceso inferior fijo. En tablet y PC, la arena y los comandos comparten una vista compacta y la información táctica lateral puede desplazarse de forma independiente.
