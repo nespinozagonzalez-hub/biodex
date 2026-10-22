@@ -20,6 +20,12 @@
 .prep-actions .trial-note { margin-top: 9px; line-height: 1.5; }
 .team-dock { display: none; }
 
+/* Cada ficha permanece en el lado de su bioforma: equipo a la izquierda,
+   guardián a la derecha. Se usan esquinas libres para dejar visibles los sprites. */
+.arena .fighter-hud { --hud-inset: clamp(12px, 1.5vw, 25px); }
+.arena .player-hud { inset: var(--hud-inset) auto auto var(--hud-inset); }
+.arena .enemy-hud { inset: auto var(--hud-inset) var(--hud-inset) auto; }
+
 /* Las preguntas usan la capa modal nativa: la arena permanece detrás. */
 body.question-active { overflow: hidden; }
 .battle-question-modal {
@@ -91,8 +97,6 @@ body.question-active { overflow: hidden; }
   .battle-aside .learning-counter > small, .battle-aside .learning-counter > span:last-child { grid-column: 2; grid-row: auto; }
   .battle-aside .party-panel, .battle-aside .skill-panel, .battle-aside .passive-panel { padding: 14px; }
   .fighter-hud { width: 190px; padding: 9px 11px; }
-  .enemy-hud { top: 15px; left: 15px; }
-  .player-hud { bottom: 15px; right: 15px; }
 }
 
 @media (min-width: 701px) and (max-width: 900px) {
