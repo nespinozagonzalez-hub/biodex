@@ -129,7 +129,7 @@
   $('ownedFilter').addEventListener('click',()=>{showAll=false;renderTeam();});$('allFilter').addEventListener('click',()=>{showAll=true;renderTeam();});
   function startMission(){
     if(!selected.length||selected.some(id=>!owned.includes(id)))return;
-    battle=E.create(selected.map(getBio),M);quiz=IS_LEAGUE?Q.create(undefined,BANK.questions,{repeat:false}):Q.create();untimed=IS_LEAGUE&&!leagueCheck.ready&&Boolean($('untimedPractice')?.checked);displayState=E.clone(battle);$('battleLog').replaceChildren();resetQuestion();
+    battle=E.create(selected.map(getBio),{id:M.id,phases:M.phases});quiz=IS_LEAGUE?Q.create(undefined,BANK.questions,{repeat:false}):Q.create();untimed=IS_LEAGUE&&!leagueCheck.ready&&Boolean($('untimedPractice')?.checked);displayState=E.clone(battle);$('battleLog').replaceChildren();resetQuestion();
     log(M.leader+' te da la bienvenida. '+M.phases[0].intro,1);if($('battleTimeHint'))$('battleTimeHint').textContent=untimed?'Ensayo sin reloj':M.questionSeconds+' s por pregunta';renderBattle(battle);storyIndex=0;renderStory();setView('story');tone('skill');
   }
   $('startButton').addEventListener('click',startMission);$('quickStartButton').addEventListener('click',startMission);
@@ -323,4 +323,3 @@
   }
   init();
 })();
-
