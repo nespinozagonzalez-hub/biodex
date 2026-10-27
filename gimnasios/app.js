@@ -5,7 +5,9 @@
   let catalog=[],session=null,owned=[],selected=[],demo=false,showAll=false,battle=null,animating=false,networkBusy=false,displayState=null,forcedSwitch=false;
   let currentView='access',sound=false,audioContext=null,toastTimer=null,lastModalFocus=null;
   let quiz=null,renderer=null,storyIndex=0,typingTimer=null,fullStory='',questionOrigin=null;
-  const M=window.BioDexMission,STORY=M.story;
+  const M=window.BioDexMission,STORY=M.story,IS_LEAGUE=Boolean(M.slug),BANK=M.bank||null;
+  let clockTimer=null,untimed=false;
+  const leagueCheck=IS_LEAGUE?window.BioDexLeague.validateBank(BANK,M.slug):null;
   const DEMO_IDS=Array.from({length:33},(_,i)=>'B'+String(i+1).padStart(3,'0'));
   const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const getBio=id=>catalog.find(b=>b.id===id);
@@ -122,13 +124,13 @@
     $('startButton').disabled=selected.length===0;$('quickStartButton').disabled=selected.length===0;$('dockCount').textContent=selected.length+' / 3 elegidas';$('startHint').textContent=selected.length?selected.length+' de 3 compañeros listos. La primera elección entra al combate.':'Elige de 1 a 3 bioformas para comenzar.';
     $('rosterMessage').textContent=owned.length===0?'También puedes salir y probar la misión con el equipo de ensayo.':'';
     window.PixelArt.paintAll($('teamView'));
-    $('teamAdvice').textContent=selected.length?selected.map(id=>{const b=getBio(id);return b.name+': '+E.matchup(b,{type:M.phases[0].type}).label;}).join(' · '):'Aurora y Lumen tienen ventaja ante Umbral. Elige también curación y protección.';
+    $('teamAdvice').textContent=selected.length?selected.map(id=>{const b=getBio(id);return b.name+': '+E.matchup(b,{type:M.phases[0].type}).label;}).join(' · '):'Combina afinidad, curación y protección ante '+M.phases[0].type+'.';
   }
   $('ownedFilter').addEventListener('click',()=>{showAll=false;renderTeam();});$('allFilter').addEventListener('click',()=>{showAll=true;renderTeam();});
   function startMission(){
     if(!selected.length||selected.some(id=>!owned.includes(id)))return;
-    battle=E.create(selected.map(getBio),M);quiz=Q.create();displayState=E.clone(battle);$('battleLog').replaceChildren();resetQuestion();
-    log('Iria te da la bienvenida. Caelix custodia el primer sello.',1);renderBattle(battle);storyIndex=0;renderStory();setView('story');tone('skill');
+    battle=E.create(selected.map(getBio),M);quiz=IS_LEAGUE?Q.create(undefined,BANK.questions,{repeat:false}):Q.create();untimed=IS_LEAGUE&&!leagueCheck.ready&&Boolean($('untimedPractice')?.checked);displayState=E.clone(battle);$('battleLog').replaceChildren();resetQuestion();
+    log(M.leader+' te da la bienvenida. '+M.phases[0].intro,1);if($('battleTimeHint'))$('battleTimeHint').textContent=untimed?'Ensayo sin reloj':M.questionSeconds+' s por pregunta';renderBattle(battle);storyIndex=0;renderStory();setView('story');tone('skill');
   }
   $('startButton').addEventListener('click',startMission);$('quickStartButton').addEventListener('click',startMission);
   function finishStory(){clearInterval(typingTimer);typingTimer=null;if($('storyText'))$('storyText').textContent=fullStory;}
@@ -141,7 +143,7 @@
   function enterBattle(){finishStory();leaderSay('Elige tu estrategia. Tu respuesta dará energía al movimiento.','LA PRUEBA COMIENZA');setView('battle');renderBattle(battle);}
   $('storyNext').addEventListener('click',()=>{if(typingTimer){finishStory();return;}if(storyIndex<2){storyIndex++;renderStory();tone();}else enterBattle();});
   $('showStoryText').addEventListener('click',finishStory);$('skipStory').addEventListener('click',enterBattle);$('storyBack').addEventListener('click',()=>{finishStory();renderTeam();setView('team');});
-  function leaderSay(line,caption='GUARDIANA DEL UMBRAL',encouraging=false){$('leaderLine').textContent=line;$('leaderCaption').textContent=caption;$('battlePortrait').classList.toggle('encouraging',encouraging);}
+  function leaderSay(line,caption=M.leaderTitle?.toLocaleUpperCase('es')||'GUARDIANA DEL UMBRAL',encouraging=false){$('leaderLine').textContent=line;$('leaderCaption').textContent=caption;$('battlePortrait').classList.toggle('encouraging',encouraging);}
   function hpColor(value,max){return value/max<.25?'#f2a18b':value/max<.5?'#e9c879':'';}
   function renderBattle(state){
     displayState=E.clone(state);const member=state.team[state.active],enemy=state.enemy,move=E.intent(state);
@@ -153,7 +155,7 @@
     $('playerSprite').classList.toggle('fainted',member.hp<=0);$('enemySprite').classList.toggle('fainted',enemy.hp<=0);
     $('playerHpBar').style.width=(Math.max(0,member.hp)/member.maxHp*100)+'%';$('playerHpBar').style.background=hpColor(member.hp,member.maxHp);
     $('playerHp').textContent=member.hp+' / '+member.maxHp;$('playerEnergy').textContent='ENERGÍA '+member.energy+' / 3';
-    $('phaseLabel').textContent='FASE '+(state.phase===1?'I':'II')+' / II';$('turnLabel').textContent='TURNO '+String(state.turn).padStart(2,'0');
+    $('phaseLabel').textContent='FASE '+(state.phase===1?'I':'II')+' / '+(M.phases.length===2?'II':M.phases.length);$('turnLabel').textContent='TURNO '+String(state.turn).padStart(2,'0');
     $('intentTitle').textContent=move.name;$('intentHint').textContent=move.hint;$('intentPower').textContent=move.power?E.forecast(state)+' DAÑO EST.':move.kind==='shield'?'+'+(move.shield||12)+' ESCUDO':'CARGA';
     $('matchupBadge').textContent=member.type+' → '+enemy.type+' · '+E.matchup(member,enemy).label;
     $('passiveName').textContent=member.passive.name;$('passiveDescription').textContent=E.passiveDescription(member.passive);
@@ -165,10 +167,10 @@
     updateCommands();
   }
   function updateCommands(){
-    const s=displayState;if(!s)return;const waiting=Boolean(quiz?.current),locked=animating||s.status!=='playing'||s.needsSwitch||waiting;
+    const s=displayState;if(!s)return;const waiting=Boolean(quiz?.current)&&$('questionPanel').open,locked=animating||s.status!=='playing'||s.needsSwitch||waiting;
     $('battleView').dataset.phase=animating?'animating':s.status!=='playing'?'finished':waiting?(quiz.current.graded?'feedback':'question'):s.needsSwitch?'switch':'player';
     document.querySelectorAll('[data-action]').forEach(b=>b.disabled=locked||(b.dataset.action==='skill'&&s.team[s.active].energy<2));
-    $('switchButton').disabled=animating||waiting||s.status!=='playing'||s.team.filter(m=>m.hp>0).length<2;
+    $('switchButton').disabled=animating||Boolean(quiz?.current)||s.status!=='playing'||s.team.filter(m=>m.hp>0).length<2;
     $('retreatButton').disabled=animating;
     $('commandState').textContent=animating?'RESOLVIENDO TURNO':waiting?'TU DECISIÓN':s.needsSwitch?'ELIGE UN RELEVO':'TU TURNO';
     $('commandPrompt').textContent=animating?'El encuentro sigue su curso…':waiting?'Responde para dar forma a tu estrategia.':s.needsSwitch?'Tu equipo necesita un nuevo compañero.':'Elige una acción y responde para ejecutarla.';
@@ -187,8 +189,8 @@
       if(play)await play;
     }else if(event.type==='echo'){floatNumber(event.damage,'enemy');await sleep(350);
     }else if(event.type==='phase'){
-      $('phaseNotice').textContent='FASE II · EL ÚLTIMO SELLO';$('phaseNotice').hidden=false;
-      leaderSay('Has abierto el primer sello. Nuvora custodiará el último: mantén tu criterio y observa su próxima oleada.','EL LAGO CAMBIA DE VOZ');tone('skill');await sleep(1200);$('phaseNotice').hidden=true;
+      $('phaseNotice').textContent='FASE '+event.snapshot.phase+' · EL SIGUIENTE SELLO';$('phaseNotice').hidden=false;
+      leaderSay(event.snapshot.mission.phases[event.snapshot.phase-1].intro+' Mantén tu criterio y observa su próximo movimiento.','EL SELLO CAMBIA DE GUARDIÁN');tone('skill');await sleep(1200);$('phaseNotice').hidden=true;
     }
     renderBattle(event.snapshot);
     if(!['ready','win','loss'].includes(event.type))log(event.text,event.snapshot.turn);
@@ -198,33 +200,64 @@
     try{
       const events=E.act(battle,action,index,outcome||{correct:true});
       for(const event of events)await animate(event);
+      if(IS_LEAGUE&&battle.status==='playing'&&quiz.history.length>=30){battle.status='lost';log('Se agotaron las 30 preguntas del intento. Prepara otro equipo y vuelve a probar.',battle.turn);}
       renderBattle(battle);
       if(battle.status!=='playing'){await sleep(700);renderResult();setView('result');if(battle.status==='won')tone('win');}
     }catch(error){toast(error.message);}
     finally{animating=false;updateCommands();if(battle?.status==='playing'&&!battle.needsSwitch){const target=questionOrigin&&!questionOrigin.disabled?questionOrigin:document.querySelector('[data-action="attack"]');target?.focus({preventScroll:true});}}
     if(battle?.needsSwitch&&battle.status==='playing')openSwitch(true);
   }
-  function resetQuestion(){if(quiz)quiz.current=null;if($('questionPanel').open)$('questionPanel').close();document.body.classList.remove('question-active');document.querySelector('.battle-main').classList.remove('question-open');}
-  function reconsiderQuestion(){if(!quiz?.current||quiz.current.graded||animating)return;resetQuestion();updateCommands();questionOrigin?.focus({preventScroll:true});}
+  function stopClock(){clearInterval(clockTimer);clockTimer=null;}
+  function hideQuestion(){if($('questionPanel').open)$('questionPanel').close();document.body.classList.remove('question-active');document.querySelector('.battle-main').classList.remove('question-open');}
+  function resetQuestion(){stopClock();if(quiz)quiz.current=null;hideQuestion();}
+  function timeoutOutcome(graded){
+    if(!graded?.timedOut||animating)return;
+    stopClock();const outcome=Q.consume(quiz);if(!outcome)return;
+    for(const id of ['guideDialog','infoDialog','retreatDialog'])if($(id).open)$(id).close();
+    hideQuestion();toast('Tiempo agotado. Tu acción falla y el rival continúa.');
+    leaderSay('Se agotó el tiempo: la acción no se activó. '+graded.explain,'EL RIVAL TOMA LA INICIATIVA');
+    perform(outcome.mode,undefined,outcome);
+  }
+  function tickClock(){
+    if(!IS_LEAGUE||untimed||!quiz?.current||quiz.current.graded){stopClock();return;}
+    const q=quiz.current,remaining=Q.remaining(quiz);if(remaining===null)return;
+    const seconds=Math.ceil(remaining/1000),panel=$('questionClock');
+    $('questionSeconds').textContent=seconds+' s';$('questionClockBar').style.width=Math.max(0,remaining/q.duration*100)+'%';panel.classList.toggle('urgent',seconds<=10);
+    if(seconds<=10&&!q.announced){q.announced=true;$('clockAnnouncement').textContent='Quedan diez segundos para confirmar.';}
+    if(remaining<=0)timeoutOutcome(Q.expire(quiz));
+  }
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)tickClock();});
+  window.addEventListener('focus',tickClock);
+  function reconsiderQuestion(){if(!quiz?.current||quiz.current.graded||animating)return;hideQuestion();updateCommands();questionOrigin?.focus({preventScroll:true});}
   $('cancelQuestion').addEventListener('click',reconsiderQuestion);
   $('questionPanel').addEventListener('cancel',event=>{event.preventDefault();reconsiderQuestion();});
+  if(IS_LEAGUE){
+    $('questionPanel').classList.add('protected-question');
+    for(const type of ['copy','cut','contextmenu','dragstart','selectstart'])$('questionPanel').querySelector('.question-content').addEventListener(type,e=>e.preventDefault());
+  }
   function presentQuestion(action){
-    if(animating||!battle||battle.status!=='playing'||battle.needsSwitch||quiz.current)return;
+    if(animating||!battle||battle.status!=='playing'||battle.needsSwitch||quiz.current?.graded||$('questionPanel').open)return;
     if(action==='skill'&&battle.team[battle.active].energy<2)return;
-    questionOrigin=document.querySelector('[data-action="'+action+'"]');Q.present(quiz,action);renderQuestion();updateCommands();tone();
-    $('questionPanel').showModal();document.body.classList.add('question-active');$('questionPanel').querySelector('.question-content').scrollTop=0;$('questionStem').focus({preventScroll:true});
+    questionOrigin=document.querySelector('[data-action="'+action+'"]');
+    const q=Q.present(quiz,action);if(!q){toast('Se agotaron las preguntas de este intento.');return;}q.mode=action;
+    renderQuestion();tone();$('questionPanel').showModal();updateCommands();document.body.classList.add('question-active');$('questionPanel').querySelector('.question-content').scrollTop=0;$('questionStem').focus({preventScroll:true});
+    if(IS_LEAGUE&&!untimed){const duration=q.seconds??M.questionSeconds;Q.arm(quiz,duration);$('questionClock').hidden=false;tickClock();if(!q.graded){stopClock();clockTimer=setInterval(tickClock,150);}}
+    else if($('questionClock'))$('questionClock').hidden=true;
   }
   function renderQuestion(){
     const q=quiz.current;if(!q)return;
     document.querySelector('.battle-main').classList.add('question-open');$('questionPanel').classList.toggle('graded',q.graded);$('cancelQuestion').hidden=q.graded;$('resolveAnswer').hidden=!q.graded;
     const member=battle.team[battle.active];$('questionMatchup').textContent=member.name+' → '+battle.enemy.name+' · '+E.matchup(member,battle.enemy).label;
-    $('questionOptions').hidden=q.graded;$('questionSelection').hidden=!q.graded;$('questionSelection').textContent=q.graded?'Tu elección: '+q.options[q.selected]:'';
+    $('questionOptions').hidden=q.graded;$('questionSelection').hidden=!q.graded;$('questionSelection').textContent=q.graded?(q.timedOut?'Tiempo agotado.':'Tu elección: '+q.options[q.selected]):'';
     $('questionTopic').textContent=q.topic;$('questionNumber').textContent='DECISIÓN '+String(quiz.history.length+(q.graded?0:1)).padStart(2,'0');
     $('questionAction').textContent={attack:'↗ PREPARANDO ATAQUE',skill:'✦ PREPARANDO HABILIDAD',guard:'⬡ PREPARANDO DEFENSA'}[q.mode];$('questionStem').textContent=q.stem;
     $('questionFigure').hidden=!q.figure;
-    $('questionFigure').innerHTML=q.figure==='ratios'?'<div class="data-card"><span>REGISTRO DEL ENSAYO</span><div><b>Grupo A</b><strong>12 <small>de 20</small></strong></div><div><b>Grupo B</b><strong>18 <small>de 40</small></strong></div></div>':'';
+    $('questionFigure').replaceChildren();
+    if(q.figure==='ratios')$('questionFigure').innerHTML='<div class="data-card"><span>REGISTRO DEL ENSAYO</span><div><b>Grupo A</b><strong>12 <small>de 20</small></strong></div><div><b>Grupo B</b><strong>18 <small>de 40</small></strong></div></div>';
+    else if(q.figure?.src){const img=document.createElement('img');img.src=q.figure.src;img.alt=q.figure.alt;img.style.cssText='max-width:100%;max-height:220px;object-fit:contain';$('questionFigure').append(img);}
     $('questionOptions').innerHTML=q.options.map((option,i)=>`<button class="question-option ${q.selected===i?'selected':''} ${q.graded&&q.answer===i?'correct':''} ${q.graded&&!q.correct&&q.selected===i?'incorrect':''}" data-option="${i}" aria-pressed="${q.selected===i}" ${q.graded?'disabled':''}><span>${String.fromCharCode(65+i)}</span><b>${escape(option)}</b>${q.graded&&q.answer===i?'<i>✓</i>':''}</button>`).join('');
     $('questionOptions').querySelectorAll('[data-option]').forEach(button=>button.addEventListener('click',()=>{if(Q.choose(quiz,Number(button.dataset.option))){renderQuestion();$('questionOptions').querySelector('[data-option="'+button.dataset.option+'"]').focus({preventScroll:true});tone();}}));
+    if(IS_LEAGUE){let watermark=$('questionWatermark');if(!watermark){watermark=document.createElement('small');watermark.id='questionWatermark';watermark.className='question-watermark';$('questionPanel').querySelector('.question-content').append(watermark);}watermark.textContent=(demo?'ENSAYO':session?.name||'BioDex')+' · '+M.title+' · '+q.id;}
     $('confirmAnswer').hidden=q.graded;$('confirmAnswer').disabled=q.selected===null||q.graded;
     $('answerFeedback').hidden=!q.graded;
     if(q.graded){
@@ -234,7 +267,7 @@
     }
   }
   $('confirmAnswer').addEventListener('click',()=>{
-    const graded=Q.grade(quiz);if(!graded)return;renderQuestion();updateCommands();$('learningCount').textContent=quiz.history.filter(x=>x.correct).length+' / '+quiz.history.length;
+    const graded=Q.grade(quiz);if(!graded)return;if(graded.timedOut){timeoutOutcome(graded);return;}stopClock();renderQuestion();updateCommands();$('learningCount').textContent=quiz.history.filter(x=>x.correct).length+' / '+quiz.history.length;
     leaderSay(graded.correct?'Tu decisión tiene fundamento. Ahora deja que tu bioforma transforme esa idea en acción.':'La señal no se ha estabilizado. Revisa la explicación: entender el error también forma parte de la travesía.',graded.correct?'EL VÍNCULO RESPONDE':'PAUSA PARA COMPRENDER',graded.correct);
     $('questionPanel').querySelector('.question-content').scrollTop=0;$('resolveAnswer').focus({preventScroll:true});
   });
@@ -252,15 +285,26 @@
   $('switchButton').addEventListener('click',()=>openSwitch(battle?.needsSwitch||false));
   $('retreatButton').addEventListener('click',()=>{if(!animating)openDialog('retreatDialog');});
   $('confirmRetreat').addEventListener('click',()=>{closeDialog('retreatDialog');resetQuestion();quiz=null;battle=null;displayState=null;renderTeam();setView('team');});
-  function renderResult(){
+  function renderLegacyResult(){
     const won=battle.status==='won',standing=battle.team.filter(m=>m.hp>0).length;
     $('resultView').innerHTML=`<div class="result-wrap"><div class="result-emblem"><span>${won?'✦':'◇'}</span></div><div class="eyebrow gold">${won?'MISIÓN COMPLETADA':'UNA PAUSA EN EL CAMINO'}</div><h2>${won?'El Umbral se abre.':'Toda aventura enseña.'}</h2><p>${won?'Iria reconoce el vínculo de tu equipo. Las aguas se aquietan y el último sello comienza a brillar.':'Tu equipo necesita descansar. Observa las señales de la corriente, combina tus habilidades y vuelve a intentarlo.'}</p><div class="result-stats"><span><b>${battle.turn}</b>TURNOS</span><span><b>${standing} / ${battle.team.length}</b>EN PIE</span><span><b>${battle.phase} / 2</b>FASES</span></div>${won?'<div class="reward-box"><span class="reward-icon">◈</span><div><span class="tiny-label">RECOMPENSA DE ENSAYO</span><h3>Emblema del Umbral</h3><p>Una muestra de cómo recibirías el premio de esta misión. Este emblema pertenece a la partida de prueba.</p><button class="text-button" id="claimReward">Recibir emblema de ensayo →</button><p id="claimMessage" hidden></p></div></div>':''}<div class="result-actions"><button class="button primary" id="retryButton">Preparar otro equipo <span>→</span></button><a class="button secondary" href="${'../'}" target="_blank" rel="noopener noreferrer">Volver a mi BioDex <span>↗</span></a></div><p class="result-note">${won?'Para una recompensa real, el docente puede entregarte un código de una bioforma existente. Se canjea en el escáner de BioDex.':'Tus bioformas de BioDex conservan sus capturas. Cada nuevo intento empieza con el equipo recuperado.'}</p></div>`;
     const review=document.createElement('section');review.className='learning-review';
     const missed=[...new Set(quiz.history.filter(x=>!x.correct).map(x=>x.id))];
-    review.innerHTML='<div class="eyebrow">LO QUE TE LLEVAS DE ESTE ENCUENTRO</div><h3>'+quiz.history.filter(x=>x.correct).length+' de '+quiz.history.length+' decisiones fundamentadas</h3><p>Banco de ensayo: lectura crítica y evidencias. Este resultado pertenece a la preview.</p>'+(missed.length?missed.map(id=>{const q=Q.BANK.find(x=>x.id===id);return '<details><summary>'+escape(q.topic)+'</summary><p>'+escape(q.stem)+'</p><b>'+escape(q.options[q.answer])+'</b><p>'+escape(q.explain)+'</p></details>';}).join(''):'<p class="review-complete">✦ Todas tus respuestas estuvieron bien fundamentadas.</p>');
+    review.innerHTML='<div class="eyebrow">LO QUE TE LLEVAS DE ESTE ENCUENTRO</div><h3>'+quiz.history.filter(x=>x.correct).length+' de '+quiz.history.length+' decisiones fundamentadas</h3><p>Banco de ensayo: lectura crítica y evidencias. Este resultado pertenece a la preview.</p>'+(missed.length?missed.map(id=>{const q=quiz.bank.find(x=>x.id===id);return '<details><summary>'+escape(q.topic)+'</summary><p>'+escape(q.stem)+'</p><b>'+escape(q.options[q.answer])+'</b><p>'+escape(q.explain)+'</p></details>';}).join(''):'<p class="review-complete">✦ Todas tus respuestas estuvieron bien fundamentadas.</p>');
     $('resultView').querySelector('.result-actions').before(review);
     $('retryButton').addEventListener('click',()=>{battle=null;displayState=null;resetQuestion();quiz=null;renderTeam();setView('team');});
     $('claimReward')?.addEventListener('click',()=>{const b=$('claimReward');b.disabled=true;b.textContent='✓ Emblema recibido en esta partida';b.classList.add('reward-claimed');$('claimMessage').hidden=false;$('claimMessage').textContent='La preview no guarda este emblema en tu cuenta.';tone('win');});
+  }
+  function renderResult(){
+    if(!IS_LEAGUE){renderLegacyResult();return;}
+    stopClock();const won=battle.status==='won',standing=battle.team.filter(m=>m.hp>0).length;
+    const eligible=window.BioDexLeague.rewardEligible({won,demo,bank:BANK,slug:M.slug});
+    let saved=false;if(won)try{saved=window.BioDexLeague.markWin(localStorage,demo?'ensayo':session?.name,M.slug,BANK.version,eligible?'challenge':'trial');}catch(_){}
+    const rewardCards=won?'<div class="reward-codes">'+M.rewards.map(r=>'<article class="reward-code"><img src="../assets/cutouts/'+r.id+'.png" alt=""><b>'+escape(r.name)+'</b><code>'+escape(eligible?r.code:'ENSAYO · '+r.name.toLocaleUpperCase('es'))+'</code><small>'+escape(eligible?'Canjea este código en el escáner de BioDex.':'Recompensa simulada. No se añade a la colección.')+'</small>'+(eligible?'<button class="text-button copy-reward" data-code="'+escape(r.code)+'">Copiar código</button>':'')+'</article>').join('')+'</div>':'';
+    const missed=[...new Set(quiz.history.filter(x=>!x.correct).map(x=>x.id))];
+    $('resultView').innerHTML='<div class="result-wrap"><div class="result-emblem"><span>'+(won?'✦':'◇')+'</span></div><div class="eyebrow gold">'+escape(M.sector)+'</div><h2>'+escape(won?M.emblem+' conseguido.':'El territorio te espera.')+'</h2><p>'+escape(won?M.leader+' reconoce la estrategia de tu equipo. El siguiente camino queda abierto.':'Tu equipo necesita descansar. Revisa las explicaciones y prepara otra combinación.')+'</p><div class="result-stats"><span><b>'+quiz.history.filter(x=>x.correct).length+' / '+quiz.history.length+'</b>ACIERTOS</span><span><b>'+quiz.history.filter(x=>x.timedOut).length+'</b>TIEMPOS AGOTADOS</span><span><b>'+standing+' / '+battle.team.length+'</b>EN PIE</span></div>'+(won&&!eligible?'<p class="draft-results">'+(demo?'Equipo prestado: esta victoria es un ensayo.':'Este banco todavía usa preguntas de ensayo.')+' Los cuatro premios se muestran como simulación.</p>':'')+rewardCards+(eligible?'<p class="result-note">Los códigos se canjean uno por uno en BioDex. Una bioforma que ya tienes se reconoce como duplicada. No se registra una segunda copia.</p>':'')+(saved?'<p class="result-note">El sello quedó registrado en este navegador.</p>':'')+'<section class="learning-review"><div class="eyebrow">EL REGISTRO DEL ENCUENTRO</div><h3>Decisiones que puedes revisar.</h3>'+missed.map(id=>{const q=quiz.bank.find(x=>x.id===id);return '<details><summary>'+escape(q.topic)+'</summary><p>'+escape(q.stem)+'</p><b>'+escape(q.options[q.answer])+'</b><p>'+escape(q.explain)+'</p></details>';}).join('')+(missed.length?'':'<p>Todas tus respuestas estuvieron bien fundamentadas.</p>')+'</section><div class="result-actions"><button class="button primary" id="retryButton">Preparar otro equipo →</button><a class="button secondary" href="liga.html">Volver a la liga →</a></div><a class="league-result-link" href="../" target="_blank" rel="noopener">Abrir mi BioDex para canjear ↗</a></div>';
+    $('retryButton').addEventListener('click',()=>{battle=null;displayState=null;resetQuestion();quiz=null;renderTeam();setView('team');});
+    document.querySelectorAll('.copy-reward').forEach(button=>button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(button.dataset.code);button.textContent='✓ Código copiado';}catch(_){toast('Selecciona el código para copiarlo.');}}));
   }
   function renderGuide(){
     const query=$('guideSearch').value.trim().toLocaleLowerCase('es'),type=$('guideOpponent').value;
@@ -279,3 +323,4 @@
   }
   init();
 })();
+

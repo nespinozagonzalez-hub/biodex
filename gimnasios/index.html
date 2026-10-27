@@ -16,10 +16,10 @@
   <script defer src="bancos/umbral.js?v=1"></script>
   <script defer src="motor/roster.js?v=1"></script>
   <script defer src="motor/combat.js?v=1"></script>
-  <script defer src="motor/questions.js?v=1"></script>
+  <script defer src="motor/questions.js?v=2"></script>
   <script defer src="assets/bioformas/manifest.js?v=1"></script>
   <script defer src="motor/renderer.js?v=1"></script>
-  <script defer src="app.js?v=2"></script>
+  <script defer src="app.js?v=3"></script>
 </head>
 <body data-view="access">
   <a class="skip" href="#main">Ir a la misión</a>
@@ -32,7 +32,7 @@
       <span class="step" data-step="story"><b>03</b> Historia</span><i></i>
       <span class="step" data-step="battle"><b>04</b> Combate</span>
     </nav>
-    <div class="header-actions"><button id="atlasButton" class="text-button atlas-button">◈ Atlas táctico</button><button class="icon-button" id="soundButton" title="Activar sonido" aria-label="Activar sonido" aria-pressed="false">♪</button><button class="icon-button" id="fullButton" title="Pantalla completa" aria-label="Pantalla completa">⛶</button><button class="icon-button" id="helpButton" title="Cómo jugar" aria-label="Cómo jugar">?</button></div>
+    <div class="header-actions"><a class="text-button" href="liga.html">↗ Liga de cinco gimnasios</a><button id="atlasButton" class="text-button atlas-button">◈ Atlas táctico</button><button class="icon-button" id="soundButton" title="Activar sonido" aria-label="Activar sonido" aria-pressed="false">♪</button><button class="icon-button" id="fullButton" title="Pantalla completa" aria-label="Pantalla completa">⛶</button><button class="icon-button" id="helpButton" title="Cómo jugar" aria-label="Cómo jugar">?</button></div>
   </header>
   <main id="main" tabindex="-1">
     <section id="accessView" class="view">
@@ -133,3 +133,4 @@
   <dialog id="retreatDialog" class="modal" aria-labelledby="retreatTitle"><div class="eyebrow gold">PAUSA EN EL CAMINO</div><h2 id="retreatTitle">¿Volver a preparar tu equipo?</h2><p>Esta partida terminará. Puedes iniciar otro intento con todas tus bioformas recuperadas.</p><div class="modal-actions"><button class="button secondary" data-close="retreatDialog">Seguir combatiendo</button><button class="button primary" id="confirmRetreat">Volver al equipo</button></div></dialog>
 </body>
 </html>
+
